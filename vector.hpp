@@ -3,6 +3,30 @@
 # include "ft_containers.hpp"
 
 
+
+class   A
+{
+    public:
+        static  int i;
+        int id;
+        A(int id) {
+            this->id = id;
+            std::cout << "default constructor -> " << id<< std::endl;
+        }
+        ~A() {
+            std::cout << "destructor -> " << id << std::endl; 
+            }
+        A(const A &x) {
+            std::cout << "copy constructor -> " << x.id << std::endl;
+            id = x.id;
+            }
+        A &operator=(const A &x) {
+            std::cout << "copy assignement operator -> " << x.id << std::endl;
+            id = x.id;
+            return *this;
+            }
+};
+
 template<class T>
 class ft::vector
 {
@@ -20,12 +44,12 @@ class ft::vector
 
 	public:
 
-		void print()
-		{
-			for(size_type i = 0; i< __size; i++)
-				std::cout << __container[i] << " ";
-				std::cout << std::endl;
-		}
+		// void print()
+		// {
+		// 	// for(size_type i = 0; i< __size; i++)
+		// 	// 	std::cout << __container[i] << " ";
+		// 	// 	std::cout << std::endl;
+		// }
 
 		// default constructor
 		explicit vector (const allocator_type& alloc = allocator_type());
@@ -53,20 +77,41 @@ class ft::vector
 		allocator_type		__alloc;
 };
 
-template<class T>
-ft::vector<T>::explicit vector (const allocator_type& alloc = allocator_type()) :__alloc(alloc), __container(0), __size(0), __capacity(0){}
+/***********************************************/
+/*                default constructor          */
+/***********************************************/
+
 
 template<class T>
-ft::vector<T>::vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()):__alloc(alloc), __size(n), __capacity(n)
+ft::vector<T>::vector (const allocator_type& alloc) :__alloc(alloc), __container(0), __size(0), __capacity(0){}
+
+
+
+/***********************************************/
+/*                fill constructor             */
+/***********************************************/
+
+
+
+template<class T>
+ft::vector<T>::vector (size_type n, const value_type& val, const allocator_type& alloc): __size(n), __capacity(n), __alloc(alloc)
 {
 	__container = __alloc.allocate(n);
 	for(size_type i = 0; i< __size; i++)
 		__alloc.construct(&__container[i], val);
 }
 
+
+
+/***********************************************/
+/*               range constructor             */
+/***********************************************/
+
+
+
 template<class T>
 template <class InputIterator> 
-ft::vector<T>::vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()):__alloc(alloc), __size(last - first), __capacity(__size)
+ft::vector<T>::vector (InputIterator first, InputIterator last, const allocator_type& alloc): __size(last - first), __capacity(__size), __alloc(alloc)
 {
 	if (first > last)
 		throw std::invalid_argument("Invalid range passed to vector constructor");
@@ -84,11 +129,11 @@ ft::vector<T>::vector(const vector& x): __size(x.__size), __capacity(x.__capacit
 		__alloc.construct(&__container[i], x.__container[i]);
 }
 
-template<class T>
-ft::vector& ft::vector<T>::operator= (const ft::vector& x)
-{
+// template<class T>
+// ft::vector& ft::vector<T>::operator= (const ft::vector& x)
+// {
 
-}
+// }
 
 template<class T>
 ft::vector<T>::~vector(){}
