@@ -9,14 +9,14 @@ class ft::vector
 
 	public:
 
-		using value_type = T;
-		using size_type = size_t;
-		using allocator_type = std::allocator<T>;
-        using reference = T&;
-        using const_reference = const T&;
-        using pointer = T*;
-        using const_pointer = const T*;
-        using difference_type = ptrdiff_t;
+		typedef   T                           value_type;
+		typedef   size_t                      size_type;
+		typedef   std::allocator<T>           allocator_type;
+        typedef   T&                          reference;
+        typedef   const T&                    const_reference;
+        typedef   T*                          pointer;
+        typedef   const T*                    const_pointer;
+        typedef   ptrdiff_t                   difference_type;
 
 	public:
 
@@ -28,14 +28,14 @@ class ft::vector
 		}
 
 		// default constructor
-		explicit vector ();	
+		explicit vector (const allocator_type& alloc = allocator_type());
+		
+		// fill constructor
+		explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
 		
 		// range constructor
 		template <class InputIterator>
-		vector (InputIterator first, InputIterator last);
-		
-		// fill constructor
-		explicit vector (size_type n, const value_type& val = value_type());
+		vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 		
 		// copy constructor
 		vector (const vector& x);
@@ -50,38 +50,38 @@ class ft::vector
 		pointer				__container;
 		size_type			__size;
 		size_type			__capacity;
-		allocator_type		alloc;
+		allocator_type		__alloc;
 };
 
 template<class T>
-ft::vector<T>::vector () : __container(0), __size(0), __capacity(0){}
+ft::vector<T>::explicit vector (const allocator_type& alloc = allocator_type()) :__alloc(alloc), __container(0), __size(0), __capacity(0){}
 
 template<class T>
-ft::vector<T>::vector (size_type n, const value_type& val): __size(n), __capacity(n)
+ft::vector<T>::vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()):__alloc(alloc), __size(n), __capacity(n)
 {
-	__container = alloc.allocate(n);
+	__container = __alloc.allocate(n);
 	for(size_type i = 0; i< __size; i++)
-		alloc.construct(&__container[i], val);
+		__alloc.construct(&__container[i], val);
 }
 
 template<class T>
 template <class InputIterator> 
-ft::vector<T>::vector (InputIterator first, InputIterator last): __size(last - first), __capacity(__size)
+ft::vector<T>::vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()):__alloc(alloc), __size(last - first), __capacity(__size)
 {
 	if (first > last)
 		throw std::invalid_argument("Invalid range passed to vector constructor");
-	this->__container = alloc.allocate(this->__size);
+	this->__container = __alloc.allocate(this->__size);
 	size_type i = -1;
 	while (first != last)
-		this->__container[++i] = *(first++);
+		__alloc.construct(&__container[++i], *(first++));
 }
 
 template<class T>
 ft::vector<T>::vector(const vector& x): __size(x.__size), __capacity(x.__capacity)
 {
-	this->__container = alloc.allocate(this->__size);
+	this->__container = __alloc.allocate(this->__size);
 	for(size_type i = 0; i < this->__size; i++)
-		this->__container[i] = x.__container[i];
+		__alloc.construct(&__container[i], x.__container[i]);
 }
 
 template<class T>

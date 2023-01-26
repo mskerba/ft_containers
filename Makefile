@@ -2,7 +2,7 @@ NAME =ft_containers
 
 SRC=vector.cpp
 
-CPPFLAGS=-Wall -Wextra -Werror -std=c++11 -fsanitize=address -g
+CPPFLAGS=-Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
 
 OBJ= $(SRC:.cpp=.o)
 

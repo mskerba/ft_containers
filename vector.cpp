@@ -42,7 +42,7 @@ int main()
     int arr[] = {1, 2, 951, 4, 5};
     try
     {
-        ft::vector<int> myVec(std::begin(arr), std::end(arr));
+        ft::vector<A> myVec(std::begin(arr), std::end(arr));
         myVec.print();
     }
     catch(const std::exception& e)
