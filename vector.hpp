@@ -3,7 +3,6 @@
 # include "ft_containers.hpp"
 
 
-
 class   A
 {
     public:
@@ -97,7 +96,7 @@ template<class T>
 ft::vector<T>::vector (size_type n, const value_type& val, const allocator_type& alloc): __size(n), __capacity(n), __alloc(alloc)
 {
 	__container = __alloc.allocate(n);
-	for(size_type i = 0; i< __size; i++)
+	for(size_type i = 0; i < __size; i++)
 		__alloc.construct(&__container[i], val);
 }
 
@@ -106,7 +105,6 @@ ft::vector<T>::vector (size_type n, const value_type& val, const allocator_type&
 /***********************************************/
 /*               range constructor             */
 /***********************************************/
-
 
 
 template<class T>
@@ -121,6 +119,12 @@ ft::vector<T>::vector (InputIterator first, InputIterator last, const allocator_
 		__alloc.construct(&__container[++i], *(first++));
 }
 
+
+/***********************************************/
+/*               copy constructor              */
+/***********************************************/
+
+
 template<class T>
 ft::vector<T>::vector(const vector& x): __size(x.__size), __capacity(x.__capacity)
 {
@@ -129,11 +133,29 @@ ft::vector<T>::vector(const vector& x): __size(x.__size), __capacity(x.__capacit
 		__alloc.construct(&__container[i], x.__container[i]);
 }
 
-// template<class T>
-// ft::vector& ft::vector<T>::operator= (const ft::vector& x)
-// {
 
-// }
+/***********************************************/
+/*                 operator=                   */
+/***********************************************/
+
+template<class T>
+ft::vector<T>& ft::vector<T>::operator= (const ft::vector<T>& x)
+{
+	for(size_type i = 0; i < this->__size; i++)
+		__alloc.destroy(&__container[i]);
+		// __alloc.deallocate(&__container[i], sizeof(T));
+	this->__size = x.__size;
+	this->__capacity = x.__capacity;
+	this->__container = __alloc.allocate(this->__size);
+	for(size_type i = 0; i < this->__size; i++)
+		__alloc.construct(&__container[i], x.__container[i]);
+	return (*this);
+}
+
+
+/***********************************************/
+/*                 destructor                  */
+/***********************************************/
 
 template<class T>
 ft::vector<T>::~vector(){}

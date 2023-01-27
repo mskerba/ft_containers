@@ -19,7 +19,21 @@ int main()
     // try
     // {
         // ft::vector<A> myVec(std::begin(arr), std::end(arr));
+    {
         std::vector<A> myVec(std::begin(arr), std::end(arr));
+        std::cout << "-------------------------\n";
+        std::vector<A> vec(3,2);
+        std::cout << "------------------------\n";
+        vec = myVec;
+    }
+    std::cout<<"\n\n\n\n\n\n\n\n\n\n\nmy vector\n\n\n\n\n\n\n\n\n\n\n";
+    {
+        ft::vector<A> myVec(std::begin(arr), std::end(arr));
+        std::cout << "-------------------------\n";
+        ft::vector<A> vec((size_t)3,2);
+        std::cout << "------------------------\n";
+        vec = myVec;
+    }
     //     // myVec.print();
     // }
     // catch(const std::exception& e)
