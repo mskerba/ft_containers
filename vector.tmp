@@ -1,0 +1,149 @@
+#include "vector.hpp"
+
+/***********************************************/
+/*                default constructor          */
+/***********************************************/
+
+
+template<class T>
+ft::vector<T>::vector (const allocator_type& alloc) :__alloc(alloc), __container(0), __size(0), __capacity(0){}
+
+
+
+/***********************************************/
+/*                fill constructor             */
+/***********************************************/
+
+
+
+template<class T>
+ft::vector<T>::vector (size_type n, const value_type& val, const allocator_type& alloc): __size(n), __capacity(n), __alloc(alloc)
+{
+	__container = __alloc.allocate(n);
+	for(size_type i = 0; i < __size; i++)
+		__alloc.construct(&__container[i], val);
+}
+
+
+
+/***********************************************/
+/*               range constructor             */
+/***********************************************/
+
+
+template<class T>
+template <class InputIterator> 
+ft::vector<T>::vector (InputIterator first, InputIterator last, const allocator_type& alloc): __size(last - first), __capacity(__size), __alloc(alloc)
+{
+	if (first > last)
+		throw std::invalid_argument("Invalid range passed to vector constructor");
+	this->__container = __alloc.allocate(this->__size);
+	size_type i = -1;
+	while (first != last)
+		__alloc.construct(&__container[++i], *(first++));
+}
+
+
+/***********************************************/
+/*               copy constructor              */
+/***********************************************/
+
+
+template<class T>
+ft::vector<T>::vector(const vector& x): __size(x.__size), __capacity(x.__capacity)
+{
+	this->__container = __alloc.allocate(this->__size);
+	for(size_type i = 0; i < this->__size; i++)
+		__alloc.construct(&__container[i], x.__container[i]);
+}
+
+
+/***********************************************/
+/*                 destructor                  */
+/***********************************************/
+
+template<class T>
+ft::vector<T>::~vector()
+{
+	for(size_type i = 0; i < this->__size; i++)
+		__alloc.destroy(&__container[i]);
+}
+
+
+/***********************************************/
+/*                 operator=                   */
+/***********************************************/
+
+template<class T>
+ft::vector<T>& ft::vector<T>::operator= (const ft::vector<T>& x)
+{
+	for(size_type i = 0; i < this->__size; i++)
+		__alloc.destroy(&__container[i]);
+	this->__size = x.__size;
+	this->__capacity = x.__capacity;
+	this->__container = __alloc.allocate(this->__size);
+	for(size_type i = 0; i < this->__size; i++)
+		__alloc.construct(&__container[i], x.__container[i]);
+	return (*this);
+}
+
+/***********************************************/
+/*                   size                      */
+/***********************************************/
+
+template<class T>
+size_t ft::vector<T>::size() const
+{
+	return (this->__size);
+}
+
+
+/***********************************************/
+/*                 max_size                    */
+/***********************************************/
+
+template<class T>
+size_t ft::vector<T>::max_size() const
+{
+	int sizeT = sizeof(T);
+	if (sizeT == 1)
+		sizeT = 2;
+	return (std::numeric_limits<std::size_t>::max() / sizeT);
+}
+
+/***********************************************/
+/*                 max_size                    */
+/***********************************************/
+
+template<class T>
+void ft::vector<T>::resize (size_type n, value_type val)
+{
+	if (n < this->__size)
+	{
+		for (int i = this->__size -1; i >= n; i--)
+			this->__alloc.destroy(&__container[i]);
+	}
+	else if (n > this->__size)
+	{
+		pointer newcontainer;
+		newcontainer = __alloc.allocate(n);
+		for (size_type i = this->__size; i < n; i++)
+			__alloc.construct(&newcontainer[i], val);
+		for (size_type i = this->__size - 1; i >= 0; i--)
+		{
+		 	__alloc.construct(&newcontainer[i], this->__container[i]);
+			if (!i)
+				break;
+		}
+		for (size_type i = this->__size - 1; i >= 0; i--)
+		{
+		 	__alloc.destroy(&this->__container[i]);
+			if (!i)
+				break;
+		}
+		__container = newcontainer;
+	}
+	this->__size = n;
+	//! capacity
+	this->__capacity = n;
+}

@@ -43,12 +43,12 @@ class ft::vector
 
 	public:
 
-		// void print()
-		// {
-		// 	// for(size_type i = 0; i< __size; i++)
-		// 	// 	std::cout << __container[i] << " ";
-		// 	// 	std::cout << std::endl;
-		// }
+		void print()
+		{
+			for(size_type i = 0; i< __size; i++)
+				std::cout << __container[i] << " ";
+				std::cout << std::endl;
+		}
 
 		// default constructor
 		explicit vector (const allocator_type& alloc = allocator_type());
@@ -63,11 +63,21 @@ class ft::vector
 		// copy constructor
 		vector (const vector& x);
 
+		// destructor
+		~vector();
+
 		// operator=
 		vector& operator= (const vector& x);
 
-		// destructor
-		~vector();
+		// size
+		size_type size() const;
+
+		// max_size
+		size_type max_size() const;
+
+		// resize
+		void resize (size_type n, value_type val = value_type());
+
 
 	private:
 		pointer				__container;
@@ -76,88 +86,5 @@ class ft::vector
 		allocator_type		__alloc;
 };
 
-/***********************************************/
-/*                default constructor          */
-/***********************************************/
-
-
-template<class T>
-ft::vector<T>::vector (const allocator_type& alloc) :__alloc(alloc), __container(0), __size(0), __capacity(0){}
-
-
-
-/***********************************************/
-/*                fill constructor             */
-/***********************************************/
-
-
-
-template<class T>
-ft::vector<T>::vector (size_type n, const value_type& val, const allocator_type& alloc): __size(n), __capacity(n), __alloc(alloc)
-{
-	__container = __alloc.allocate(n);
-	for(size_type i = 0; i < __size; i++)
-		__alloc.construct(&__container[i], val);
-}
-
-
-
-/***********************************************/
-/*               range constructor             */
-/***********************************************/
-
-
-template<class T>
-template <class InputIterator> 
-ft::vector<T>::vector (InputIterator first, InputIterator last, const allocator_type& alloc): __size(last - first), __capacity(__size), __alloc(alloc)
-{
-	if (first > last)
-		throw std::invalid_argument("Invalid range passed to vector constructor");
-	this->__container = __alloc.allocate(this->__size);
-	size_type i = -1;
-	while (first != last)
-		__alloc.construct(&__container[++i], *(first++));
-}
-
-
-/***********************************************/
-/*               copy constructor              */
-/***********************************************/
-
-
-template<class T>
-ft::vector<T>::vector(const vector& x): __size(x.__size), __capacity(x.__capacity)
-{
-	this->__container = __alloc.allocate(this->__size);
-	for(size_type i = 0; i < this->__size; i++)
-		__alloc.construct(&__container[i], x.__container[i]);
-}
-
-
-/***********************************************/
-/*                 operator=                   */
-/***********************************************/
-
-template<class T>
-ft::vector<T>& ft::vector<T>::operator= (const ft::vector<T>& x)
-{
-	for(size_type i = 0; i < this->__size; i++)
-		__alloc.destroy(&__container[i]);
-		// __alloc.deallocate(&__container[i], sizeof(T));
-	this->__size = x.__size;
-	this->__capacity = x.__capacity;
-	this->__container = __alloc.allocate(this->__size);
-	for(size_type i = 0; i < this->__size; i++)
-		__alloc.construct(&__container[i], x.__container[i]);
-	return (*this);
-}
-
-
-/***********************************************/
-/*                 destructor                  */
-/***********************************************/
-
-template<class T>
-ft::vector<T>::~vector(){}
 
 #endif

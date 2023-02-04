@@ -25,7 +25,7 @@ fclean : clean
 	rm -rf $(NAME)
 
 push: fclean
-	$(GA) && $(GC) && $(GP) 
+	@$(GA) && $(GC) && $(GP) 
 
 
 
