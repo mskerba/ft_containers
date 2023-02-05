@@ -122,6 +122,7 @@ void ft::vector<T>::resize (size_type n, value_type val)
 	{
 		for (int i = this->__size -1; i >= n; i--)
 			this->__alloc.destroy(&__container[i]);
+
 	}
 	else if (n > this->__size)
 	{
@@ -132,18 +133,168 @@ void ft::vector<T>::resize (size_type n, value_type val)
 		for (size_type i = this->__size - 1; i >= 0; i--)
 		{
 		 	__alloc.construct(&newcontainer[i], this->__container[i]);
-			if (!i)
-				break;
+			if (!i) break;
 		}
 		for (size_type i = this->__size - 1; i >= 0; i--)
 		{
 		 	__alloc.destroy(&this->__container[i]);
-			if (!i)
-				break;
+			if (!i) break;
 		}
 		__container = newcontainer;
 	}
 	this->__size = n;
-	//! capacity
+	if (n > this->__capacity && n < 2 * this->__capacity)
+		n *= 2;
 	this->__capacity = n;
+}
+
+/***********************************************/
+/*                 capacity                    */
+/***********************************************/
+
+template<class T>
+size_t ft::vector<T>::capacity () const
+{
+	return (this->__capacity);
+}
+
+/***********************************************/
+/*                   empty                     */
+/***********************************************/
+
+template<class T>
+bool ft::vector<T>::empty() const
+{
+	if (this->__size)
+		return (true);
+	return (false);
+}
+
+/***********************************************/
+/*                 reserve                     */
+/***********************************************/
+
+template<class T>
+void ft::vector<T>::reserve (size_type n)
+{
+	if (n <= this->__capacity)
+		return ;
+	pointer newcontainer;
+	newcontainer = __alloc.allocate(n);
+	for (size_type i = this->__size - 1;; i--)
+	{
+		__alloc.construct(&newcontainer[i], this->__container[i]);
+		if (!i) break;
+	}
+	for (size_type i = this->__size - 1;; i--)
+	{
+		__alloc.destroy(&this->__container[i]);
+		if (!i) break;
+	}
+	std::cout << "___\n";
+	__container = newcontainer;
+	__capacity = n;
+}
+
+/***********************************************/
+/*                shrink_to_fit                */
+/***********************************************/
+
+template<class T>
+void ft::vector<T>::shrink_to_fit()
+{
+	pointer newcontainer;
+	newcontainer = __alloc.allocate(__size);
+	for (size_type i = this->__size - 1;; i--)
+	{
+		__alloc.construct(&newcontainer[i], this->__container[i]);
+		if (!i) break;
+	}
+	for (size_type i = this->__size - 1;; i--)
+	{
+		__alloc.destroy(&this->__container[i]);
+		if (!i) break;
+	}
+	__container = newcontainer;
+	__capacity = __size;
+}
+
+/***********************************************/
+/*                  operator[]                 */
+/***********************************************/
+
+template<class T>
+T& ft::vector<T>::operator[] (size_t n)
+{
+	return (this->__container[n]);
+}
+
+template<class T>
+const T& ft::vector<T>::operator[] (size_t n) const
+{
+	return (this->__container[n]);
+}
+
+/***********************************************/
+/*                  operator[]                 */
+/***********************************************/
+
+template<class T>
+T& ft::vector<T>::at (size_t n)
+{
+	return (this->__container[n]);
+}
+
+template<class T>
+const T& ft::vector<T>::at (size_t n) const
+{
+	return (this->__container[n]);
+}
+
+/***********************************************/
+/*                    front                    */
+/***********************************************/
+
+template<class T>
+T& ft::vector<T>::front()
+{
+	return (this->__container[0]);
+}
+
+template<class T>
+const T& ft::vector<T>::front() const
+{
+	return (this->__container[0]);
+}
+
+/***********************************************/
+/*                    back                    */
+/***********************************************/
+
+template<class T>
+T& ft::vector<T>::back()
+{
+	return (this->__container[__size - 1]);
+}
+
+template<class T>
+const T& ft::vector<T>::back() const
+{
+	return (this->__container[__size - 1]);
+}
+
+/***********************************************/
+/*                    data                     */
+/***********************************************/
+
+template<class T>
+value_type* data() noexcept
+{
+
+}
+
+template<class T>
+const value_type* data() const noexcept
+{
+
 }

@@ -8,6 +8,7 @@ class   A
     public:
         static  int i;
         int id;
+		A(){this->id = 0;}
         A(int id) {
             this->id = id;
             std::cout << "default constructor -> " << id<< std::endl;
@@ -78,6 +79,38 @@ class ft::vector
 		// resize
 		void resize (size_type n, value_type val = value_type());
 
+		// capacity
+		size_type capacity() const;
+
+		// empty
+		bool empty() const;
+
+		// reserve
+		void reserve (size_type n);
+
+		// shrink_to_fit
+		void shrink_to_fit();
+
+		// operator []
+		reference operator[] (size_type n);
+		const_reference operator[] (size_type n) const;
+
+		// at
+		reference at (size_type n);
+		const_reference at (size_type n) const;
+
+		// front
+		reference front();
+		const_reference front() const;
+
+		// back
+		reference back();
+		const_reference back() const;
+
+		// data
+
+		value_type* data() noexcept;
+		const value_type* data() const noexcept;
 
 	private:
 		pointer				__container;
@@ -85,6 +118,7 @@ class ft::vector
 		size_type			__capacity;
 		allocator_type		__alloc;
 };
+
 
 
 #endif
