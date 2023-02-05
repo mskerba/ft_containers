@@ -1,0 +1,118 @@
+#include "iterator.hpp"
+
+template<class T>
+ft::vector<T>::iterator::iterator (){}
+
+template<class T>
+ft::vector<T>::iterator::iterator (const iterator& x):ptr(x.ptr){}
+
+template<class T>
+ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator= (const iterator& x)
+{
+    this->ptr = x.ptr;
+    return (*this);
+}
+
+template<class T>
+bool    ft::vector<T>::iterator::operator== (const iterator& x) const
+{
+    if (this->ptr == x.ptr) return (true);
+    return (false);
+}
+
+template<class T>
+bool    ft::vector<T>::iterator::operator!= (const iterator& x) const
+{
+    if (this->ptr != x.ptr) return (true);
+    return (false);
+}
+
+template<class T>
+bool    ft::vector<T>::iterator::operator>= (const iterator& x) const
+{
+    if (this->ptr >= x.ptr) return (true);
+    return (false);
+}
+
+template<class T>
+bool    ft::vector<T>::iterator::operator<= (const iterator& x) const
+{
+    if (this->ptr <= x.ptr) return (true);
+    return (false);
+}
+
+template<class T>
+bool    ft::vector<T>::iterator::operator< (const iterator& x) const
+{
+    if (this->ptr < x.ptr) return (true);
+    return (false);
+}
+
+template<class T>
+bool    ft::vector<T>::iterator::operator> (const iterator& x) const
+{
+    if (this->ptr > x.ptr) return (true);
+    return (false);
+}
+
+template<class T>
+ft::vector<T>::reference ft::vector<T>::iterator::operator* () const
+{
+    return (*ptr);
+}
+
+template<class T>
+ft::vector<T>::pointer ft::vector<T>::iterator::operator-> () const
+{
+    return (&ptr);
+}
+
+template<class T>
+ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator++ ()
+{
+    ++ptr;
+    return (*this);
+}
+
+template<class T>
+ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator-- ()
+{
+    --ptr;
+    return (*this);
+}
+
+template<class T>
+ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator++ (int)
+{
+    iterator tmp(*this);
+
+    ++(ptr);
+    return (tmp);
+}
+
+template<class T>
+ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator-- (int)
+{
+    iterator tmp(*this);
+
+    --(ptr);
+    return (tmp);
+}
+
+template<class T>
+ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator+= (const iterator& x) const
+{
+    return (ptr + x.ptr);
+}
+
+template<class T>
+ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator-= (const iterator& x) const
+{
+    return (ptr - x.ptr);
+}
+
+template<class T>
+T& ft::vector<T>::iterator::operator[] (const int n) const
+{
+    return (ptr + n);
+}

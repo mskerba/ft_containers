@@ -1,6 +1,7 @@
 # ifndef __VECTOR_HPP__
 # define __VECTOR_HPP__
 # include "ft_containers.hpp"
+# include "iterator.hpp"
 
 
 class   A
@@ -141,8 +142,18 @@ class ft::vector
 		// ? swap
 
 		void swap (vector& x);
-        void swap (T& a, T&b);
 
+        // ? clear
+
+        void clear();
+
+        // ? get_allocator
+
+        allocator_type get_allocator() const;
+        
+        // ? iterator
+
+        class iterator;
 
     private:
         pointer              __container;
