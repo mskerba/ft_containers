@@ -236,7 +236,7 @@ const T& ft::vector<T>::operator[] (size_t n) const
 }
 
 /***********************************************/
-/*                  operator[]                 */
+/*                      at                     */
 /***********************************************/
 
 template<class T>
@@ -288,13 +288,14 @@ const T& ft::vector<T>::back() const
 /***********************************************/
 
 template<class T>
-value_type* data() noexcept
+T* ft::vector<T>::data() throw()
 {
-
+	return (__container);
 }
 
 template<class T>
-const value_type* data() const noexcept
+const T* ft::vector<T>::data() const throw()
 {
-
+	return (__container);
 }
+

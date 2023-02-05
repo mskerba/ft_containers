@@ -109,8 +109,8 @@ class ft::vector
 
 		// data
 
-		value_type* data() noexcept;
-		const value_type* data() const noexcept;
+		value_type* data() throw();
+		const value_type* data() const throw();
 
 	private:
 		pointer				__container;
