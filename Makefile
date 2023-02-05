@@ -27,6 +27,4 @@ fclean : clean
 push: fclean
 	@$(GA) && $(GC) && $(GP) 
 
-
-
 re : fclean all 

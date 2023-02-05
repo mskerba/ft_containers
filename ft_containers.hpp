@@ -7,8 +7,8 @@
 
 namespace ft
 {
-	template<class T>
-	class vector;
+    template<class T>
+    class vector;
 }
 
 # endif
