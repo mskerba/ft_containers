@@ -610,9 +610,218 @@ typename ft::vector<T>::iterator ft::vector<T>::iterator::operator+ (typename ft
 template<typename T>
 typename ft::vector<T>::iterator ft::vector<T>::iterator::operator- (typename ft::vector<T>::difference_type n)
 {
+    ptr -= n;
+    return (*this);
+}
+
+/***********************************************/
+/*               reverse_iterator              */
+/***********************************************/
+
+template<typename T>
+ft::vector<T>::reverse_iterator::reverse_iterator (){}
+
+template<typename T>
+ft::vector<T>::reverse_iterator::reverse_iterator (const reverse_iterator& x):ptr(x.ptr){}
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator= (const reverse_iterator& x)
+{
+    this->ptr = x.ptr;
+    return (*this);
+}
+
+template<typename T>
+bool    ft::vector<T>::reverse_iterator::operator== (const reverse_iterator& x) const
+{
+    if (this->ptr == x.ptr) return (true);
+    return (false);
+}
+
+template<typename T>
+bool    ft::vector<T>::reverse_iterator::operator!= (const reverse_iterator& x) const
+{
+    if (this->ptr != x.ptr) return (true);
+    return (false);
+}
+
+template<typename T>
+bool    ft::vector<T>::reverse_iterator::operator>= (const reverse_iterator& x) const
+{
+    if (this->ptr >= x.ptr) return (true);
+    return (false);
+}
+
+template<typename T>
+bool    ft::vector<T>::reverse_iterator::operator<= (const reverse_iterator& x) const
+{
+    if (this->ptr <= x.ptr) return (true);
+    return (false);
+}
+
+template<typename T>
+bool    ft::vector<T>::reverse_iterator::operator< (const reverse_iterator& x) const
+{
+    if (this->ptr < x.ptr) return (true);
+    return (false);
+}
+
+template<typename T>
+bool    ft::vector<T>::reverse_iterator::operator> (const reverse_iterator& x) const
+{
+    if (this->ptr > x.ptr) return (true);
+    return (false);
+}
+
+template<typename T>
+typename ft::vector<T>::reference ft::vector<T>::reverse_iterator::operator* () const
+{
+    return (*ptr);
+}
+
+template<typename T>
+typename ft::vector<T>::pointer ft::vector<T>::reverse_iterator::operator-> () const
+{
+    return (&ptr);
+}
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator++ ()
+{
+    --ptr;
+    return (*this);
+}
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator-- ()
+{
+    ++ptr;
+    return (*this);
+}
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator++ (int)
+{
+    reverse_iterator tmp(*this);
+
+    --(ptr);
+    return (tmp);
+}
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator-- (int)
+{
+    reverse_iterator tmp(*this);
+
+    ++(ptr);
+    return (tmp);
+}
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator+= (typename ft::vector<T>::difference_type n) const
+{
+    ptr -= n;
+    return (*this);
+}
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator-= (typename ft::vector<T>::difference_type n) const
+{
+    ptr -= n;
+    return (*this);
+}
+
+template<typename T>
+T& ft::vector<T>::reverse_iterator::operator[] (typename ft::vector<T>::difference_type n) const
+{
+    return (ptr - n);
+}
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator operator+ (typename ft::vector<T>::difference_type n, const typename ft::vector<T>::reverse_iterator& it)
+{
+    return (it -= n);
+}
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator ft::vector<T>::reverse_iterator::operator- (const ft::vector<T>::reverse_iterator& it)
+{
+    return (this->ptr - it.ptr);
+}
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator ft::vector<T>::reverse_iterator::operator+ (typename ft::vector<T>::difference_type n)
+{
+    ptr -= n;
+    return (*this);
+}
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator ft::vector<T>::reverse_iterator::operator- (typename ft::vector<T>::difference_type n)
+{
     ptr += n;
     return (*this);
 }
+
+/***********************************************/
+/*                    begin                    */
+/***********************************************/
+
+template<typename T>
+typename ft::vector<T>::iterator ft::vector<T>::begin()
+{
+
+}
+
+template<typename T>
+typename ft::vector<T>::const_iterator ft::vector<T>::begin() const
+{
+
+}
+
+
+/***********************************************/
+/*                     end                     */
+/***********************************************/
+
+template<typename T>
+typename ft::vector<T>::iterator ft::vector<T>::end()
+{
+
+}
+
+template<typename T>
+typename ft::vector<T>::const_iterator ft::vector<T>::end() const
+{
+
+}
+
+/***********************************************/
+/*                   rbegin                    */
+/***********************************************/
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator ft::vector<T>::rbegin()
+{
+
+}
+
+template<typename T>
+typename ft::vector<T>::const_reverse_iterator ft::vector<T>::rbegin() const
+{
+
+}
+
+/***********************************************/
+/*                    rend                     */
+/***********************************************/
+
+template<typename T>
+typename ft::vector<T>::reverse_iterator ft::vector<T>::rend()
+{
+
+}
+
 
 
 

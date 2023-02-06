@@ -184,6 +184,61 @@ class ft::vector
                 reference operator[] (difference_type n) const;
         };
 
+        // ? reverse_iterator
+
+        class reverse_iterator
+        {
+            private:
+                pointer ptr;
+            public:
+                reverse_iterator ();
+                reverse_iterator (const reverse_iterator& x);
+                reverse_iterator& operator= (const reverse_iterator& x);
+                bool operator== (const reverse_iterator& x) const;
+                bool operator!= (const reverse_iterator& x) const;
+                reference operator* () const;
+                pointer operator-> () const;
+                reverse_iterator& operator++ ();
+                reverse_iterator& operator-- ();
+                reverse_iterator& operator++ (int);
+                reverse_iterator& operator-- (int);
+                friend reverse_iterator operator+ (difference_type n, const reverse_iterator& it);
+                reverse_iterator operator- (const reverse_iterator& it);
+                reverse_iterator operator+ (difference_type n);
+                reverse_iterator operator- (difference_type n);
+                bool operator< (const reverse_iterator& x) const;
+                bool operator> (const reverse_iterator& x) const;
+                bool operator>= (const reverse_iterator& x) const;
+                bool operator<= (const reverse_iterator& x) const;
+                reverse_iterator& operator+= (difference_type n) const;
+                reverse_iterator& operator-= (difference_type n) const;
+                reference operator[] (difference_type n) const;
+        };
+        typedef   const iterator              const_iterator;
+        typedef   const reverse_iterator      const_reverse_iterator;
+
+        // ? begin
+
+        iterator begin();
+        const_iterator begin() const;
+
+        // ? end
+
+        iterator end();
+        const_iterator end() const;
+
+        // ? rbegin
+
+        reverse_iterator rbegin();
+        const_reverse_iterator rbegin() const;
+
+        // ? rend
+
+        reverse_iterator rend();
+        const_reverse_iterator rend() const;
+
+
+
     private:
         pointer              __container;
         size_type            __size;
