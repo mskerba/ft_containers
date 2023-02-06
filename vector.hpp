@@ -46,13 +46,6 @@ class ft::vector
 
     public:
 
-        void print()
-        {
-            for(size_type i = 0; i< __size; i++)
-                std::cout << __container[i] << " ";
-                std::cout << std::endl;
-        }
-
         // ? default constructor
         explicit vector (const allocator_type& alloc = allocator_type());
         
@@ -192,6 +185,7 @@ class ft::vector
                 pointer ptr;
             public:
                 reverse_iterator ();
+                reverse_iterator (pointer p);
                 reverse_iterator (const reverse_iterator& x);
                 reverse_iterator& operator= (const reverse_iterator& x);
                 bool operator== (const reverse_iterator& x) const;
@@ -244,6 +238,12 @@ class ft::vector
         size_type            __size;
         size_type            __capacity;
         allocator_type       __alloc;
+        void    destroyed()
+        {
+            for (size_type i = this->__size;i; i--)
+                __alloc.destroy(&this->__container[i - 1]);
+            __alloc.deallocate(__container, this->__size);
+        }
 };
 
 

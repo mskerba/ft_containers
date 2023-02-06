@@ -55,8 +55,7 @@ ft::vector<T>::vector (InputIterator first, InputIterator last, const allocator_
 template<class T>
 ft::vector<T>::vector(const vector& x): __size(x.__size), __capacity(x.__capacity)
 {
-    if (!this->__size)
-        return ;
+    if (!size()) return ;
     this->__container = __alloc.allocate(this->__size);
     for(size_type i = 0; i < this->__size; i++)
         __alloc.construct(&__container[i], x.__container[i]);
@@ -70,11 +69,7 @@ ft::vector<T>::vector(const vector& x): __size(x.__size), __capacity(x.__capacit
 template<class T>
 ft::vector<T>::~vector()
 {
-    for (size_type i = this->__size - 1;; i--)
-    {
-        __alloc.destroy(&this->__container[i]);
-        if (!i) break;
-    }
+    this->destroyed(); 
 }
 
 
@@ -85,13 +80,21 @@ ft::vector<T>::~vector()
 template<class T>
 ft::vector<T>& ft::vector<T>::operator= (const ft::vector<T>& x)
 {
-    for(size_type i = 0; i < this->__size; i++)
-        __alloc.destroy(&__container[i]);
-    this->__size = x.__size;
-    this->__capacity = x.__capacity;
-    this->__container = __alloc.allocate(this->__size);
-    for(size_type i = 0; i < this->__size; i++)
-        __alloc.construct(&__container[i], x.__container[i]);
+    if(this->size() < x.size())
+    {
+        this->destroyed();
+        this->__container = __alloc.allocate(x.size());
+        for (size_t i = 0; i < x.size(); i++)
+            __alloc.construct(&__container[i], x.__container[i]);
+        this->__size = x.size();
+        this->__capacity = x.__capacity;
+        return (*this);
+    }
+    for (size_t i = 0; i < x.size(); i++)
+        this->__container[i] = x.__container[i];
+    for (size_t i = this->size(); i > x.size() ; i--)
+        __alloc.destroy(&this->__container[i - 1]);
+    this->__size = x.size();
     return (*this);
 }
 
@@ -120,7 +123,7 @@ size_t ft::vector<T>::max_size() const
 }
 
 /***********************************************/
-/*                 max_size                    */
+/*                   resize                    */
 /***********************************************/
 
 template<class T>
@@ -128,13 +131,17 @@ void ft::vector<T>::resize (size_type n, value_type val)
 {
     if (n < this->__size)
     {
-        for (size_type i = this->__size -1; i >= n; i--)
-            this->__alloc.destroy(&__container[i]);
+        for (size_type i = this->__size; i > n; i--)
+            this->__alloc.destroy(&__container[i - 1]);
     }
-    else if (n > this->__size)
+    else if (n < this->capacity())
     {
-        pointer newcontainer;
-        newcontainer = __alloc.allocate(n);
+        for (size_type i = n; i > this->size(); i--)
+            __alloc.construct(&__container[i - 1], val);
+    }
+    else if (n > this->capacity())
+    {
+        pointer newcontainer  = __alloc.allocate(n);
         for (size_type i = this->__size; i < n; i++)
             __alloc.construct(&newcontainer[i], val);
         for (size_type i = this->__size - 1; i >= 0; i--)
@@ -173,8 +180,8 @@ template<class T>
 bool ft::vector<T>::empty() const
 {
     if (this->__size)
-        return (true);
-    return (false);
+        return (false);
+    return (true);
 }
 
 /***********************************************/
@@ -188,16 +195,9 @@ void ft::vector<T>::reserve (size_type n)
         return ;
     pointer newcontainer;
     newcontainer = __alloc.allocate(n);
-    for (size_type i = this->__size - 1;; i--)
-    {
-        __alloc.construct(&newcontainer[i], this->__container[i]);
-        if (!i) break;
-    }
-    for (size_type i = this->__size - 1;; i--)
-    {
-        __alloc.destroy(&this->__container[i]);
-        if (!i) break;
-    }
+    for (size_type i = this->__size; i > 0; i--)
+        __alloc.construct(&newcontainer[i - 1], this->__container[i - 1]);
+    this->destroyed();
     __container = newcontainer;
     __capacity = n;
 }
@@ -352,8 +352,7 @@ void ft::vector<T>::push_back (const value_type& val)
 {
     if (__capacity && __capacity - __size)
     {
-        this->__alloc.construct(&__container[size()], val);
-        __size++;
+        this->__alloc.construct(&__container[__size++], val);
         return ;
     }
     __capacity *= 2;
@@ -361,16 +360,9 @@ void ft::vector<T>::push_back (const value_type& val)
     pointer newcontainer;
     newcontainer = __alloc.allocate(__capacity);
     __alloc.construct(&newcontainer[__size], val);
-    for (size_type i = this->__size - 1;i > 0; i--)
-    {
-        __alloc.construct(&newcontainer[i], this->__container[i]);
-        if (!i) break;
-    }
-    for (size_type i = this->__size - 1;; i--)
-    {
-        __alloc.destroy(&this->__container[i]);
-        if (!i) break;
-    }
+    for (size_type i = this->__size; i; i--)
+        __alloc.construct(&newcontainer[i -1], this->__container[i - 1]);
+    this->destroyed();
     __size++;
     __container = newcontainer;
 }
@@ -382,7 +374,6 @@ void ft::vector<T>::push_back (const value_type& val)
 template<class T>
 void ft::vector<T>::pop_back ()
 {
-    if (!(__size)) return ;
     this->__size--;
     __alloc.destroy(&__container[__size]);
 }
@@ -447,8 +438,8 @@ void ft::vector<T>::clear ()
 {
     while (1)
     {
+        if (!size()) break;
         __alloc.destroy(&this->__container[--(__size)]);
-        if (!__size) break;
     }
 }
 
@@ -622,6 +613,9 @@ template<typename T>
 ft::vector<T>::reverse_iterator::reverse_iterator (){}
 
 template<typename T>
+ft::vector<T>::reverse_iterator::reverse_iterator (pointer p):ptr(p){}
+
+template<typename T>
 ft::vector<T>::reverse_iterator::reverse_iterator (const reverse_iterator& x):ptr(x.ptr){}
 
 template<typename T>
@@ -770,15 +764,14 @@ typename ft::vector<T>::reverse_iterator ft::vector<T>::reverse_iterator::operat
 template<typename T>
 typename ft::vector<T>::iterator ft::vector<T>::begin()
 {
-
+    return (iterator(this->__container));
 }
 
 template<typename T>
 typename ft::vector<T>::const_iterator ft::vector<T>::begin() const
 {
-
+    return (const_iterator(this->__container));
 }
-
 
 /***********************************************/
 /*                     end                     */
@@ -787,13 +780,13 @@ typename ft::vector<T>::const_iterator ft::vector<T>::begin() const
 template<typename T>
 typename ft::vector<T>::iterator ft::vector<T>::end()
 {
-
+    return (iterator(this->__container + __size));
 }
 
 template<typename T>
 typename ft::vector<T>::const_iterator ft::vector<T>::end() const
 {
-
+    return (const_iterator(this->__container + __size));
 }
 
 /***********************************************/
@@ -803,13 +796,13 @@ typename ft::vector<T>::const_iterator ft::vector<T>::end() const
 template<typename T>
 typename ft::vector<T>::reverse_iterator ft::vector<T>::rbegin()
 {
-
+    return (reverse_iterator(this->__container + __size - 1));
 }
 
 template<typename T>
 typename ft::vector<T>::const_reverse_iterator ft::vector<T>::rbegin() const
 {
-
+    return (const_reverse_iterator(this->__container + __size - 1));
 }
 
 /***********************************************/
@@ -819,10 +812,12 @@ typename ft::vector<T>::const_reverse_iterator ft::vector<T>::rbegin() const
 template<typename T>
 typename ft::vector<T>::reverse_iterator ft::vector<T>::rend()
 {
-
+    return (reverse_iterator(this->__container - 1));
 }
 
-
-
-
+template<typename T>
+typename ft::vector<T>::const_reverse_iterator ft::vector<T>::rend() const
+{
+    return (const_reverse_iterator(this->__container - 1));
+}
 // ! dealocate 
