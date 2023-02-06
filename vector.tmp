@@ -1,5 +1,6 @@
 #include "vector.hpp"
 
+
 /***********************************************/
 /*                default constructor          */
 /***********************************************/
@@ -460,5 +461,159 @@ typename ft::vector<T>::allocator_type ft::vector<T>::get_allocator() const
 {
     return (this->__alloc);
 }
+
+/***********************************************/
+/*                  iterator                   */
+/***********************************************/
+
+template<typename T>
+ft::vector<T>::iterator::iterator (){}
+
+template<typename T>
+ft::vector<T>::iterator::iterator (pointer p): ptr(p){}
+
+template<typename T>
+ft::vector<T>::iterator::iterator (const iterator& x):ptr(x.ptr){}
+
+template<typename T>
+typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator= (const iterator& x)
+{
+    this->ptr = x.ptr;
+    return (*this);
+}
+
+template<typename T>
+bool    ft::vector<T>::iterator::operator== (const iterator& x) const
+{
+    if (this->ptr == x.ptr) return (true);
+    return (false);
+}
+
+template<typename T>
+bool    ft::vector<T>::iterator::operator!= (const iterator& x) const
+{
+    if (this->ptr != x.ptr) return (true);
+    return (false);
+}
+
+template<typename T>
+bool    ft::vector<T>::iterator::operator>= (const iterator& x) const
+{
+    if (this->ptr >= x.ptr) return (true);
+    return (false);
+}
+
+template<typename T>
+bool    ft::vector<T>::iterator::operator<= (const iterator& x) const
+{
+    if (this->ptr <= x.ptr) return (true);
+    return (false);
+}
+
+template<typename T>
+bool    ft::vector<T>::iterator::operator< (const iterator& x) const
+{
+    if (this->ptr < x.ptr) return (true);
+    return (false);
+}
+
+template<typename T>
+bool    ft::vector<T>::iterator::operator> (const iterator& x) const
+{
+    if (this->ptr > x.ptr) return (true);
+    return (false);
+}
+
+template<typename T>
+typename ft::vector<T>::reference ft::vector<T>::iterator::operator* () const
+{
+    return (*ptr);
+}
+
+template<typename T>
+typename ft::vector<T>::pointer ft::vector<T>::iterator::operator-> () const
+{
+    return (&ptr);
+}
+
+template<typename T>
+typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator++ ()
+{
+    ++ptr;
+    return (*this);
+}
+
+template<typename T>
+typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator-- ()
+{
+    --ptr;
+    return (*this);
+}
+
+template<typename T>
+typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator++ (int)
+{
+    iterator tmp(*this);
+
+    ++(ptr);
+    return (tmp);
+}
+
+template<typename T>
+typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator-- (int)
+{
+    iterator tmp(*this);
+
+    --(ptr);
+    return (tmp);
+}
+
+template<typename T>
+typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator+= (typename ft::vector<T>::difference_type n) const
+{
+    ptr += n;
+    return (*this);
+}
+
+template<typename T>
+typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator-= (typename ft::vector<T>::difference_type n) const
+{
+    ptr -= n;
+    return (*this);
+}
+
+template<typename T>
+T& ft::vector<T>::iterator::operator[] (typename ft::vector<T>::difference_type n) const
+{
+    return (ptr + n);
+}
+
+template<typename T>
+typename ft::vector<T>::iterator operator+ (typename ft::vector<T>::difference_type n, const typename ft::vector<T>::iterator& it)
+{
+    return (it += n);
+}
+
+template<typename T>
+typename ft::vector<T>::iterator ft::vector<T>::iterator::operator- (const ft::vector<T>::iterator& it)
+{
+    return (this->ptr - it.ptr);
+}
+
+template<typename T>
+typename ft::vector<T>::iterator ft::vector<T>::iterator::operator+ (typename ft::vector<T>::difference_type n)
+{
+    ptr += n;
+    return (*this);
+}
+
+template<typename T>
+typename ft::vector<T>::iterator ft::vector<T>::iterator::operator- (typename ft::vector<T>::difference_type n)
+{
+    ptr += n;
+    return (*this);
+}
+
+
 
 // ! dealocate 

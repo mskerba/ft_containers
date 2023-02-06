@@ -1,87 +1,90 @@
-#include "iterator.hpp"
 
-template<class T>
+
+template<typename T>
 ft::vector<T>::iterator::iterator (){}
 
-template<class T>
+template<typename T>
+ft::vector<T>::iterator::iterator (pointer p): ptr(p){}
+
+template<typename T>
 ft::vector<T>::iterator::iterator (const iterator& x):ptr(x.ptr){}
 
-template<class T>
+template<typename T>
 ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator= (const iterator& x)
 {
     this->ptr = x.ptr;
     return (*this);
 }
 
-template<class T>
+template<typename T>
 bool    ft::vector<T>::iterator::operator== (const iterator& x) const
 {
     if (this->ptr == x.ptr) return (true);
     return (false);
 }
 
-template<class T>
+template<typename T>
 bool    ft::vector<T>::iterator::operator!= (const iterator& x) const
 {
     if (this->ptr != x.ptr) return (true);
     return (false);
 }
 
-template<class T>
+template<typename T>
 bool    ft::vector<T>::iterator::operator>= (const iterator& x) const
 {
     if (this->ptr >= x.ptr) return (true);
     return (false);
 }
 
-template<class T>
+template<typename T>
 bool    ft::vector<T>::iterator::operator<= (const iterator& x) const
 {
     if (this->ptr <= x.ptr) return (true);
     return (false);
 }
 
-template<class T>
+template<typename T>
 bool    ft::vector<T>::iterator::operator< (const iterator& x) const
 {
     if (this->ptr < x.ptr) return (true);
     return (false);
 }
 
-template<class T>
+template<typename T>
 bool    ft::vector<T>::iterator::operator> (const iterator& x) const
 {
     if (this->ptr > x.ptr) return (true);
     return (false);
 }
 
-template<class T>
+template<typename T>
 ft::vector<T>::reference ft::vector<T>::iterator::operator* () const
 {
     return (*ptr);
 }
 
-template<class T>
+template<typename T>
 ft::vector<T>::pointer ft::vector<T>::iterator::operator-> () const
 {
     return (&ptr);
 }
 
-template<class T>
+template<typename T>
 ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator++ ()
 {
     ++ptr;
     return (*this);
 }
 
-template<class T>
+template<typename T>
 ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator-- ()
 {
     --ptr;
     return (*this);
 }
 
-template<class T>
+template<typename T>
 ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator++ (int)
 {
     iterator tmp(*this);
@@ -90,7 +93,7 @@ ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator++ (int)
     return (tmp);
 }
 
-template<class T>
+template<typename T>
 ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator-- (int)
 {
     iterator tmp(*this);
@@ -99,20 +102,51 @@ ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator-- (int)
     return (tmp);
 }
 
-template<class T>
-ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator+= (const iterator& x) const
+template<typename T>
+ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator+= (difference_type n) const
 {
-    return (ptr + x.ptr);
+    ptr += n;
+    return (*this);
 }
 
-template<class T>
-ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator-= (const iterator& x) const
+template<typename T>
+ft::vector<T>::iterator::iterator& ft::vector<T>::iterator::operator-= (difference_type n) const
 {
-    return (ptr - x.ptr);
+    ptr -= n;
+    return (*this);
 }
 
-template<class T>
-T& ft::vector<T>::iterator::operator[] (const int n) const
+template<typename T>
+T& ft::vector<T>::iterator::operator[] (difference_type n) const
 {
     return (ptr + n);
 }
+
+template<typename T>
+ft::vector<T>::iterator::iterator operator+ (difference_type n, const iterator& it)
+{
+    return (it += n);
+}
+
+template<typename T>
+ft::vector<T>::iterator::iterator ft::vector<T>::iterator::operator- (const iterator& it)
+{
+    return (this->ptr - it.ptr);
+}
+
+template<typename T>
+ft::vector<T>::iterator::iterator ft::vector<T>::iterator::operator+ (difference_type n)
+{
+    ptr += n;
+    return (*this);
+}
+
+template<typename T>
+ft::vector<T>::iterator::iterator ft::vector<T>::iterator::operator- (difference_type n)
+{
+    ptr += n;
+    return (*this);
+}
+
+
+

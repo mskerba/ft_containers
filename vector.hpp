@@ -1,7 +1,8 @@
 # ifndef __VECTOR_HPP__
 # define __VECTOR_HPP__
-# include "ft_containers.hpp"
-# include "iterator.hpp"
+#include "ft_containers.hpp"
+#include <iostream>
+#include <memory>
 
 
 class   A
@@ -153,7 +154,35 @@ class ft::vector
         
         // ? iterator
 
-        class iterator;
+        class iterator
+        {
+            private:
+                pointer ptr;
+            public:
+                iterator ();
+                iterator (pointer p);
+                iterator (const iterator& x);
+                iterator& operator= (const iterator& x);
+                bool operator== (const iterator& x) const;
+                bool operator!= (const iterator& x) const;
+                reference operator* () const;
+                pointer operator-> () const;
+                iterator& operator++ ();
+                iterator& operator-- ();
+                iterator& operator++ (int);
+                iterator& operator-- (int);
+                friend iterator operator+ (difference_type n, const iterator& it);
+                iterator operator- (const iterator& it);
+                iterator operator+ (difference_type n);
+                iterator operator- (difference_type n);
+                bool operator< (const iterator& x) const;
+                bool operator> (const iterator& x) const;
+                bool operator>= (const iterator& x) const;
+                bool operator<= (const iterator& x) const;
+                iterator& operator+= (difference_type n) const;
+                iterator& operator-= (difference_type n) const;
+                reference operator[] (difference_type n) const;
+        };
 
     private:
         pointer              __container;
@@ -161,7 +190,6 @@ class ft::vector
         size_type            __capacity;
         allocator_type       __alloc;
 };
-
 
 
 #endif
