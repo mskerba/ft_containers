@@ -39,7 +39,7 @@ template <class InputIterator>
 ft::vector<T>::vector (InputIterator first, InputIterator last, const allocator_type& alloc): __size(last - first), __capacity(__size), __alloc(alloc)
 {
     if (first > last)
-        throw std::invalid_argument("Invalid range passed to vector constructor");
+        throw  std::length_error("vector");
     this->__container = __alloc.allocate(this->__size);
     size_type i = -1;
     while (first != last)
@@ -69,7 +69,9 @@ ft::vector<T>::vector(const vector& x): __size(x.__size), __capacity(x.__capacit
 template<class T>
 ft::vector<T>::~vector()
 {
-    this->destroyed(); 
+    this->destroyed();
+    this->__size = 0;
+    this->__capacity = 0;
 }
 
 
@@ -133,6 +135,8 @@ void ft::vector<T>::resize (size_type n, value_type val)
     {
         for (size_type i = this->__size; i > n; i--)
             this->__alloc.destroy(&__container[i - 1]);
+        __size = n;
+        return ;
     }
     else if (n < this->capacity())
     {
@@ -144,16 +148,10 @@ void ft::vector<T>::resize (size_type n, value_type val)
         pointer newcontainer  = __alloc.allocate(n);
         for (size_type i = this->__size; i < n; i++)
             __alloc.construct(&newcontainer[i], val);
-        for (size_type i = this->__size - 1; i >= 0; i--)
-        {
-             __alloc.construct(&newcontainer[i], this->__container[i]);
-            if (!i) break;
-        }
-        for (size_type i = this->__size - 1; i >= 0; i--)
-        {
-             __alloc.destroy(&this->__container[i]);
-            if (!i) break;
-        }
+
+        for (size_type i = this->__size; i > 0; i--)
+             __alloc.construct(&newcontainer[i - 1], this->__container[i - 1]);
+        this->destroyed();
         __container = newcontainer;
     }
     this->__size = n;
@@ -248,12 +246,16 @@ const T& ft::vector<T>::operator[] (size_t n) const
 template<class T>
 T& ft::vector<T>::at (size_t n)
 {
+    if (n >= this->size())
+        throw std::out_of_range("vector");
     return (this->__container[n]);
 }
 
 template<class T>
 const T& ft::vector<T>::at (size_t n) const
 {
+    if (n >= this->size())
+        throw std::out_of_range("vector");
     return (this->__container[n]);
 }
 
@@ -314,7 +316,10 @@ template <class InputIterator>
 void ft::vector<T>::assign (InputIterator first, InputIterator last)
 {
     if (first > last)
-        throw std::invalid_argument("Invalid range passed to vector constructor");
+    {
+        this->~vector();
+        throw std::length_error("vector");
+    }
     for (size_type i = this->__size - 1;; i--)
     {
         __alloc.destroy(&this->__container[i]);

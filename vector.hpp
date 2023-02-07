@@ -10,10 +10,14 @@ class   A
     public:
         static  int i;
         int id;
-        A(){this->id = 0;}
+        A(){
+            this->id = 0;
+            std::cout << "default constructor -> " << id<< std::endl;
+
+        }
         A(int id) {
             this->id = id;
-            std::cout << "default constructor -> " << id<< std::endl;
+            std::cout << "parametrize constructor -> " << id<< std::endl;
         }
         ~A() {
             std::cout << "destructor -> " << id << std::endl; 
@@ -29,6 +33,11 @@ class   A
             }
 };
 
+        std::ostream& operator<<(std::ostream& out, A a)
+        {
+            out << a.id;
+            return (out);
+        }
 template<class T>
 class ft::vector
 {
@@ -242,7 +251,8 @@ class ft::vector
         {
             for (size_type i = this->__size;i; i--)
                 __alloc.destroy(&this->__container[i - 1]);
-            __alloc.deallocate(__container, this->__size);
+            if(this->capacity())
+                __alloc.deallocate(__container, this->__capacity);
         }
 };
 

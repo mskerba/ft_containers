@@ -38,7 +38,7 @@ int main23()
     // A   *p = arr;
 
     // std::cout << "_____________" << std::endl;
-    // ft::vector<A> vec(input_iterator<A>(p), input_iterator<A>(p + 5));
+    // std::vector<A> vec(input_iterator<A>(p), input_iterator<A>(p + 5));
     // std::cout << "_____________" << std::endl;
 
     return 0;
@@ -58,7 +58,7 @@ int main()
 
     std::cout << "********************" << std::endl;
         {
-            ft::vector<A>  vec((size_t)7, 0);
+            std::vector<A>  vec((size_t)7, 0);
     
             std::cout << "-------------------------****" << std::endl;
             vec.resize(2, A());
@@ -68,7 +68,7 @@ int main()
         }
         {
         
-            ft::vector<A>  vec((size_t)2, 0);
+            std::vector<A>  vec((size_t)2, 0);
 
             std::cout << "-------------------------****" << std::endl;
             vec.resize(7, A());
@@ -79,7 +79,7 @@ int main()
         }
         {
                 
-            ft::vector<A>  vec((size_t)2, 0);
+            std::vector<A>  vec((size_t)2, 0);
             std::cout << "-------------------------****" << std::endl;
             vec.resize(2, A());
             std::cout << "****-------------------------" << std::endl;
