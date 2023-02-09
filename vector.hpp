@@ -136,7 +136,7 @@ class ft::vector
 
         void pop_back ();
 
-        // ? pop_back
+        // ? insert
 
 		// ! iterator insert (iterator position, const value_type& val);
     	// ! void insert (iterator position, size_type n, const value_type& val);
@@ -203,6 +203,11 @@ class ft::vector
             private:
                 pointer ptr;
             public:
+                typedef   T                                value_type;
+                typedef   T&                               reference;
+                typedef   T*                               pointer;
+                typedef   ptrdiff_t                        difference_type;
+                typedef   std::random_access_iterator_tag  iterator_category;
                 reverse_iterator ();
                 reverse_iterator (pointer p);
                 reverse_iterator (const reverse_iterator& x);
@@ -215,20 +220,19 @@ class ft::vector
                 reverse_iterator& operator-- ();
                 reverse_iterator operator++ (int);
                 reverse_iterator operator-- (int);
-                friend reverse_iterator operator+ (difference_type n, const reverse_iterator& it);
                 difference_type operator- (const reverse_iterator& it);
-                reverse_iterator operator+ (difference_type n);
-                reverse_iterator operator- (difference_type n);
+                reverse_iterator operator+ (difference_type n) const;
+                reverse_iterator operator- (difference_type n) const;
                 bool operator< (const reverse_iterator& x) const;
                 bool operator> (const reverse_iterator& x) const;
                 bool operator>= (const reverse_iterator& x) const;
                 bool operator<= (const reverse_iterator& x) const;
-                reverse_iterator operator+= (difference_type n) const;
-                reverse_iterator operator-= (difference_type n) const;
+                reverse_iterator& operator+= (difference_type n);
+                reverse_iterator& operator-= (difference_type n);
                 reference operator[] (difference_type n) const;
         };
         // typedef     reverse_iterator<const T>      const_reverse_iterator;
-        // typedef     iterator<const T>              const_iterator;
+        // typedef   typename   iterator<const T>              const_iterator;
 
         // ? begin
 
