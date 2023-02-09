@@ -6,8 +6,8 @@
 /***********************************************/
 
 
-template<class T>
-ft::vector<T>::vector (const allocator_type& alloc) :__container(0), __size(0), __capacity(0), __alloc(alloc){}
+template<typename T, typename A>
+ft::vector<T, A>::vector (const allocator_type& alloc) :__container(nullptr), __size(0), __capacity(0), __alloc(alloc){}
 
 
 
@@ -17,8 +17,8 @@ ft::vector<T>::vector (const allocator_type& alloc) :__container(0), __size(0), 
 
 
 
-template<class T>
-ft::vector<T>::vector (size_type n, const value_type& val, const allocator_type& alloc): __size(n), __capacity(n), __alloc(alloc)
+template<typename T, typename A>
+ft::vector<T, A>::vector (size_type n, const value_type& val, const allocator_type& alloc): __size(n), __capacity(n), __alloc(alloc)
 {
     if (!n)
         return ;
@@ -34,11 +34,11 @@ ft::vector<T>::vector (size_type n, const value_type& val, const allocator_type&
 /***********************************************/
 
 
-template<class T>
+template<typename T, typename A>
 template <class InputIterator> 
-ft::vector<T>::vector (InputIterator first, InputIterator last, const allocator_type& alloc): __size(last - first), __capacity(__size), __alloc(alloc)
+ft::vector<T, A>::vector (InputIterator first, InputIterator last, const allocator_type& alloc): __size(last - first), __capacity(__size), __alloc(alloc)
 {
-    if (first > last)
+    if (size() < 0)
         throw  std::length_error("vector");
     this->__container = __alloc.allocate(this->__size);
     size_type i = -1;
@@ -52,8 +52,8 @@ ft::vector<T>::vector (InputIterator first, InputIterator last, const allocator_
 /***********************************************/
 
 
-template<class T>
-ft::vector<T>::vector(const vector& x): __size(x.__size), __capacity(x.__capacity)
+template<typename T, typename A>
+ft::vector<T, A>::vector(const vector& x): __size(x.__size), __capacity(x.__capacity)
 {
     if (!size()) return ;
     this->__container = __alloc.allocate(this->__size);
@@ -66,8 +66,8 @@ ft::vector<T>::vector(const vector& x): __size(x.__size), __capacity(x.__capacit
 /*                 destructor                  */
 /***********************************************/
 
-template<class T>
-ft::vector<T>::~vector()
+template<typename T, typename A>
+ft::vector<T, A>::~vector()
 {
     this->destroyed();
     this->__size = 0;
@@ -79,8 +79,8 @@ ft::vector<T>::~vector()
 /*                 operator=                   */
 /***********************************************/
 
-template<class T>
-ft::vector<T>& ft::vector<T>::operator= (const ft::vector<T>& x)
+template<typename T, typename A>
+ft::vector<T, A>& ft::vector<T, A>::operator= (const ft::vector<T, A>& x)
 {
     if(this->size() < x.size())
     {
@@ -104,8 +104,8 @@ ft::vector<T>& ft::vector<T>::operator= (const ft::vector<T>& x)
 /*                   size                      */
 /***********************************************/
 
-template<class T>
-typename ft::vector<T>::size_type ft::vector<T>::size() const
+template<typename T, typename A>
+typename ft::vector<T, A>::size_type ft::vector<T, A>::size() const
 {
     return (this->__size);
 }
@@ -115,8 +115,8 @@ typename ft::vector<T>::size_type ft::vector<T>::size() const
 /*                 max_size                    */
 /***********************************************/
 
-template<class T>
-size_t ft::vector<T>::max_size() const
+template<typename T, typename A>
+size_t ft::vector<T, A>::max_size() const
 {
     int sizeT = sizeof(T);
     if (sizeT == 1)
@@ -128,8 +128,8 @@ size_t ft::vector<T>::max_size() const
 /*                   resize                    */
 /***********************************************/
 
-template<class T>
-void ft::vector<T>::resize (size_type n, value_type val)
+template<typename T, typename A>
+void ft::vector<T, A>::resize (size_type n, value_type val)
 {
     if (n < this->__size)
     {
@@ -142,6 +142,8 @@ void ft::vector<T>::resize (size_type n, value_type val)
     {
         for (size_type i = n; i > this->size(); i--)
             __alloc.construct(&__container[i - 1], val);
+        this->__size = n;
+        return ;
     }
     else if (n > this->capacity())
     {
@@ -164,8 +166,8 @@ void ft::vector<T>::resize (size_type n, value_type val)
 /*                 capacity                    */
 /***********************************************/
 
-template<class T>
-size_t ft::vector<T>::capacity () const
+template<typename T, typename A>
+size_t ft::vector<T, A>::capacity () const
 {
     return (this->__capacity);
 }
@@ -174,8 +176,8 @@ size_t ft::vector<T>::capacity () const
 /*                   empty                     */
 /***********************************************/
 
-template<class T>
-bool ft::vector<T>::empty() const
+template<typename T, typename A>
+bool ft::vector<T, A>::empty() const
 {
     if (this->__size)
         return (false);
@@ -186,8 +188,8 @@ bool ft::vector<T>::empty() const
 /*                 reserve                     */
 /***********************************************/
 
-template<class T>
-void ft::vector<T>::reserve (size_type n)
+template<typename T, typename A>
+void ft::vector<T, A>::reserve (size_type n)
 {
     if (n <= this->__capacity)
         return ;
@@ -204,8 +206,8 @@ void ft::vector<T>::reserve (size_type n)
 /*                shrink_to_fit                */
 /***********************************************/
 
-template<class T>
-void ft::vector<T>::shrink_to_fit()
+template<typename T, typename A>
+void ft::vector<T, A>::shrink_to_fit()
 {
     pointer newcontainer;
     newcontainer = __alloc.allocate(__size);
@@ -227,14 +229,14 @@ void ft::vector<T>::shrink_to_fit()
 /*                  operator[]                 */
 /***********************************************/
 
-template<class T>
-T& ft::vector<T>::operator[] (size_t n)
+template<typename T, typename A>
+T& ft::vector<T, A>::operator[] (size_t n)
 {
     return (this->__container[n]);
 }
 
-template<class T>
-const T& ft::vector<T>::operator[] (size_t n) const
+template<typename T, typename A>
+const T& ft::vector<T, A>::operator[] (size_t n) const
 {
     return (this->__container[n]);
 }
@@ -243,16 +245,16 @@ const T& ft::vector<T>::operator[] (size_t n) const
 /*                      at                     */
 /***********************************************/
 
-template<class T>
-T& ft::vector<T>::at (size_t n)
+template<typename T, typename A>
+T& ft::vector<T, A>::at (size_t n)
 {
     if (n >= this->size())
         throw std::out_of_range("vector");
     return (this->__container[n]);
 }
 
-template<class T>
-const T& ft::vector<T>::at (size_t n) const
+template<typename T, typename A>
+const T& ft::vector<T, A>::at (size_t n) const
 {
     if (n >= this->size())
         throw std::out_of_range("vector");
@@ -263,14 +265,14 @@ const T& ft::vector<T>::at (size_t n) const
 /*                    front                    */
 /***********************************************/
 
-template<class T>
-T& ft::vector<T>::front()
+template<typename T, typename A>
+T& ft::vector<T, A>::front()
 {
     return (this->__container[0]);
 }
 
-template<class T>
-const T& ft::vector<T>::front() const
+template<typename T, typename A>
+const T& ft::vector<T, A>::front() const
 {
     return (this->__container[0]);
 }
@@ -279,14 +281,14 @@ const T& ft::vector<T>::front() const
 /*                    back                    */
 /***********************************************/
 
-template<class T>
-T& ft::vector<T>::back()
+template<typename T, typename A>
+T& ft::vector<T, A>::back()
 {
     return (this->__container[__size - 1]);
 }
 
-template<class T>
-const T& ft::vector<T>::back() const
+template<typename T, typename A>
+const T& ft::vector<T, A>::back() const
 {
     return (this->__container[__size - 1]);
 }
@@ -295,14 +297,14 @@ const T& ft::vector<T>::back() const
 /*                    data                     */
 /***********************************************/
 
-template<class T>
-T* ft::vector<T>::data() throw()
+template<typename T, typename A>
+T* ft::vector<T, A>::data() throw()
 {
     return (__container);
 }
 
-template<class T>
-const T* ft::vector<T>::data() const throw()
+template<typename T, typename A>
+const T* ft::vector<T, A>::data() const throw()
 {
     return (__container);
 }
@@ -311,20 +313,17 @@ const T* ft::vector<T>::data() const throw()
 /*                 assigner                    */
 /***********************************************/
 
-template<class T>
+template<typename T, typename A>
 template <class InputIterator>
-void ft::vector<T>::assign (InputIterator first, InputIterator last)
+void ft::vector<T, A>::assign (InputIterator first, InputIterator last)
 {
     if (first > last)
     {
         this->~vector();
         throw std::length_error("vector");
     }
-    for (size_type i = this->__size - 1;; i--)
-    {
-        __alloc.destroy(&this->__container[i]);
-        if (!i) break;
-    }
+    for (size_type i = this->__size;i; i--)
+        __alloc.destroy(&this->__container[i - 1]);
     this->__size = last - first;
     this->__container = this->__alloc.allocate(this->__size);
     size_type i = -1;
@@ -333,17 +332,15 @@ void ft::vector<T>::assign (InputIterator first, InputIterator last)
     this->__capacity = this->__size;
 }
 
-template<class T>
-void ft::vector<T>::assign (size_type n, const value_type& val)
+template<typename T, typename A>
+void ft::vector<T, A>::assign (size_type n, const value_type& val)
 {
-    for (size_type i = this->__size - 1;; i--)
-    {
-        __alloc.destroy(&this->__container[i]);
-        if (!i) break;
-    }
+    for (size_type i = this->__size; i; i--)
+        __alloc.destroy(&this->__container[i - 1]);
     this->__container = this->__alloc.allocate(n);
     this->__size = n;
-    this->__capacity = n;
+    if (capacity() < n)
+        this->__capacity = n;
     for(size_type i = 0; i < __size; i++)
         __alloc.construct(&__container[i], val);
 }
@@ -352,8 +349,8 @@ void ft::vector<T>::assign (size_type n, const value_type& val)
 /*                  push_back                  */
 /***********************************************/
 
-template<class T>
-void ft::vector<T>::push_back (const value_type& val)
+template<typename T, typename A>
+void ft::vector<T, A>::push_back (const value_type& val)
 {
     if (__capacity && __capacity - __size)
     {
@@ -366,7 +363,7 @@ void ft::vector<T>::push_back (const value_type& val)
     newcontainer = __alloc.allocate(__capacity);
     __alloc.construct(&newcontainer[__size], val);
     for (size_type i = this->__size; i; i--)
-        __alloc.construct(&newcontainer[i -1], this->__container[i - 1]);
+        __alloc.construct(&newcontainer[i - 1], this->__container[i - 1]);
     this->destroyed();
     __size++;
     __container = newcontainer;
@@ -376,8 +373,8 @@ void ft::vector<T>::push_back (const value_type& val)
 /*                 pop_back                    */
 /***********************************************/
 
-template<class T>
-void ft::vector<T>::pop_back ()
+template<typename T, typename A>
+void ft::vector<T, A>::pop_back ()
 {
     this->__size--;
     __alloc.destroy(&__container[__size]);
@@ -387,21 +384,21 @@ void ft::vector<T>::pop_back ()
 // !/*                  insert                     */
 // !/***********************************************/
 
-// ! template<class T>
-// ! iterator ft::vector<T>::insert (iterator position, const value_type& val)
+// ! template<typename T, typename A>
+// ! iterator ft::vector<T, A>::insert (iterator position, const value_type& val)
 // ! {
 // ! 
 // ! }
 // ! 
-// ! template<class T>
-// ! void ft::vector<T>::insert (iterator position, size_type n, const value_type& val)
+// ! template<typename T, typename A>
+// ! void ft::vector<T, A>::insert (iterator position, size_type n, const value_type& val)
 // ! {
 // ! 
 // ! }
 // ! 
-// ! template<class T>
+// ! template<typename T, typename A>
 // ! template <class InputIterator>
-// ! void ft::vector<T>::insert (iterator position, InputIterator first, InputIterator last)
+// ! void ft::vector<T, A>::insert (iterator position, InputIterator first, InputIterator last)
 // ! {
 // ! 
 // ! }
@@ -410,14 +407,14 @@ void ft::vector<T>::pop_back ()
 // !/*                  insert                     */
 // !/***********************************************/
 
-// ! template<class T>
-// ! iterator ft::vector<T>::erase (iterator position)
+// ! template<typename T, typename A>
+// ! iterator ft::vector<T, A>::erase (iterator position)
 // ! {
 // ! 
 // ! }
 // ! 
-// ! template<class T>
-// ! iterator ft::vector<T>::erase (iterator first, iterator last)
+// ! template<typename T, typename A>
+// ! iterator ft::vector<T, A>::erase (iterator first, iterator last)
 // ! {
 // ! 
 // ! }
@@ -426,8 +423,8 @@ void ft::vector<T>::pop_back ()
 /*                   swap                      */
 /***********************************************/
 
-template<class T>
-void ft::vector<T>::swap (ft::vector<T>& x)
+template<typename T, typename A>
+void ft::vector<T, A>::swap (ft::vector<T, A>& x)
 {
     std::swap(this->__container, x.__container);
     std::swap(this->__size, x.__size);
@@ -438,8 +435,8 @@ void ft::vector<T>::swap (ft::vector<T>& x)
 /*                  clear                     */
 /***********************************************/
 
-template<class T>
-void ft::vector<T>::clear ()
+template<typename T, typename A>
+void ft::vector<T, A>::clear ()
 {
     while (1)
     {
@@ -452,8 +449,8 @@ void ft::vector<T>::clear ()
 /*                get_allocator                */
 /***********************************************/
 
-template<class T>
-typename ft::vector<T>::allocator_type ft::vector<T>::get_allocator() const
+template<typename T, typename A>
+typename ft::vector<T, A>::allocator_type ft::vector<T, A>::get_allocator() const
 {
     return (this->__alloc);
 }
@@ -462,244 +459,236 @@ typename ft::vector<T>::allocator_type ft::vector<T>::get_allocator() const
 /*                  iterator                   */
 /***********************************************/
 
-template<typename T>
-ft::vector<T>::iterator::iterator (){}
+template<typename T, typename A>
+ft::vector<T, A>::iterator::iterator (){}
 
-template<typename T>
-ft::vector<T>::iterator::iterator (pointer p): ptr(p){}
+template<typename T, typename A>
+ft::vector<T, A>::iterator::iterator (pointer p): ptr(p){}
 
-template<typename T>
-ft::vector<T>::iterator::iterator (const iterator& x):ptr(x.ptr){}
+template<typename T, typename A>
+ft::vector<T, A>::iterator::iterator (const iterator& x):ptr(x.ptr){}
 
-template<typename T>
-typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator= (const iterator& x)
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator& ft::vector<T, A>::iterator::operator= (const iterator& x)
 {
     this->ptr = x.ptr;
     return (*this);
 }
 
-template<typename T>
-bool    ft::vector<T>::iterator::operator== (const iterator& x) const
+template<typename T, typename A>
+bool    ft::vector<T, A>::iterator::operator== (const iterator& x) const
 {
     if (this->ptr == x.ptr) return (true);
     return (false);
 }
 
-template<typename T>
-bool    ft::vector<T>::iterator::operator!= (const iterator& x) const
+template<typename T, typename A>
+bool    ft::vector<T, A>::iterator::operator!= (const iterator& x) const
 {
     if (this->ptr != x.ptr) return (true);
     return (false);
 }
 
-template<typename T>
-bool    ft::vector<T>::iterator::operator>= (const iterator& x) const
+template<typename T, typename A>
+bool    ft::vector<T, A>::iterator::operator>= (const iterator& x) const
 {
     if (this->ptr >= x.ptr) return (true);
     return (false);
 }
 
-template<typename T>
-bool    ft::vector<T>::iterator::operator<= (const iterator& x) const
+template<typename T, typename A>
+bool    ft::vector<T, A>::iterator::operator<= (const iterator& x) const
 {
     if (this->ptr <= x.ptr) return (true);
     return (false);
 }
 
-template<typename T>
-bool    ft::vector<T>::iterator::operator< (const iterator& x) const
+template<typename T, typename A>
+bool    ft::vector<T, A>::iterator::operator< (const iterator& x) const
 {
     if (this->ptr < x.ptr) return (true);
     return (false);
 }
 
-template<typename T>
-bool    ft::vector<T>::iterator::operator> (const iterator& x) const
+template<typename T, typename A>
+bool    ft::vector<T, A>::iterator::operator> (const iterator& x) const
 {
     if (this->ptr > x.ptr) return (true);
     return (false);
 }
 
-template<typename T>
-typename ft::vector<T>::reference ft::vector<T>::iterator::operator* () const
+template<typename T, typename A>
+typename ft::vector<T, A>::reference ft::vector<T, A>::iterator::operator* () const
 {
     return (*ptr);
 }
 
-template<typename T>
-typename ft::vector<T>::pointer ft::vector<T>::iterator::operator-> () const
+template<typename T, typename A>
+typename ft::vector<T, A>::pointer ft::vector<T, A>::iterator::operator-> () const
 {
-    return (&ptr);
+    return (ptr);
 }
 
-template<typename T>
-typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator++ ()
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator& ft::vector<T, A>::iterator::operator++ ()
 {
     ++ptr;
     return (*this);
 }
 
-template<typename T>
-typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator-- ()
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator& ft::vector<T, A>::iterator::operator-- ()
 {
     --ptr;
     return (*this);
 }
 
-template<typename T>
-typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator++ (int)
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator ft::vector<T, A>::iterator::operator++ (int)
 {
-    iterator tmp(*this);
+    iterator tmp =(*this);
 
     ++(ptr);
     return (tmp);
 }
 
-template<typename T>
-typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator-- (int)
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator ft::vector<T, A>::iterator::operator-- (int)
 {
-    iterator tmp(*this);
+    iterator tmp = (*this);
 
     --(ptr);
     return (tmp);
 }
 
-template<typename T>
-typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator+= (typename ft::vector<T>::difference_type n) const
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator& ft::vector<T, A>::iterator::operator+= (typename ft::vector<T, A>::difference_type n)
 {
     ptr += n;
     return (*this);
 }
 
-template<typename T>
-typename ft::vector<T>::iterator& ft::vector<T>::iterator::operator-= (typename ft::vector<T>::difference_type n) const
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator& ft::vector<T, A>::iterator::operator-= (typename ft::vector<T, A>::difference_type n)
 {
     ptr -= n;
     return (*this);
 }
 
-template<typename T>
-T& ft::vector<T>::iterator::operator[] (typename ft::vector<T>::difference_type n) const
+template<typename T, typename A>
+T& ft::vector<T, A>::iterator::operator[] (typename ft::vector<T, A>::difference_type n) const
 {
-    return (ptr + n);
+    return (this->ptr[n]);
 }
 
-template<typename T>
-typename ft::vector<T>::iterator operator+ (typename ft::vector<T>::difference_type n, const typename ft::vector<T>::iterator& it)
+template<typename T, typename A>
+typename ft::vector<T, A>::difference_type ft::vector<T, A>::iterator::operator- (const ft::vector<T, A>::iterator& it)
 {
-    return (it += n);
+    return this->ptr - it.ptr;
 }
 
-template<typename T>
-typename ft::vector<T>::iterator ft::vector<T>::iterator::operator- (const ft::vector<T>::iterator& it)
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator ft::vector<T, A>::iterator::operator+ (typename ft::vector<T, A>::difference_type n) const
 {
-    return (this->ptr - it.ptr);
+    return (iterator(ptr + n));
 }
 
-template<typename T>
-typename ft::vector<T>::iterator ft::vector<T>::iterator::operator+ (typename ft::vector<T>::difference_type n)
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator ft::vector<T, A>::iterator::operator- (typename ft::vector<T, A>::difference_type n) const
 {
-    ptr += n;
-    return (*this);
-}
-
-template<typename T>
-typename ft::vector<T>::iterator ft::vector<T>::iterator::operator- (typename ft::vector<T>::difference_type n)
-{
-    ptr -= n;
-    return (*this);
+    return (iterator(ptr - n));
 }
 
 /***********************************************/
 /*               reverse_iterator              */
 /***********************************************/
 
-template<typename T>
-ft::vector<T>::reverse_iterator::reverse_iterator (){}
+template<typename T, typename A>
+ft::vector<T, A>::reverse_iterator::reverse_iterator (){}
 
-template<typename T>
-ft::vector<T>::reverse_iterator::reverse_iterator (pointer p):ptr(p){}
+template<typename T, typename A>
+ft::vector<T, A>::reverse_iterator::reverse_iterator (pointer p):ptr(p){}
 
-template<typename T>
-ft::vector<T>::reverse_iterator::reverse_iterator (const reverse_iterator& x):ptr(x.ptr){}
+template<typename T, typename A>
+ft::vector<T, A>::reverse_iterator::reverse_iterator (const reverse_iterator& x):ptr(x.ptr){}
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator= (const reverse_iterator& x)
+template<typename T, typename A>
+typename ft::vector<T, A>::reverse_iterator& ft::vector<T, A>::reverse_iterator::operator= (const reverse_iterator& x)
 {
     this->ptr = x.ptr;
     return (*this);
 }
 
-template<typename T>
-bool    ft::vector<T>::reverse_iterator::operator== (const reverse_iterator& x) const
+template<typename T, typename A>
+bool    ft::vector<T, A>::reverse_iterator::operator== (const reverse_iterator& x) const
 {
     if (this->ptr == x.ptr) return (true);
     return (false);
 }
 
-template<typename T>
-bool    ft::vector<T>::reverse_iterator::operator!= (const reverse_iterator& x) const
+template<typename T, typename A>
+bool    ft::vector<T, A>::reverse_iterator::operator!= (const reverse_iterator& x) const
 {
     if (this->ptr != x.ptr) return (true);
     return (false);
 }
 
-template<typename T>
-bool    ft::vector<T>::reverse_iterator::operator>= (const reverse_iterator& x) const
+template<typename T, typename A>
+bool    ft::vector<T, A>::reverse_iterator::operator>= (const reverse_iterator& x) const
 {
     if (this->ptr >= x.ptr) return (true);
     return (false);
 }
 
-template<typename T>
-bool    ft::vector<T>::reverse_iterator::operator<= (const reverse_iterator& x) const
+template<typename T, typename A>
+bool    ft::vector<T, A>::reverse_iterator::operator<= (const reverse_iterator& x) const
 {
     if (this->ptr <= x.ptr) return (true);
     return (false);
 }
 
-template<typename T>
-bool    ft::vector<T>::reverse_iterator::operator< (const reverse_iterator& x) const
+template<typename T, typename A>
+bool    ft::vector<T, A>::reverse_iterator::operator< (const reverse_iterator& x) const
 {
     if (this->ptr < x.ptr) return (true);
     return (false);
 }
 
-template<typename T>
-bool    ft::vector<T>::reverse_iterator::operator> (const reverse_iterator& x) const
+template<typename T, typename A>
+bool    ft::vector<T, A>::reverse_iterator::operator> (const reverse_iterator& x) const
 {
     if (this->ptr > x.ptr) return (true);
     return (false);
 }
 
-template<typename T>
-typename ft::vector<T>::reference ft::vector<T>::reverse_iterator::operator* () const
+template<typename T, typename A>
+typename ft::vector<T, A>::reference ft::vector<T, A>::reverse_iterator::operator* () const
 {
     return (*ptr);
 }
 
-template<typename T>
-typename ft::vector<T>::pointer ft::vector<T>::reverse_iterator::operator-> () const
+template<typename T, typename A>
+typename ft::vector<T, A>::pointer ft::vector<T, A>::reverse_iterator::operator-> () const
 {
     return (&ptr);
 }
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator++ ()
+template<typename T, typename A>
+typename ft::vector<T, A>::reverse_iterator& ft::vector<T, A>::reverse_iterator::operator++ ()
 {
     --ptr;
     return (*this);
 }
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator-- ()
+template<typename T, typename A>
+typename ft::vector<T, A>::reverse_iterator& ft::vector<T, A>::reverse_iterator::operator-- ()
 {
     ++ptr;
     return (*this);
 }
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator++ (int)
+template<typename T, typename A>
+typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::reverse_iterator::operator++ (int)
 {
     reverse_iterator tmp(*this);
 
@@ -707,8 +696,8 @@ typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::opera
     return (tmp);
 }
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator-- (int)
+template<typename T, typename A>
+typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::reverse_iterator::operator-- (int)
 {
     reverse_iterator tmp(*this);
 
@@ -716,47 +705,47 @@ typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::opera
     return (tmp);
 }
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator+= (typename ft::vector<T>::difference_type n) const
+template<typename T, typename A>
+typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::reverse_iterator::operator+= (typename ft::vector<T, A>::difference_type n) const
 {
     ptr -= n;
     return (*this);
 }
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator& ft::vector<T>::reverse_iterator::operator-= (typename ft::vector<T>::difference_type n) const
+template<typename T, typename A>
+typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::reverse_iterator::operator-= (typename ft::vector<T, A>::difference_type n) const
 {
-    ptr -= n;
+    ptr += n;
     return (*this);
 }
 
-template<typename T>
-T& ft::vector<T>::reverse_iterator::operator[] (typename ft::vector<T>::difference_type n) const
+template<typename T, typename A>
+T& ft::vector<T, A>::reverse_iterator::operator[] (typename ft::vector<T, A>::difference_type n) const
 {
     return (ptr - n);
 }
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator operator+ (typename ft::vector<T>::difference_type n, const typename ft::vector<T>::reverse_iterator& it)
+template<typename T, typename A>
+typename ft::vector<T, A>::reverse_iterator operator+ (typename ft::vector<T, A>::difference_type n, const typename ft::vector<T, A>::reverse_iterator& it)
 {
     return (it -= n);
 }
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator ft::vector<T>::reverse_iterator::operator- (const ft::vector<T>::reverse_iterator& it)
+template<typename T, typename A>
+typename ft::vector<T, A>::difference_type ft::vector<T, A>::reverse_iterator::operator- (const ft::vector<T, A>::reverse_iterator& it)
 {
-    return (this->ptr - it.ptr);
+    return (it.ptr - this->ptr);
 }
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator ft::vector<T>::reverse_iterator::operator+ (typename ft::vector<T>::difference_type n)
+template<typename T, typename A>
+typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::reverse_iterator::operator+ (typename ft::vector<T, A>::difference_type n)
 {
     ptr -= n;
     return (*this);
 }
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator ft::vector<T>::reverse_iterator::operator- (typename ft::vector<T>::difference_type n)
+template<typename T, typename A>
+typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::reverse_iterator::operator- (typename ft::vector<T, A>::difference_type n)
 {
     ptr += n;
     return (*this);
@@ -766,63 +755,63 @@ typename ft::vector<T>::reverse_iterator ft::vector<T>::reverse_iterator::operat
 /*                    begin                    */
 /***********************************************/
 
-template<typename T>
-typename ft::vector<T>::iterator ft::vector<T>::begin()
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator ft::vector<T, A>::begin()
 {
     return (iterator(this->__container));
 }
 
-template<typename T>
-typename ft::vector<T>::const_iterator ft::vector<T>::begin() const
-{
-    return (const_iterator(this->__container));
-}
+// template<typename T, typename A>
+// typename ft::vector<T, A>::const_iterator ft::vector<T, A>::begin() const
+// {
+//     return (const_iterator(this->__container));
+// }
 
 /***********************************************/
 /*                     end                     */
 /***********************************************/
 
-template<typename T>
-typename ft::vector<T>::iterator ft::vector<T>::end()
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator ft::vector<T, A>::end()
 {
     return (iterator(this->__container + __size));
 }
 
-template<typename T>
-typename ft::vector<T>::const_iterator ft::vector<T>::end() const
-{
-    return (const_iterator(this->__container + __size));
-}
+// template<typename T, typename A>
+// typename ft::vector<T, A>::const_iterator ft::vector<T, A>::end() const
+// {
+//     return (const_iterator(this->__container + __size));
+// }
 
 /***********************************************/
 /*                   rbegin                    */
 /***********************************************/
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator ft::vector<T>::rbegin()
+template<typename T, typename A>
+typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::rbegin()
 {
     return (reverse_iterator(this->__container + __size - 1));
 }
 
-template<typename T>
-typename ft::vector<T>::const_reverse_iterator ft::vector<T>::rbegin() const
-{
-    return (const_reverse_iterator(this->__container + __size - 1));
-}
+// template<typename T, typename A>
+// typename ft::vector<T, A>::const_reverse_iterator ft::vector<T, A>::rbegin() const
+// {
+//     return (const_reverse_iterator(this->__container + __size - 1));
+// }
 
 /***********************************************/
 /*                    rend                     */
 /***********************************************/
 
-template<typename T>
-typename ft::vector<T>::reverse_iterator ft::vector<T>::rend()
+template<typename T, typename A>
+typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::rend()
 {
     return (reverse_iterator(this->__container - 1));
 }
 
-template<typename T>
-typename ft::vector<T>::const_reverse_iterator ft::vector<T>::rend() const
-{
-    return (const_reverse_iterator(this->__container - 1));
-}
+// template<typename T, typename A>
+// typename ft::vector<T, A>::const_reverse_iterator ft::vector<T, A>::rend() const
+// {
+//     return (const_reverse_iterator(this->__container - 1));
+// }
 // ! dealocate 

@@ -38,7 +38,7 @@ class   A
             out << a.id;
             return (out);
         }
-template<class T>
+template<typename T, typename A = std::allocator<T>  >
 class ft::vector
 {
 
@@ -46,7 +46,7 @@ class ft::vector
 
         typedef   T                           value_type;
         typedef   size_t                      size_type;
-        typedef   std::allocator<T>           allocator_type;
+        typedef   A                           allocator_type;
         typedef   T&                          reference;
         typedef   const T&                    const_reference;
         typedef   T*                          pointer;
@@ -59,6 +59,12 @@ class ft::vector
         explicit vector (const allocator_type& alloc = allocator_type());
         
         // ? fill constructor
+        explicit vector (size_type n) : __container(nullptr), __size(n), __capacity (n)
+        {
+            __container = __alloc.allocate(__capacity);
+            for (size_type i = 0; i < __size; i++)
+                __alloc.construct(__container + i);
+        }
         explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
         
         // ? range constructor
@@ -161,6 +167,11 @@ class ft::vector
             private:
                 pointer ptr;
             public:
+                typedef   T                                value_type;
+                typedef   T&                               reference;
+                typedef   T*                               pointer;
+                typedef   ptrdiff_t                        difference_type;
+                typedef   std::random_access_iterator_tag  iterator_category;
                 iterator ();
                 iterator (pointer p);
                 iterator (const iterator& x);
@@ -171,18 +182,17 @@ class ft::vector
                 pointer operator-> () const;
                 iterator& operator++ ();
                 iterator& operator-- ();
-                iterator& operator++ (int);
-                iterator& operator-- (int);
-                friend iterator operator+ (difference_type n, const iterator& it);
-                iterator operator- (const iterator& it);
-                iterator operator+ (difference_type n);
-                iterator operator- (difference_type n);
+                iterator operator++ (int);
+                iterator operator-- (int);
+                difference_type operator- (const iterator& it);
+                iterator operator+ (difference_type n) const;
+                iterator operator- (difference_type n) const;
                 bool operator< (const iterator& x) const;
                 bool operator> (const iterator& x) const;
                 bool operator>= (const iterator& x) const;
                 bool operator<= (const iterator& x) const;
-                iterator& operator+= (difference_type n) const;
-                iterator& operator-= (difference_type n) const;
+                iterator& operator+= (difference_type n);
+                iterator& operator-= (difference_type n);
                 reference operator[] (difference_type n) const;
         };
 
@@ -203,43 +213,108 @@ class ft::vector
                 pointer operator-> () const;
                 reverse_iterator& operator++ ();
                 reverse_iterator& operator-- ();
-                reverse_iterator& operator++ (int);
-                reverse_iterator& operator-- (int);
+                reverse_iterator operator++ (int);
+                reverse_iterator operator-- (int);
                 friend reverse_iterator operator+ (difference_type n, const reverse_iterator& it);
-                reverse_iterator operator- (const reverse_iterator& it);
+                difference_type operator- (const reverse_iterator& it);
                 reverse_iterator operator+ (difference_type n);
                 reverse_iterator operator- (difference_type n);
                 bool operator< (const reverse_iterator& x) const;
                 bool operator> (const reverse_iterator& x) const;
                 bool operator>= (const reverse_iterator& x) const;
                 bool operator<= (const reverse_iterator& x) const;
-                reverse_iterator& operator+= (difference_type n) const;
-                reverse_iterator& operator-= (difference_type n) const;
+                reverse_iterator operator+= (difference_type n) const;
+                reverse_iterator operator-= (difference_type n) const;
                 reference operator[] (difference_type n) const;
         };
-        typedef   const iterator              const_iterator;
-        typedef   const reverse_iterator      const_reverse_iterator;
+        // typedef     reverse_iterator<const T>      const_reverse_iterator;
+        // typedef     iterator<const T>              const_iterator;
 
         // ? begin
 
         iterator begin();
-        const_iterator begin() const;
+        // const_iterator begin() const;
 
         // ? end
 
         iterator end();
-        const_iterator end() const;
+        // const_iterator end() const;
 
         // ? rbegin
 
         reverse_iterator rbegin();
-        const_reverse_iterator rbegin() const;
+        // const_reverse_iterator rbegin() const;
 
         // ? rend
 
         reverse_iterator rend();
-        const_reverse_iterator rend() const;
+        // const_reverse_iterator rend() const;
 
+        bool operator!=(const vector& x)
+        {
+            if (this->size() != x.size())
+                return (true);
+            if (this->capacity() != x.capacity())
+                return (true);
+            for (size_type i = 0; i < x.size() && i < this->size(); i++)
+                if (this->__container[i] != x.__container[i]) return (true);
+            return (false);
+        }
+        bool operator==(const vector& x)
+        {
+            if (this->size() != x.size())
+                return (false);
+            if (this->capacity() != x.capacity())
+                return (false);
+            for (size_type i = 0; i < x.size() && i < this->size(); i++)
+                if (this->__container[i] != x.__container[i]) return (false);
+            return (true);
+        }
+
+        bool operator> (const vector& x)
+        {
+            for (size_type i = 0; i < x.size() && i < this->size(); i++)
+            {
+                if (this->__container[i] < x.__container[i]) return (false);
+                else if (this->__container[i] > x.__container[i]) return (true);
+            }
+            if (this->size() > x.size()) return (true);
+            return (false);
+        }
+
+        bool operator< (const vector& x)
+        {
+            for (size_type i = 0; i < x.size() && i < this->size(); i++)
+            {
+                if (this->__container[i] > x.__container[i]) return (false);
+                else if (this->__container[i] < x.__container[i]) return (true);
+            }
+            if (this->size() < x.size()) return (true);
+            return (false);
+        }
+        bool operator>= (const vector& x)
+        {
+            for (size_type i = 0; i < x.size() && i < this->size(); i++)
+            {
+                if (this->__container[i] < x.__container[i]) return (false);
+                else if (this->__container[i] > x.__container[i]) return (true);
+            }
+            if (this->size() >= x.size()) return (true);
+            return (false);
+        }
+
+        bool operator<= (const vector& x)
+        {
+            for (size_type i = 0; i < x.size() && i < this->size(); i++)
+            {
+                if (this->__container[i] > x.__container[i]) return (false);
+                else if (this->__container[i] < x.__container[i]) return (true);
+            }
+            if (this->size() <= x.size()) return (true);
+            return (false);
+        }
+
+    
 
 
     private:
@@ -255,6 +330,9 @@ class ft::vector
                 __alloc.deallocate(__container, this->__capacity);
         }
 };
-
-
+ft::vector<int, std::allocator<int> >::iterator operator+ (int n, const ft::vector<int, std::allocator<int> >::iterator& it)
+{
+    ft::vector<int, std::allocator<int> >::iterator it1(it);
+    return (it1 + n);
+}
 #endif

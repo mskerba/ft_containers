@@ -4,8 +4,15 @@
 
 namespace ft
 {
-    template<typename T>
+    template<typename T, typename A>
     class vector;
+    
+    template <typename T>
+    void swap (ft::vector<T, std::allocator<T> >& x, ft::vector<T, std::allocator<T> >& y)
+    {
+        x.swap(y);
+    }
+
 }
 
 # endif
