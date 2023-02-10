@@ -136,18 +136,6 @@ class ft::vector
 
         void pop_back ();
 
-        // ? insert
-
-		// ! iterator insert (iterator position, const value_type& val);
-    	// ! void insert (iterator position, size_type n, const value_type& val);
-		// ! template <class InputIterator>
-		// ! void insert (iterator position, InputIterator first, InputIterator last);
-
-		// ? erase
-
-		// ! iterator erase (iterator position);
-		// ! iterator erase (iterator first, iterator last);
-
 		// ? swap
 
 		void swap (vector& x);
@@ -201,13 +189,13 @@ class ft::vector
         class reverse_iterator
         {
             private:
+                iterator __it;
                 pointer ptr;
             public:
                 typedef   T                                value_type;
                 typedef   T&                               reference;
                 typedef   T*                               pointer;
                 typedef   ptrdiff_t                        difference_type;
-                typedef   std::random_access_iterator_tag  iterator_category;
                 reverse_iterator ();
                 reverse_iterator (pointer p);
                 reverse_iterator (const reverse_iterator& x);
@@ -233,6 +221,18 @@ class ft::vector
         };
         // typedef     reverse_iterator<const T>      const_reverse_iterator;
         // typedef   typename   iterator<const T>              const_iterator;
+
+        // ? insert
+
+		iterator insert (iterator position, const T& val);
+    	// void insert (iterator position, size_t n, const T& val);
+		// template <class InputIterator>
+		// void insert (iterator position, InputIterator first, InputIterator last);
+
+		// ? erase
+
+		iterator erase (iterator position);
+		iterator erase (iterator first, iterator last);
 
         // ? begin
 

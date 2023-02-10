@@ -380,44 +380,90 @@ void ft::vector<T, A>::pop_back ()
     __alloc.destroy(&__container[__size]);
 }
 
-// !/***********************************************/
-// !/*                  insert                     */
-// !/***********************************************/
+/***********************************************/
+/*                  insert                     */
+/***********************************************/
 
-// ! template<typename T, typename A>
-// ! iterator ft::vector<T, A>::insert (iterator position, const value_type& val)
-// ! {
-// ! 
-// ! }
-// ! 
-// ! template<typename T, typename A>
-// ! void ft::vector<T, A>::insert (iterator position, size_type n, const value_type& val)
-// ! {
-// ! 
-// ! }
-// ! 
-// ! template<typename T, typename A>
-// ! template <class InputIterator>
-// ! void ft::vector<T, A>::insert (iterator position, InputIterator first, InputIterator last)
-// ! {
-// ! 
-// ! }
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, const T& val)
+{
+    iterator tmp = begin();
+    if (this->capacity() == this->size())
+    {
+        pointer newcontainer;
 
-// !/***********************************************/
-// !/*                  insert                     */
-// !/***********************************************/
+        __capacity = ++__size;
+        newcontainer = __alloc.allocate(capacity());
+        __alloc.construct(&newcontainer[position - begin()], val);
+        size_t n = 0;
+        while (tmp++ != position)
+        {
+            __alloc.construct(&newcontainer[n], __container[n]);
+            n++;
+        }
+        while (tmp++ != end())
+        {
+            __alloc.construct(&newcontainer[n + 1], __container[n]);
+            n++;
+        }
+        if ((capacity() - 1))
+            destroyed();
+        __container = newcontainer;
+        return (position);
+    }
+    __alloc.construct(&__container[size()], __container[size() - 1]);
+    tmp = end();
+    while (--tmp != position)
+        *tmp = *(tmp - 1);
+    *tmp = val;
+    return (position);
+}
 
-// ! template<typename T, typename A>
-// ! iterator ft::vector<T, A>::erase (iterator position)
-// ! {
-// ! 
-// ! }
-// ! 
-// ! template<typename T, typename A>
-// ! iterator ft::vector<T, A>::erase (iterator first, iterator last)
-// ! {
-// ! 
-// ! }
+// template<typename T, typename A>
+// void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, size_t n, const T& val)
+// {
+
+// }
+
+// template<typename T, typename A>
+// template <typename InputIterator>
+// void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, InputIterator first, InputIterator last)
+// {
+
+// }
+
+/***********************************************/
+/*                  erase                     */
+/***********************************************/
+
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator ft::vector<T, A>::erase (typename ft::vector<T, A>::iterator position)
+{
+    iterator tmp = this->begin();
+
+    while (tmp != position - 1)   tmp++;
+
+    while ((++tmp) != this->end() - 1)  *tmp = *(tmp + 1);
+
+    this->__alloc.destroy(&__container[--this->__size]);
+
+    return (position);
+}
+
+template<typename T, typename A>
+typename ft::vector<T, A>::iterator ft::vector<T, A>::erase (typename ft::vector<T, A>::iterator first, ft::vector<T, A>::iterator last)
+{
+    difference_type n = last - first;
+    iterator tmp = first;
+
+    while ((tmp + n) != this->end())  *tmp = *(tmp++ + n);
+    
+
+    for (difference_type i = this->__size; i >= (end() - last - 1); i--)
+        __alloc.destroy(&this->__container[i - 1]);
+        this->__size -= n;
+    return (first);
+}
 
 /***********************************************/
 /*                   swap                      */
@@ -728,7 +774,7 @@ T& ft::vector<T, A>::reverse_iterator::operator[] (typename ft::vector<T, A>::di
 template<typename T, typename A>
 typename ft::vector<T, A>::difference_type ft::vector<T, A>::reverse_iterator::operator- (const ft::vector<T, A>::reverse_iterator& it)
 {
-    return this->ptr + it.ptr;
+    return (it.ptr - this->ptr);
 }
 
 template<typename T, typename A>
