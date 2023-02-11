@@ -427,15 +427,15 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, siz
         pointer newcontainer;
         size_type newcapacity = capacity();
 
-        while(n > newcapacity) newcapacity *= 2;
+        while(n + size() > newcapacity) newcapacity *= 2;
         newcontainer = __alloc.allocate(newcapacity);
-        for (difference_type i = 0; i <= n; i++ )
+        for (difference_type i = 0; i < n; i++ )
             __alloc.construct(&newcontainer[j + i], val);
 
         for (difference_type i = 0; i < j; i++)
             __alloc.construct(&newcontainer[i], __container[i]);
-        for (difference_type i = (j + n); i <= end() - begin() + n; i++) 
-            __alloc.construct(&newcontainer[i], __container[i + n]);
+        for (difference_type i = j; i < (end() - begin()); i++) 
+            __alloc.construct(&newcontainer[i + n], __container[i]);
         if (capacity())
             destroyed();
         __capacity = newcapacity;
