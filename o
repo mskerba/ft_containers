@@ -1,46 +1,98 @@
-parametrize constructor -> 100
-copy constructor -> 100
-copy constructor -> 100
-copy constructor -> 100
-destructor -> 100
-3 3
 parametrize constructor -> 1
 copy constructor -> 1
-copy constructor -> 100
-copy constructor -> 100
-copy constructor -> 100
-destructor -> 100
-destructor -> 100
-destructor -> 100
-destructor -> 1
-4 6
-
-
-
-parametrize constructor -> 200
 copy constructor -> 1
-copy assignement operator -> 100
-copy assignement operator -> 100
-copy assignement operator -> 200
-destructor -> 200
-
-
-
-4 6
- copy constructor -> 100
-100 
-destructor -> 100
- copy constructor -> 200
-200 
-destructor -> 200
- copy constructor -> 100
-100 
-destructor -> 100
- copy constructor -> 100
-100 
-destructor -> 100
-
-destructor -> 100
-destructor -> 100
-destructor -> 200
-destructor -> 100
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+destructor -> 1
+parametrize constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+copy constructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+destructor -> 1
+40***************21
+parametrize constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2
+copy constructor -> 2

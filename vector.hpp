@@ -225,7 +225,7 @@ class ft::vector
         // ? insert
 
 		iterator insert (iterator position, const T& val);
-    	// void insert (iterator position, size_t n, const T& val);
+    	void insert (iterator position, size_t n, const T& val);
 		// template <class InputIterator>
 		// void insert (iterator position, InputIterator first, InputIterator last);
 
@@ -326,12 +326,15 @@ class ft::vector
         size_type            __size;
         size_type            __capacity;
         allocator_type       __alloc;
-        void    destroyed()
+        void destroyed()
         {
-            for (size_type i = this->__size;i; i--)
-                __alloc.destroy(&this->__container[i - 1]);
-            if(this->capacity())
-                __alloc.deallocate(__container, this->__capacity);
+            if (__container != nullptr)
+            {
+                for (size_type i = this->__size;i; i--)
+                    __alloc.destroy(&this->__container[i - 1]);
+                if(this->capacity())
+                    __alloc.deallocate(__container, this->__capacity);
+            }
         }
 };
 ft::vector<int, std::allocator<int> >::iterator operator+ (int n, const ft::vector<int, std::allocator<int> >::iterator& it)
