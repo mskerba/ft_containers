@@ -439,7 +439,7 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, siz
         if (capacity())
             destroyed();
         __capacity = newcapacity;
-        __size += n - 5;
+        __size += n;
         __container = newcontainer;
         return ;
     }
