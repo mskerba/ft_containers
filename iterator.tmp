@@ -1,0 +1,145 @@
+#include "vector.hpp"
+
+/***********************************************/
+/*                  iterator                   */
+/***********************************************/
+
+template<typename T, typename Category>
+iterator<T, Category>::iterator (){}
+
+template<typename T, typename Category>
+iterator<T, Category>::iterator (iterator<T, Category>::pointer p): __ptr(p){}
+
+template<typename T, typename Category>
+iterator<T, Category>::iterator (const iterator<T, Category>& x):__ptr(x.__ptr){}
+
+template<typename T, typename Category>
+iterator<T, Category>& iterator<T, Category>::operator= (const iterator<T, Category>& x)
+{
+    this->__ptr = x.__ptr;
+    return (*this);
+}
+
+template<typename T, typename Category>
+bool    iterator<T, Category>::operator== (const iterator<T, Category>& x) const
+{
+    if (this->__ptr == x.__ptr) return (true);
+    return (false);
+}
+
+template<typename T, typename Category>
+bool    iterator<T, Category>::operator!= (const iterator<T, Category>& x) const
+{
+    if (this->__ptr != x.__ptr) return (true);
+    return (false);
+}
+
+template<typename T, typename Category>
+bool    iterator<T, Category>::operator>= (const iterator<T, Category>& x) const
+{
+    if (this->__ptr >= x.__ptr) return (true);
+    return (false);
+}
+
+template<typename T, typename Category>
+bool    iterator<T, Category>::operator<= (const iterator<T, Category>& x) const
+{
+    if (this->__ptr <= x.__ptr) return (true);
+    return (false);
+}
+
+template<typename T, typename Category>
+bool    iterator<T, Category>::operator< (const iterator<T, Category>& x) const
+{
+    if (this->__ptr < x.__ptr) return (true);
+    return (false);
+}
+
+template<typename T, typename Category>
+bool    iterator<T, Category>::operator> (const iterator<T, Category>& x) const
+{
+    if (this->__ptr > x.__ptr) return (true);
+    return (false);
+}
+
+template<typename T, typename Category>
+typename iterator<T, Category>::reference iterator<T, Category>::operator* () const
+{
+    return (*__ptr);
+}
+
+template<typename T, typename Category>
+iterator<T, Category>::pointer <T>iterator<T, Category>::operator-> () const
+{
+    return (__ptr);
+}
+
+template<typename T, typename Category>
+iterator<T, Category>& iterator<T, Category>::operator++ ()
+{
+    ++__ptr;
+    return (*this);
+}
+
+template<typename T, typename Category>
+iterator<T, Category>& iterator<T, Category>::operator-- ()
+{
+    --__ptr;
+    return (*this);
+}
+
+template<typename T, typename Category>
+iterator<T, Category> iterator<T, Category>::operator++ (int)
+{
+    iterator tmp =(*this);
+
+    ++(__ptr);
+    return (tmp);
+}
+
+template<typename T, typename Category>
+iterator<T, Category> iterator<T, Category>::operator-- (int)
+{
+    iterator tmp = (*this);
+
+    --(__ptr);
+    return (tmp);
+}
+
+template<typename T, typename Category>
+iterator<T, Category>& iterator<T, Category>::operator+= (typename iterator<T, Category>::difference_type n)
+{
+    __ptr += n;
+    return (*this);
+}
+
+template<typename T, typename Category>
+iterator<T, Category>& iterator<T, Category>::operator-= (typename iterator<T, Category>::difference_type n)
+{
+    __ptr -= n;
+    return (*this);
+}
+
+template<typename T, typename Category>
+T& iterator<T, Category>::operator[] (typename iterator<T, Category>::difference_type n) const
+{
+    return (this->__ptr[n]);
+}
+
+template<typename T, typename Category>
+typename iterator<T, Category>::difference_type iterator<T, Category>::operator- (const iterator<T, Category>& it)
+{
+    return this->__ptr - it.__ptr;
+}
+
+template<typename T, typename Category>
+iterator<T, Category> iterator<T, Category>::operator+ (typename iterator<T, Category>::difference_type n) const
+{
+    return (iterator(__ptr + n));
+}
+
+template<typename T, typename Category>
+iterator<T, Category> iterator<T, Category>::operator- (typename iterator<T, Category>::difference_type n) const
+{
+    return (iterator(__ptr - n));
+}

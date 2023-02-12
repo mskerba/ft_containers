@@ -10,14 +10,12 @@ int main()
 {
     bool a;
     {
-        ft::vector<A> v((size_t)20, 1);
-        v.push_back(1);
+        std::vector<int> v(20, 4);
 
-        std::cout <<v.capacity() << "***************" << v.size() << std::endl;
-        v.insert(v.begin() + 10, 30, 2);
-        std::cout <<v.capacity() << "***************" << v.size() << std::endl;
+        std::cout << v.capacity() << " " << v.size() << std::endl;
+        v.insert(v.begin(), 21, 15);
+        std::cout << v.capacity() << " " << v.size();
     }
-
     return 0;
 }
 

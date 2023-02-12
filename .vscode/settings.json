@@ -66,6 +66,12 @@
         "iterator.hpp": "c",
         "vector.hpp": "c",
         "ft_containers.hpp": "c",
-        "__functional_03": "cpp"
+        "__functional_03": "cpp",
+        "__tree": "c",
+        "deque": "c",
+        "list": "c",
+        "map": "c",
+        "set": "c",
+        "stack": "c"
     }
 }

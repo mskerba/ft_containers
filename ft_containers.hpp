@@ -6,12 +6,15 @@ namespace ft
 {
     template<typename T, typename A>
     class vector;
+
+    template<typename Iterator>
+    class reverse_iterator;
     
-    // template <typename T>
-    // void swap (ft::vector<T, std::allocator<T> >& x, ft::vector<T, std::allocator<T> >& y)
-    // {
-    //     x.swap(y);
-    // }
+    template <typename T>
+    void swap (ft::vector<T, std::allocator<T> >& x, ft::vector<T, std::allocator<T> >& y)
+    {
+        x.swap(y);
+    }
 
 }
 
