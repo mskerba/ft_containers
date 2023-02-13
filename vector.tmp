@@ -625,11 +625,11 @@ typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::rbegin()
     return (reverse_iterator(end() - 1));
 }
 
-// template<typename T, typename A>
-// typename ft::vector<T, A>::const_reverse_iterator ft::vector<T, A>::rbegin() const
-// {
-//     return (const_reverse_iterator(this->__container + __size - 1));
-// }
+template<typename T, typename A>
+typename ft::vector<T, A>::const_reverse_iterator ft::vector<T, A>::rbegin() const
+{
+    return (const_reverse_iterator(this->__container + __size - 1));
+}
 
 /***********************************************/
 /*                    rend                     */
@@ -642,10 +642,10 @@ typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::rend()
     return (reverse_iterator(begin() - 1));
 }
 
-// template<typename T, typename A>
-// typename ft::vector<T, A>::const_reverse_iterator ft::vector<T, A>::rend() const
-// {
-//     return (const_reverse_iterator(this->__container - 1));
-// }
+template<typename T, typename A>
+typename ft::vector<T, A>::const_reverse_iterator ft::vector<T, A>::rend() const
+{
+    return (const_reverse_iterator(this->__container - 1));
+}
 // ! dealocate 
 

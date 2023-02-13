@@ -189,13 +189,13 @@ class ft::vector
 
         
         reverse_iterator rbegin();
-        // const_reverse_iterator rbegin() const;
+        const_reverse_iterator rbegin() const;
 
         // ? rend
 
         
         reverse_iterator rend();
-        // const_reverse_iterator rend() const;
+        const_reverse_iterator rend() const;
 
         bool operator!=(const vector& x)
         {
