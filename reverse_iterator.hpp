@@ -140,7 +140,7 @@ typename ft::reverse_iterator<Iterator>::difference_type ft::reverse_iterator<It
 template<typename Iterator>
 typename ft::reverse_iterator<Iterator>::pointer ft::reverse_iterator<Iterator>::operator->() const
 {
-    return (__it);
+    return (__it.operator->());
 }
 
 template<typename Iterator>
