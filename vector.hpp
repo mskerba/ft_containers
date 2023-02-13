@@ -62,8 +62,8 @@ class ft::vector
         typedef   const T*                          const_pointer;
         typedef   Iterator<T>                       iterator;
         typedef   Iterator<const T>                 const_iterator;
-        typedef   reverse_iterator<const_iterator>  const_reverse_iterator;
-        typedef   reverse_iterator<iterator>        reverse_iterator;
+        typedef   ft::reverse_iterator<const_iterator>  const_reverse_iterator;
+        typedef   ft::reverse_iterator<iterator>        reverse_iterator;
         typedef   ptrdiff_t                         difference_type;
         typedef   size_t                            size_type;
 
