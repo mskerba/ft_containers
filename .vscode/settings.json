@@ -72,6 +72,9 @@
         "list": "c",
         "map": "c",
         "set": "c",
-        "stack": "c"
+        "stack": "c",
+        "iomanip": "cpp",
+        "numeric": "cpp",
+        "random": "cpp"
     }
 }

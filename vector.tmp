@@ -584,259 +584,6 @@ typename ft::vector<T, A>::allocator_type ft::vector<T, A>::get_allocator() cons
 }
 
 /***********************************************/
-/*                  iterator                   */
-/***********************************************/
-
-template<typename T, typename Category>
-iterator<T, Category>::iterator (){}
-
-template<typename T, typename Category>
-iterator<T, Category>::iterator (iterator<T, Category>::pointer p): __ptr(p){}
-
-template<typename T, typename Category>
-iterator<T, Category>::iterator (const iterator<T, Category>& x):__ptr(x.__ptr){}
-
-template<typename T, typename Category>
-iterator<T, Category>& iterator<T, Category>::operator= (const iterator<T, Category>& x)
-{
-    this->__ptr = x.__ptr;
-    return (*this);
-}
-
-template<typename T, typename Category>
-bool    iterator<T, Category>::operator== (const iterator<T, Category>& x) const
-{
-    if (this->__ptr == x.__ptr) return (true);
-    return (false);
-}
-
-template<typename T, typename Category>
-bool    iterator<T, Category>::operator!= (const iterator<T, Category>& x) const
-{
-    if (this->__ptr != x.__ptr) return (true);
-    return (false);
-}
-
-template<typename T, typename Category>
-bool    iterator<T, Category>::operator>= (const iterator<T, Category>& x) const
-{
-    if (this->__ptr >= x.__ptr) return (true);
-    return (false);
-}
-
-template<typename T, typename Category>
-bool    iterator<T, Category>::operator<= (const iterator<T, Category>& x) const
-{
-    if (this->__ptr <= x.__ptr) return (true);
-    return (false);
-}
-
-template<typename T, typename Category>
-bool    iterator<T, Category>::operator< (const iterator<T, Category>& x) const
-{
-    if (this->__ptr < x.__ptr) return (true);
-    return (false);
-}
-
-template<typename T, typename Category>
-bool    iterator<T, Category>::operator> (const iterator<T, Category>& x) const
-{
-    if (this->__ptr > x.__ptr) return (true);
-    return (false);
-}
-
-template<typename T, typename Category>
-typename iterator<T, Category>::reference iterator<T, Category>::operator* () const
-{
-    return (*__ptr);
-}
-
-template<typename T, typename Category>
-iterator<T, Category>::pointer <T>iterator<T, Category>::operator-> () const
-{
-    return (__ptr);
-}
-
-template<typename T, typename Category>
-iterator<T, Category>& iterator<T, Category>::operator++ ()
-{
-    ++__ptr;
-    return (*this);
-}
-
-template<typename T, typename Category>
-iterator<T, Category>& iterator<T, Category>::operator-- ()
-{
-    --__ptr;
-    return (*this);
-}
-
-template<typename T, typename Category>
-iterator<T, Category> iterator<T, Category>::operator++ (int)
-{
-    iterator tmp =(*this);
-
-    ++(__ptr);
-    return (tmp);
-}
-
-template<typename T, typename Category>
-iterator<T, Category> iterator<T, Category>::operator-- (int)
-{
-    iterator tmp = (*this);
-
-    --(__ptr);
-    return (tmp);
-}
-
-template<typename T, typename Category>
-iterator<T, Category>& iterator<T, Category>::operator+= (typename iterator<T, Category>::difference_type n)
-{
-    __ptr += n;
-    return (*this);
-}
-
-template<typename T, typename Category>
-iterator<T, Category>& iterator<T, Category>::operator-= (typename iterator<T, Category>::difference_type n)
-{
-    __ptr -= n;
-    return (*this);
-}
-
-template<typename T, typename Category>
-T& iterator<T, Category>::operator[] (typename iterator<T, Category>::difference_type n) const
-{
-    return (this->__ptr[n]);
-}
-
-template<typename T, typename Category>
-typename iterator<T, Category>::difference_type iterator<T, Category>::operator- (const iterator<T, Category>& it)
-{
-    return this->__ptr - it.__ptr;
-}
-
-template<typename T, typename Category>
-iterator<T, Category> iterator<T, Category>::operator+ (typename iterator<T, Category>::difference_type n) const
-{
-    return (iterator(__ptr + n));
-}
-
-template<typename T, typename Category>
-iterator<T, Category> iterator<T, Category>::operator- (typename iterator<T, Category>::difference_type n) const
-{
-    return (iterator(__ptr - n));
-}
-
-/***********************************************/
-/*               reverse_iterator              */
-/***********************************************/
-
-template<typename T, typename A>
-template <class Iterator>
-ft::vector<T, A>::reverse_iterator<iterator_type>::reverse_iterator () :__it(){}
-
-template<typename T, typename A>
-template <class Iterator>
-ft::vector<T, A>::reverse_iterator<iterator_type>::reverse_iterator (iterator_type it): __it(it){}
-
-template<typename T, typename A>
-template <class Iterator>
-template <class Iter>  
-ft::vector<T, A>::reverse_iterator<iterator_type>::reverse_iterator (const reverse_iterator<Iter>& rev_it):__it(rev_it.__it){}
-
-template<typename T, typename A>
-template <class Iterator>
-ft::vector<T, A>::iterator_type ft::vector<T, A>::reverse_iterator<iterator_type>::base() const
-{
-    return (__it);
-}
-
-template<typename T, typename A>
-template <class Iterator>
-ft::vector<T, A>::reference ft::vector<T, A>::reverse_iterator<iterator_type>::operator*() const
-{
-    return (*it);
-}
-
-template<typename T, typename A>
-template <class Iterator>
-ft::vector<T, A>::reverse_iterator<iterator_type> ft::vector<T, A>::reverse_iterator<iterator_type>::operator+ (difference_type n) const
-{
-    return (reverse_iterator(__it - n));
-}
-
-template<typename T, typename A>
-template <class Iterator>
-ft::vector<T, A>::reverse_iterator<iterator_type> ft::vector<T, A>::reverse_iterator<iterator_type>::operator- (difference_type n) const
-{
-    return (reverse_iterator(__it + n));
-}
-
-template<typename T, typename A>
-template <class Iterator>
-ft::vector<T, A>::reverse_iterator<iterator_type>& ft::vector<T, A>::reverse_iterator<iterator_type>::operator+= (difference_type n)
-{
-    __it -= n;
-    return (*this);
-}
-
-template<typename T, typename A>
-template <class Iterator>
-ft::vector<T, A>::reverse_iterator<iterator_type>& ft::vector<T, A>::reverse_iterator<iterator_type>::operator-= (difference_type n)
-{
-    __it += n;
-    return (*this);
-}
-
-template<typename T, typename A>
-template <class Iterator>
-typename ft::vector<T, A>::reverse_iterator<iterator_type>& ft::vector<T, A>::reverse_iterator<iterator_type>::operator++()
-{
-    --__it;
-    return (*this);
-}
-
-template<typename T, typename A>
-template <class Iterator>
-typename ft::vector<T, A>::reverse_iterator<iterator_type>  ft::vector<T, A>::reverse_iterator<iterator_type>::operator++(int)
-{
-    reverse_iterator tmp(__it);
-    __it--;
-    return (tmp);
-}
-
-template<typename T, typename A>
-template <class Iterator>
-typename ft::vector<T, A>::reverse_iterator<iterator_type>& ft::vector<T, A>::reverse_iterator<iterator_type>::operator--()
-{
-    ++__it;
-    return (*this);
-}
-
-template<typename T, typename A>
-template <class Iterator>
-typename ft::vector<T, A>::reverse_iterator<iterator_type>  ft::vector<T, A>::reverse_iterator<iterator_type>::operator--(int)
-{
-    reverse_iterator tmp(__it);
-    __it++;
-    return (tmp);
-}
-
-template<typename T, typename A>
-template <class Iterator>
-ft::vector<T, A>::pointer ft::vector<T, A>::reverse_iterator<iterator_type>::operator->() const
-{
-    return (__it);
-}
-
-template<typename T, typename A>
-template <class Iterator>
-ft::vector<T, A>::reference ft::vector<T, A>::reverse_iterator<iterator_type>::operator[] (difference_type n) const
-{
-    return (__it[n]);
-}
-
-/***********************************************/
 /*                    begin                    */
 /***********************************************/
 
@@ -846,11 +593,11 @@ typename ft::vector<T, A>::iterator ft::vector<T, A>::begin()
     return (iterator(this->__container));
 }
 
-// template<typename T, typename A>
-// typename ft::vector<T, A>::const_iterator ft::vector<T, A>::begin() const
-// {
-//     return (const_iterator(this->__container));
-// }
+template<typename T, typename A>
+typename ft::vector<T, A>::const_iterator ft::vector<T, A>::begin() const
+{
+    return (const_iterator(this->__container));
+}
 
 /***********************************************/
 /*                     end                     */
@@ -862,20 +609,20 @@ typename ft::vector<T, A>::iterator ft::vector<T, A>::end()
     return (iterator(this->__container + __size));
 }
 
-// template<typename T, typename A>
-// typename ft::vector<T, A>::const_iterator ft::vector<T, A>::end() const
-// {
-//     return (const_iterator(this->__container + __size));
-// }
+template<typename T, typename A>
+typename ft::vector<T, A>::const_iterator ft::vector<T, A>::end() const
+{
+    return (const_iterator(this->__container + __size));
+}
 
 /***********************************************/
 /*                   rbegin                    */
 /***********************************************/
 
 template<typename T, typename A>
-typename ft::vector<T, A>::reverse_iterator<iterator_type> ft::vector<T, A>::rbegin()
+typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::rbegin()
 {
-    return (reverse_iterator(this->__container + __size - 1));
+    return (reverse_iterator(end() - 1));
 }
 
 // template<typename T, typename A>
@@ -889,9 +636,10 @@ typename ft::vector<T, A>::reverse_iterator<iterator_type> ft::vector<T, A>::rbe
 /***********************************************/
 
 template<typename T, typename A>
-typename ft::vector<T, A>::reverse_iterator<iterator_type> ft::vector<T, A>::rend()
+typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::rend()
 {
-    return (reverse_iterator(this->__container - 1));
+
+    return (reverse_iterator(begin() - 1));
 }
 
 // template<typename T, typename A>
