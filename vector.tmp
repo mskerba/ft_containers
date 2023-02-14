@@ -1,21 +1,15 @@
 #include "vector.hpp"
 
-
 /***********************************************/
 /*                default constructor          */
 /***********************************************/
 
-
 template<typename T, typename A>
 ft::vector<T, A>::vector (const allocator_type& alloc) :__container(nullptr), __size(0), __capacity(0), __alloc(alloc){}
-
-
 
 /***********************************************/
 /*                fill constructor             */
 /***********************************************/
-
-
 
 template<typename T, typename A>
 ft::vector<T, A>::vector (size_type n, const value_type& val, const allocator_type& alloc): __size(n), __capacity(n), __alloc(alloc)
@@ -27,12 +21,9 @@ ft::vector<T, A>::vector (size_type n, const value_type& val, const allocator_ty
         __alloc.construct(&__container[i], val);
 }
 
-
-
 /***********************************************/
 /*               range constructor             */
 /***********************************************/
-
 
 template<typename T, typename A>
 template <class InputIterator> 
@@ -46,11 +37,9 @@ ft::vector<T, A>::vector (InputIterator first, InputIterator last, const allocat
         __alloc.construct(&__container[++i], *(first++));
 }
 
-
 /***********************************************/
 /*               copy constructor              */
 /***********************************************/
-
 
 template<typename T, typename A>
 ft::vector<T, A>::vector(const vector& x): __size(x.__size), __capacity(x.__capacity)
@@ -60,7 +49,6 @@ ft::vector<T, A>::vector(const vector& x): __size(x.__size), __capacity(x.__capa
     for(size_type i = 0; i < this->__size; i++)
         __alloc.construct(&__container[i], x.__container[i]);
 }
-
 
 /***********************************************/
 /*                 destructor                  */
@@ -73,7 +61,6 @@ ft::vector<T, A>::~vector()
     this->__size = 0;
     this->__capacity = 0;
 }
-
 
 /***********************************************/
 /*                 operator=                   */
@@ -109,7 +96,6 @@ typename ft::vector<T, A>::size_type ft::vector<T, A>::size() const
 {
     return (this->__size);
 }
-
 
 /***********************************************/
 /*                 max_size                    */
@@ -622,13 +608,13 @@ typename ft::vector<T, A>::const_iterator ft::vector<T, A>::end() const
 template<typename T, typename A>
 typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::rbegin()
 {
-    return (reverse_iterator(end() - 1));
+    return (reverse_iterator(end()));
 }
 
 template<typename T, typename A>
 typename ft::vector<T, A>::const_reverse_iterator ft::vector<T, A>::rbegin() const
 {
-    return (const_reverse_iterator(this->__container + __size - 1));
+    return (const_reverse_iterator(end()));
 }
 
 /***********************************************/
@@ -639,13 +625,123 @@ template<typename T, typename A>
 typename ft::vector<T, A>::reverse_iterator ft::vector<T, A>::rend()
 {
 
-    return (reverse_iterator(begin() - 1));
+    return (reverse_iterator(begin()));
 }
 
 template<typename T, typename A>
 typename ft::vector<T, A>::const_reverse_iterator ft::vector<T, A>::rend() const
 {
-    return (const_reverse_iterator(this->__container - 1));
+    return (const_reverse_iterator(begin()));
 }
-// ! dealocate 
 
+/***********************************************/
+/*                operator!=                   */
+/***********************************************/
+
+template<typename T, typename A>
+bool ft::vector<T, A>::operator!=(const ft::vector<T, A>& x)
+{
+    if (this->size() != x.size())
+        return (true);
+    if (this->capacity() != x.capacity())
+        return (true);
+    for (size_type i = 0; i < x.size() && i < this->size(); i++)
+        if (this->__container[i] != x.__container[i]) return (true);
+    return (false);
+}
+
+/***********************************************/
+/*                operator==                   */
+/***********************************************/
+
+template<typename T, typename A>
+bool ft::vector<T, A>::operator==(const ft::vector<T, A>& x)
+{
+    if (this->size() != x.size())
+        return (false);
+    if (this->capacity() != x.capacity())
+        return (false);
+    for (size_type i = 0; i < x.size() && i < this->size(); i++)
+        if (this->__container[i] != x.__container[i]) return (false);
+    return (true);
+}
+
+/***********************************************/
+/*                operator>                    */
+/***********************************************/
+
+template<typename T, typename A>
+bool ft::vector<T, A>::operator> (const ft::vector<T, A>& x)
+{
+    for (size_type i = 0; i < x.size() && i < this->size(); i++)
+    {
+        if (this->__container[i] < x.__container[i]) return (false);
+        else if (this->__container[i] > x.__container[i]) return (true);
+    }
+    if (this->size() > x.size()) return (true);
+    return (false);
+}
+
+/***********************************************/
+/*                operator>                    */
+/***********************************************/
+
+template<typename T, typename A>
+bool ft::vector<T, A>::operator< (const ft::vector<T, A>& x)
+{
+    for (size_type i = 0; i < x.size() && i < this->size(); i++)
+    {
+        if (this->__container[i] > x.__container[i]) return (false);
+        else if (this->__container[i] < x.__container[i]) return (true);
+    }
+    if (this->size() < x.size()) return (true);
+    return (false);
+}
+
+/***********************************************/
+/*                operator>                    */
+/***********************************************/
+
+template<typename T, typename A>
+bool ft::vector<T, A>::operator>= (const ft::vector<T, A>& x)
+{
+    for (size_type i = 0; i < x.size() && i < this->size(); i++)
+    {
+        if (this->__container[i] < x.__container[i]) return (false);
+        else if (this->__container[i] > x.__container[i]) return (true);
+    }
+    if (this->size() >= x.size()) return (true);
+    return (false);
+}
+
+/***********************************************/
+/*                operator>                    */
+/***********************************************/
+
+template<typename T, typename A>
+bool ft::vector<T, A>::operator<= (const ft::vector<T, A>& x)
+{
+    for (size_type i = 0; i < x.size() && i < this->size(); i++)
+    {
+        if (this->__container[i] > x.__container[i]) return (false);
+        else if (this->__container[i] < x.__container[i]) return (true);
+    }
+    if (this->size() <= x.size()) return (true);
+    return (false);
+}
+
+/***********************************************/
+/*             private destroyed               */
+/***********************************************/
+
+template<typename T, typename A>
+void ft::vector<T, A>::destroyed()
+{
+    if (__container != nullptr)
+    {
+        for (size_type i = this->__size;i; i--)
+            __alloc.destroy(&this->__container[i - 1]);
+        if(this->capacity())
+            __alloc.deallocate(__container, this->__capacity);
+    }
+}

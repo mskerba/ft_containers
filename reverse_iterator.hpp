@@ -27,6 +27,7 @@ class  ft::reverse_iterator
         reverse_iterator();
         explicit reverse_iterator (iterator_type it);
         reverse_iterator (const reverse_iterator& rev_it);
+        // operator iterator_type<const value_type>() const {return (iterator_type<const value_type>(__it));}
         iterator_type base() const;
         reference operator*() const;
         reverse_iterator operator+ (difference_type n) const;

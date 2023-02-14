@@ -45,6 +45,7 @@ std::ostream& operator<<(std::ostream& out, A a)
 template <typename T, typename Category>
 class Iterator;
 
+// ? reverse_iterator
 template <typename T>
 class reverse_iterator;
 
@@ -54,18 +55,18 @@ class ft::vector
 
     public:
 
-        typedef   T                                 value_type;
-        typedef   A                                 allocator_type;
-        typedef   T&                                reference;
-        typedef   const T&                          const_reference;
-        typedef   T*                                pointer;
-        typedef   const T*                          const_pointer;
-        typedef   Iterator<T>                       iterator;
-        typedef   Iterator<const T>                 const_iterator;
+        typedef   T                                     value_type;
+        typedef   A                                     allocator_type;
+        typedef   T&                                    reference;
+        typedef   const T&                              const_reference;
+        typedef   T*                                    pointer;
+        typedef   const T*                              const_pointer;
+        typedef   Iterator<T>                           iterator;
+        typedef   Iterator<const T>                     const_iterator;
         typedef   ft::reverse_iterator<const iterator>  const_reverse_iterator;
         typedef   ft::reverse_iterator<iterator>        reverse_iterator;
-        typedef   ptrdiff_t                         difference_type;
-        typedef   size_t                            size_type;
+        typedef   ptrdiff_t                             difference_type;
+        typedef   size_t                                size_type;
 
     public:
 
@@ -137,145 +138,83 @@ class ft::vector
         const value_type* data() const throw();
 
         // ? assigner
-
         template <class InputIterator>
         void assign (InputIterator first, InputIterator last);
         void assign (size_type n, const value_type& val);
 
         // ? push_back
-
         void push_back (const value_type& val);
 
         // ? pop_back
-
         void pop_back ();
 
 		// ? swap
-
 		void swap (vector& x);
 
         // ? clear
-
         void clear();
 
         // ? get_allocator
-
         allocator_type get_allocator() const;
         
         // ? insert
-
-
 		iterator insert (iterator position, const T& val);
+
+        // ? insert fill
     	void insert (iterator position, size_t n, const T& val);
+        
+        // ? insert range
 		template <class InputIterator>
 		void insert (iterator position, InputIterator first, InputIterator last);
 
 		// ? erase
-
 		iterator erase (iterator position);
+		
+        // ? erase range
 		iterator erase (iterator first, iterator last);
 
         // ? begin
-
         iterator begin();
         const_iterator begin() const;
 
         // ? end
-
         iterator end();
         const_iterator end() const;
 
         // ? rbegin
-
-        
         reverse_iterator rbegin();
         const_reverse_iterator rbegin() const;
 
         // ? rend
-
-        
         reverse_iterator rend();
         const_reverse_iterator rend() const;
 
-        bool operator!=(const vector& x)
-        {
-            if (this->size() != x.size())
-                return (true);
-            if (this->capacity() != x.capacity())
-                return (true);
-            for (size_type i = 0; i < x.size() && i < this->size(); i++)
-                if (this->__container[i] != x.__container[i]) return (true);
-            return (false);
-        }
-        bool operator==(const vector& x)
-        {
-            if (this->size() != x.size())
-                return (false);
-            if (this->capacity() != x.capacity())
-                return (false);
-            for (size_type i = 0; i < x.size() && i < this->size(); i++)
-                if (this->__container[i] != x.__container[i]) return (false);
-            return (true);
-        }
+        // ? operator!=
+        bool operator!=(const vector& x);
 
-        bool operator> (const vector& x)
-        {
-            for (size_type i = 0; i < x.size() && i < this->size(); i++)
-            {
-                if (this->__container[i] < x.__container[i]) return (false);
-                else if (this->__container[i] > x.__container[i]) return (true);
-            }
-            if (this->size() > x.size()) return (true);
-            return (false);
-        }
+        // ? operator==
+        bool operator==(const vector& x);
 
-        bool operator< (const vector& x)
-        {
-            for (size_type i = 0; i < x.size() && i < this->size(); i++)
-            {
-                if (this->__container[i] > x.__container[i]) return (false);
-                else if (this->__container[i] < x.__container[i]) return (true);
-            }
-            if (this->size() < x.size()) return (true);
-            return (false);
-        }
-        bool operator>= (const vector& x)
-        {
-            for (size_type i = 0; i < x.size() && i < this->size(); i++)
-            {
-                if (this->__container[i] < x.__container[i]) return (false);
-                else if (this->__container[i] > x.__container[i]) return (true);
-            }
-            if (this->size() >= x.size()) return (true);
-            return (false);
-        }
+        // ? operator>
+        bool operator> (const vector& x);
+        
+        // ? operator<
+        bool operator< (const vector& x);
 
-        bool operator<= (const vector& x)
-        {
-            for (size_type i = 0; i < x.size() && i < this->size(); i++)
-            {
-                if (this->__container[i] > x.__container[i]) return (false);
-                else if (this->__container[i] < x.__container[i]) return (true);
-            }
-            if (this->size() <= x.size()) return (true);
-            return (false);
-        }
+        // ? operator>=
+        bool operator>= (const vector& x);
 
-    private:
+        // ? operator<=
+        bool operator<= (const vector& x);
+
+    private: // *data member
         pointer              __container;
         size_type            __size;
         size_type            __capacity;
         allocator_type       __alloc;
-        void destroyed()
-        {
-            if (__container != nullptr)
-            {
-                for (size_type i = this->__size;i; i--)
-                    __alloc.destroy(&this->__container[i - 1]);
-                if(this->capacity())
-                    __alloc.deallocate(__container, this->__capacity);
-            }
-        }
+    
+    private: // *member function
+        void destroyed();
 };
 
 
