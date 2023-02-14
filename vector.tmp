@@ -731,6 +731,16 @@ bool ft::vector<T, A>::operator<= (const ft::vector<T, A>& x)
 }
 
 /***********************************************/
+/*                operator>                    */
+/***********************************************/
+
+template <typename T>
+void ft::swap (ft::vector<T, std::allocator<T> >& x, ft::vector<T, std::allocator<T> >& y)
+{
+    x.swap(y);
+}
+
+/***********************************************/
 /*             private destroyed               */
 /***********************************************/
 
@@ -745,3 +755,4 @@ void ft::vector<T, A>::destroyed()
             __alloc.deallocate(__container, this->__capacity);
     }
 }
+

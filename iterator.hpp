@@ -1,4 +1,3 @@
-
 # ifndef __ITERATOR__HPP
 # define __ITERATOR__HPP
 # include <iostream>
@@ -46,7 +45,6 @@ Iterator<T> operator+ (typename Iterator<T>::difference_type n, const Iterator<T
     Iterator<T> it1(it);
     return (it1 + n);
 }
-
 
 template<typename T, typename Category>
 Iterator<T, Category>::Iterator (){}
