@@ -17,6 +17,14 @@ class Iterator
         Iterator (pointer p);
         Iterator (const Iterator& x);
         Iterator& operator= (const Iterator& x);
+        template<typename cT>
+        cT (cT& x):__ptr(x.__ptr){}
+        template<typename cT>
+        cT& operator= (cT& x)
+        {
+            this->__ptr = x.__ptr;
+            return (*this);
+        }
         bool operator== (const Iterator& x) const;
         bool operator!= (const Iterator& x) const;
         reference operator* () const;
@@ -35,6 +43,7 @@ class Iterator
         Iterator& operator+= (difference_type n);
         Iterator& operator-= (difference_type n);
         reference operator[] (difference_type n) const;
+
     private:
         pointer __ptr;
 };
