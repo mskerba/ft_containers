@@ -39,6 +39,10 @@ class Iterator
         pointer __ptr;
 };
 
+/***********************************************/
+/*                  operator+                  */
+/***********************************************/
+
 template<typename T>
 Iterator<T> operator+ (typename Iterator<T>::difference_type n, const Iterator<T>& it)
 {
@@ -46,14 +50,30 @@ Iterator<T> operator+ (typename Iterator<T>::difference_type n, const Iterator<T
     return (it1 + n);
 }
 
+/***********************************************/
+/*                default constructor          */
+/***********************************************/
+
 template<typename T, typename Category>
 Iterator<T, Category>::Iterator (){}
+
+/***********************************************/
+/*            parametrize constructor          */
+/***********************************************/
 
 template<typename T, typename Category>
 Iterator<T, Category>::Iterator (Iterator<T, Category>::pointer p): __ptr(p){}
 
+/***********************************************/
+/*               copy constructor              */
+/***********************************************/
+
 template<typename T, typename Category>
 Iterator<T, Category>::Iterator (const Iterator<T, Category>& x):__ptr(x.__ptr){}
+
+/***********************************************/
+/*                 operator=                   */
+/***********************************************/
 
 template<typename T, typename Category>
 Iterator<T, Category>& Iterator<T, Category>::operator= (const Iterator<T, Category>& x)
@@ -62,12 +82,20 @@ Iterator<T, Category>& Iterator<T, Category>::operator= (const Iterator<T, Categ
     return (*this);
 }
 
+/***********************************************/
+/*                 operator==                  */
+/***********************************************/
+
 template<typename T, typename Category>
 bool    Iterator<T, Category>::operator== (const Iterator<T, Category>& x) const
 {
     if (this->__ptr == x.__ptr) return (true);
     return (false);
 }
+
+/***********************************************/
+/*                 operator!=                  */
+/***********************************************/
 
 template<typename T, typename Category>
 bool    Iterator<T, Category>::operator!= (const Iterator<T, Category>& x) const
@@ -76,12 +104,20 @@ bool    Iterator<T, Category>::operator!= (const Iterator<T, Category>& x) const
     return (false);
 }
 
+/***********************************************/
+/*                 operator>=                  */
+/***********************************************/
+
 template<typename T, typename Category>
 bool    Iterator<T, Category>::operator>= (const Iterator<T, Category>& x) const
 {
     if (this->__ptr >= x.__ptr) return (true);
     return (false);
 }
+
+/***********************************************/
+/*                 operator<=                  */
+/***********************************************/
 
 template<typename T, typename Category>
 bool    Iterator<T, Category>::operator<= (const Iterator<T, Category>& x) const
@@ -90,12 +126,20 @@ bool    Iterator<T, Category>::operator<= (const Iterator<T, Category>& x) const
     return (false);
 }
 
+/***********************************************/
+/*                  operator<                  */
+/***********************************************/
+
 template<typename T, typename Category>
 bool    Iterator<T, Category>::operator< (const Iterator<T, Category>& x) const
 {
     if (this->__ptr < x.__ptr) return (true);
     return (false);
 }
+
+/***********************************************/
+/*                  operator>                  */
+/***********************************************/
 
 template<typename T, typename Category>
 bool    Iterator<T, Category>::operator> (const Iterator<T, Category>& x) const
@@ -104,17 +148,29 @@ bool    Iterator<T, Category>::operator> (const Iterator<T, Category>& x) const
     return (false);
 }
 
+/***********************************************/
+/*                  operator*                  */
+/***********************************************/
+
 template<typename T, typename Category>
 typename Iterator<T, Category>::reference Iterator<T, Category>::operator* () const
 {
     return (*__ptr);
 }
 
+/***********************************************/
+/*                 operator->                  */
+/***********************************************/
+
 template<typename T, typename Category>
 typename Iterator<T, Category>::pointer Iterator<T, Category>::operator-> () const
 {
     return (__ptr);
 }
+
+/***********************************************/
+/*                 operator++                  */
+/***********************************************/
 
 template<typename T, typename Category>
 Iterator<T, Category>& Iterator<T, Category>::operator++ ()
@@ -123,12 +179,20 @@ Iterator<T, Category>& Iterator<T, Category>::operator++ ()
     return (*this);
 }
 
+/***********************************************/
+/*                 operator--                  */
+/***********************************************/
+
 template<typename T, typename Category>
 Iterator<T, Category>& Iterator<T, Category>::operator-- ()
 {
     --__ptr;
     return (*this);
 }
+
+/***********************************************/
+/*                 ++operator                  */
+/***********************************************/
 
 template<typename T, typename Category>
 Iterator<T, Category> Iterator<T, Category>::operator++ (int)
@@ -139,6 +203,10 @@ Iterator<T, Category> Iterator<T, Category>::operator++ (int)
     return (tmp);
 }
 
+/***********************************************/
+/*                 --operator                  */
+/***********************************************/
+
 template<typename T, typename Category>
 Iterator<T, Category> Iterator<T, Category>::operator-- (int)
 {
@@ -148,12 +216,20 @@ Iterator<T, Category> Iterator<T, Category>::operator-- (int)
     return (tmp);
 }
 
+/***********************************************/
+/*                 operator+=                  */
+/***********************************************/
+
 template<typename T, typename Category>
 Iterator<T, Category>& Iterator<T, Category>::operator+= (typename Iterator<T, Category>::difference_type n)
 {
     __ptr += n;
     return (*this);
 }
+
+/***********************************************/
+/*                 operator-=                  */
+/***********************************************/
 
 template<typename T, typename Category>
 Iterator<T, Category>& Iterator<T, Category>::operator-= (typename Iterator<T, Category>::difference_type n)
@@ -162,11 +238,19 @@ Iterator<T, Category>& Iterator<T, Category>::operator-= (typename Iterator<T, C
     return (*this);
 }
 
+/***********************************************/
+/*                 operator[]                  */
+/***********************************************/
+
 template<typename T, typename Category>
 T& Iterator<T, Category>::operator[] (typename Iterator<T, Category>::difference_type n) const
 {
     return (this->__ptr[n]);
 }
+
+/***********************************************/
+/*                  operator-                  */
+/***********************************************/
 
 template<typename T, typename Category>
 typename Iterator<T, Category>::difference_type Iterator<T, Category>::operator- (const Iterator<T, Category>& it)
@@ -174,11 +258,19 @@ typename Iterator<T, Category>::difference_type Iterator<T, Category>::operator-
     return this->__ptr - it.__ptr;
 }
 
+/***********************************************/
+/*                  operator+                  */
+/***********************************************/
+
 template<typename T, typename Category>
 Iterator<T, Category> Iterator<T, Category>::operator+ (typename Iterator<T, Category>::difference_type n) const
 {
     return (Iterator(__ptr + n));
 }
+
+/***********************************************/
+/*                  operator-                  */
+/***********************************************/
 
 template<typename T, typename Category>
 Iterator<T, Category> Iterator<T, Category>::operator- (typename Iterator<T, Category>::difference_type n) const

@@ -6,8 +6,8 @@ namespace ft
     template<typename T, typename A>
     class vector;
 
-    template <typename T>
-    void swap (ft::vector<T, std::allocator<T> >& x, ft::vector<T, std::allocator<T> >& y);
+    // template <typename T>
+    // void swap (ft::vector<T, std::allocator<T> >& x, ft::vector<T, std::allocator<T> >& y);
 }
 
 # endif
