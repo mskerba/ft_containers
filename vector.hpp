@@ -191,23 +191,96 @@ class ft::vector
         reverse_iterator rend();
         const_reverse_iterator rend() const;
 
-        // ? operator!=
-        bool operator!=(const vector& x);
+        // // ? operator!=
+        // bool operator!=(const vector& x);
 
-        // ? operator==
-        bool operator==(const vector& x);
+        // // ? operator==
+        // bool operator==(const vector& x);
 
-        // ? operator>
-        bool operator> (const vector& x);
+        // // ? operator>
+        // bool operator> (const vector& x);
         
-        // ? operator<
-        bool operator< (const vector& x);
+        // // ? operator<
+        // bool operator< (const vector& x);
 
-        // ? operator>=
-        bool operator>= (const vector& x);
+        // // ? operator>=
+        // bool operator>= (const vector& x);
 
-        // ? operator<=
-        bool operator<= (const vector& x);
+        // // ? operator<=
+        // bool operator<= (const vector& x);
+
+    template <class _T, class  _Alloc>
+        friend bool operator== (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs)
+    {
+        if (lhs.size() != rhs.size())
+            return (false);
+        if (lhs.capacity() != rhs.capacity())
+            return (false);
+        for (size_type i = 0; i < rhs.size() && i < lhs.size(); i++)
+            if (lhs.__container[i] != rhs.__container[i]) return (false);
+        return (true);
+    }
+
+    template <class _T, class  _Alloc>
+        friend bool operator!= (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs)
+    {
+        if (lhs.size() != rhs.size())
+            return (true);
+        if (lhs.capacity() != rhs.capacity())
+            return (true);
+        for (size_type i = 0; i < rhs.size() && i < lhs.size(); i++)
+            if (lhs.__container[i] != rhs.__container[i]) return (true);
+        return (false);
+    }
+
+    template <class _T, class  _Alloc>
+        friend bool operator<  (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs)
+    {
+        for (size_type i = 0; i < rhs.size() && i < lhs.size(); i++)
+        {
+            if (lhs.__container[i] > rhs.__container[i]) return (false);
+            else if (lhs.__container[i] < rhs.__container[i]) return (true);
+        }
+        if (lhs.size() < rhs.size()) return (true);
+        return (false);
+    }
+
+    template <class _T, class  _Alloc>
+        friend bool operator<= (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs)
+    {
+        for (size_type i = 0; i < rhs.size() && i < lhs.size(); i++)
+        {
+            if (lhs.__container[i] > rhs.__container[i]) return (false);
+            else if (lhs.__container[i] < rhs.__container[i]) return (true);
+        }
+        if (lhs.size() <= rhs.size()) return (true);
+        return (false);
+    }
+
+    template <class _T, class  _Alloc>
+        friend bool operator>  (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs)
+    {
+        for (size_type i = 0; i < rhs.size() && i < lhs.size(); i++)
+        {
+            if (lhs.__container[i] < rhs.__container[i]) return (false);
+            else if (lhs.__container[i] > rhs.__container[i]) return (true);
+        }
+        if (lhs.size() > rhs.size()) return (true);
+        return (false);
+    }
+
+    template <class _T, class  _Alloc>
+        friend bool operator>= (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs)
+    {
+        for (size_type i = 0; i < rhs.size() && i < lhs.size(); i++)
+        {
+            if (lhs.__container[i] < rhs.__container[i]) return (false);
+            else if (lhs.__container[i] > rhs.__container[i]) return (true);
+        }
+        if (lhs.size() >= rhs.size()) return (true);
+        return (false);
+    }
+
 
     private: // *data member
         pointer              __container;

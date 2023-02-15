@@ -658,97 +658,97 @@ typename ft::vector<T, A>::const_reverse_iterator ft::vector<T, A>::rend() const
 /*                operator!=                   */
 /***********************************************/
 
-template<typename T, typename A>
-bool ft::vector<T, A>::operator!=(const ft::vector<T, A>& x)
-{
-    if (this->size() != x.size())
-        return (true);
-    if (this->capacity() != x.capacity())
-        return (true);
-    for (size_type i = 0; i < x.size() && i < this->size(); i++)
-        if (this->__container[i] != x.__container[i]) return (true);
-    return (false);
-}
+// template<typename T, typename A>
+// bool ft::vector<T, A>::operator!=(const ft::vector<T, A>& x)
+// {
+//     if (this->size() != x.size())
+//         return (true);
+//     if (this->capacity() != x.capacity())
+//         return (true);
+//     for (size_type i = 0; i < x.size() && i < this->size(); i++)
+//         if (this->__container[i] != x.__container[i]) return (true);
+//     return (false);
+// }
 
 /***********************************************/
 /*                operator==                   */
 /***********************************************/
 
-template<typename T, typename A>
-bool ft::vector<T, A>::operator==(const ft::vector<T, A>& x)
-{
-    if (this->size() != x.size())
-        return (false);
-    if (this->capacity() != x.capacity())
-        return (false);
-    for (size_type i = 0; i < x.size() && i < this->size(); i++)
-        if (this->__container[i] != x.__container[i]) return (false);
-    return (true);
-}
+// template<typename T, typename A>
+// bool ft::vector<T, A>::operator==(const ft::vector<T, A>& x)
+// {
+//     if (this->size() != x.size())
+//         return (false);
+//     if (this->capacity() != x.capacity())
+//         return (false);
+//     for (size_type i = 0; i < x.size() && i < this->size(); i++)
+//         if (this->__container[i] != x.__container[i]) return (false);
+//     return (true);
+// }
 
 /***********************************************/
 /*                operator>                    */
 /***********************************************/
 
-template<typename T, typename A>
-bool ft::vector<T, A>::operator> (const ft::vector<T, A>& x)
-{
-    for (size_type i = 0; i < x.size() && i < this->size(); i++)
-    {
-        if (this->__container[i] < x.__container[i]) return (false);
-        else if (this->__container[i] > x.__container[i]) return (true);
-    }
-    if (this->size() > x.size()) return (true);
-    return (false);
-}
+// template<typename T, typename A>
+// bool ft::vector<T, A>::operator> (const ft::vector<T, A>& x)
+// {
+//     for (size_type i = 0; i < x.size() && i < this->size(); i++)
+//     {
+//         if (this->__container[i] < x.__container[i]) return (false);
+//         else if (this->__container[i] > x.__container[i]) return (true);
+//     }
+//     if (this->size() > x.size()) return (true);
+//     return (false);
+// }
+
+/***********************************************/
+/*                operator<                    */
+/***********************************************/
+
+// template<typename T, typename A>
+// bool ft::vector<T, A>::operator< (const ft::vector<T, A>& x)
+// {
+//     for (size_type i = 0; i < x.size() && i < this->size(); i++)
+//     {
+//         if (this->__container[i] > x.__container[i]) return (false);
+//         else if (this->__container[i] < x.__container[i]) return (true);
+//     }
+//     if (this->size() < x.size()) return (true);
+//     return (false);
+// }
 
 /***********************************************/
 /*                operator>                    */
 /***********************************************/
 
-template<typename T, typename A>
-bool ft::vector<T, A>::operator< (const ft::vector<T, A>& x)
-{
-    for (size_type i = 0; i < x.size() && i < this->size(); i++)
-    {
-        if (this->__container[i] > x.__container[i]) return (false);
-        else if (this->__container[i] < x.__container[i]) return (true);
-    }
-    if (this->size() < x.size()) return (true);
-    return (false);
-}
+// template<typename T, typename A>
+// bool ft::vector<T, A>::operator>= (const ft::vector<T, A>& x)
+// {
+//     for (size_type i = 0; i < x.size() && i < this->size(); i++)
+//     {
+//         if (this->__container[i] < x.__container[i]) return (false);
+//         else if (this->__container[i] > x.__container[i]) return (true);
+//     }
+//     if (this->size() >= x.size()) return (true);
+//     return (false);
+// }
 
 /***********************************************/
 /*                operator>                    */
 /***********************************************/
 
-template<typename T, typename A>
-bool ft::vector<T, A>::operator>= (const ft::vector<T, A>& x)
-{
-    for (size_type i = 0; i < x.size() && i < this->size(); i++)
-    {
-        if (this->__container[i] < x.__container[i]) return (false);
-        else if (this->__container[i] > x.__container[i]) return (true);
-    }
-    if (this->size() >= x.size()) return (true);
-    return (false);
-}
-
-/***********************************************/
-/*                operator>                    */
-/***********************************************/
-
-template<typename T, typename A>
-bool ft::vector<T, A>::operator<= (const ft::vector<T, A>& x)
-{
-    for (size_type i = 0; i < x.size() && i < this->size(); i++)
-    {
-        if (this->__container[i] > x.__container[i]) return (false);
-        else if (this->__container[i] < x.__container[i]) return (true);
-    }
-    if (this->size() <= x.size()) return (true);
-    return (false);
-}
+// template<typename T, typename A>
+// bool ft::vector<T, A>::operator<= (const ft::vector<T, A>& x)
+// {
+//     for (size_type i = 0; i < x.size() && i < this->size(); i++)
+//     {
+//         if (this->__container[i] > x.__container[i]) return (false);
+//         else if (this->__container[i] < x.__container[i]) return (true);
+//     }
+//     if (this->size() <= x.size()) return (true);
+//     return (false);
+// }
 
 /***********************************************/
 /*                   swap                      */
