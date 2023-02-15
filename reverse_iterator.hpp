@@ -45,17 +45,17 @@ class  ft::reverse_iterator
         pointer operator->() const;
         reference operator[] (difference_type n) const;
         template<typename Iterator1, typename Iterator2>
-            friend bool operator== (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs){ return (lhs.__it  == rhs.__it);}
+            friend bool operator== (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs) { return (lhs.__it  == rhs.__it);}
         template<typename Iterator1, typename Iterator2>
-            friend bool operator!= (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs){ return (lhs.__it  != rhs.__it);}
+            friend bool operator!= (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs) { return (lhs.__it  != rhs.__it);}
         template<typename Iterator1, typename Iterator2>
-            friend bool operator<  (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs){ return (lhs.__it  > rhs.__it);}
+            friend bool operator<  (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs) { return (lhs.__it  > rhs.__it);}
         template<typename Iterator1, typename Iterator2>
-            friend bool operator<= (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs){ return (lhs.__it  >= rhs.__it);}
+            friend bool operator<= (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs) {return !(rhs < lhs);}
         template<typename Iterator1, typename Iterator2>
-            friend bool operator>  (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs){ return (lhs.__it  < rhs.__it);}
+            friend bool operator>  (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs) {return (rhs < lhs);}
         template<typename Iterator1, typename Iterator2>
-            friend bool operator>= (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs){ return (lhs.__it  <= rhs.__it);}
+            friend bool operator>= (const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs) {return !(lhs < rhs);}
 
     private:
         Iterator __it;

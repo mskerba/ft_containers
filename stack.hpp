@@ -1,15 +1,15 @@
 # ifndef __STACK_HPP__
 # define __STACK_HPP__
-# include "ft_containers.hpp"
+// # include "ft_containers.hpp"
 # include "vector.hpp"
-# include "pair.hpp"
+# include <iostream>
+# include <memory>
 
 namespace ft
 {
     template <typename T, typename Container>
     class stack;
-}
-
+};
 
 template <typename T, typename Container = ft::vector<T> >
 class ft::stack
@@ -31,23 +31,23 @@ class ft::stack
         void push (const value_type& val);
         void pop();
 
-        template <typename T1, typename T2>
-            friend bool operator== (const ft::stack<T1>& lhs, const ft::stack<T2>& rhs) {return (lhs.c == rhs.c);}
+        template <typename _T, typename _Container>
+            friend bool operator== (const ft::stack<_T,_Container>& lhs, const ft::stack<_T,_Container>& rhs) {return (lhs.c == rhs.c);}
 
-        template <typename T1, typename T2>
-            friend bool operator!= (const ft::stack<T1>& lhs, const ft::stack<T2>& rhs) {return (lhs.c != rhs.c);}
+        template <typename _T, typename _Container>
+            friend bool operator!= (const ft::stack<_T,_Container>& lhs, const ft::stack<_T,_Container>& rhs) {return (lhs.c != rhs.c);}
 
-        template <typename T1, typename T2>
-            friend bool operator<  (const ft::stack<T1>& lhs, const ft::stack<T2>& rhs) {return (lhs.c < rhs.c);}
+        template <typename _T, typename _Container>
+            friend bool operator<  (const ft::stack<_T,_Container>& lhs, const ft::stack<_T,_Container>& rhs) {return (lhs.c < rhs.c);}
 
-        template <typename T1, typename T2>
-            friend bool operator<= (const ft::stack<T1>& lhs, const ft::stack<T2>& rhs) {return (lhs.c <= rhs.c);}
+        template <typename _T, typename _Container>
+            friend bool operator<= (const ft::stack<_T,_Container>& lhs, const ft::stack<_T,_Container>& rhs) {return (lhs.c <= rhs.c);}
 
-        template <typename T1, typename T2>
-            friend bool operator>  (const ft::stack<T1>& lhs, const ft::stack<T2>& rhs) {return (lhs.c > rhs.c);}
+        template <typename _T, typename _Container>
+            friend bool operator>  (const ft::stack<_T,_Container>& lhs, const ft::stack<_T,_Container>& rhs) {return (lhs.c > rhs.c);}
 
-        template <typename T1, typename T2>
-            friend bool operator>= (const ft::stack<T1>& lhs, const ft::stack<T2>& rhs) {return (lhs.c >= rhs.c);}
+        template <typename _T, typename _Container>
+            friend bool operator>= (const ft::stack<_T,_Container>& lhs, const ft::stack<_T,_Container>& rhs) {return (lhs.c >= rhs.c);}
 
 };
 
