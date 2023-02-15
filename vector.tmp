@@ -108,6 +108,7 @@ size_t ft::vector<T, A>::max_size() const
     if (sizeT == 1)
         sizeT = 2;
     return (std::numeric_limits<std::size_t>::max() / sizeT);
+    // return (MAX_SIZE_T / sizeT);
 }
 
 /***********************************************/
@@ -124,28 +125,26 @@ void ft::vector<T, A>::resize (size_type n, value_type val)
         __size = n;
         return ;
     }
-    else if (n < this->capacity())
+    else if (n <= this->capacity())
     {
         for (size_type i = n; i > this->size(); i--)
             __alloc.construct(&__container[i - 1], val);
         this->__size = n;
         return ;
     }
-    else if (n > this->capacity())
-    {
-        pointer newcontainer  = __alloc.allocate(n);
-        for (size_type i = this->__size; i < n; i++)
-            __alloc.construct(&newcontainer[i], val);
+    size_type newcapacity = (n > capacity() * 2) ? n : (capacity() * 2);
 
-        for (size_type i = this->__size; i > 0; i--)
-             __alloc.construct(&newcontainer[i - 1], this->__container[i - 1]);
-        this->destroyed();
-        __container = newcontainer;
-    }
+    pointer newcontainer  = __alloc.allocate(newcapacity);
+
+    for (size_type i = this->__size; i < n; i++)
+        __alloc.construct(&newcontainer[i], val);
+
+    for (size_type i = this->__size; i > 0; i--)
+            __alloc.construct(&newcontainer[i - 1], this->__container[i - 1]);
+    this->destroyed();
+    __container = newcontainer;
+    this->__capacity = newcapacity;
     this->__size = n;
-    if (n > this->__capacity && n < 2 * this->__capacity)
-        n *= 2;
-    this->__capacity = n;
 }
 
 /***********************************************/
@@ -752,10 +751,10 @@ bool ft::vector<T, A>::operator<= (const ft::vector<T, A>& x)
 }
 
 /***********************************************/
-/*                operator>                    */
+/*                   swap                      */
 /***********************************************/
 
-// template <typename T>
+// template <typename T, typename A>
 // void ft::swap (ft::vector<T, std::allocator<T> >& x, ft::vector<T, std::allocator<T> >& y)
 // {
 //     x.swap(y);

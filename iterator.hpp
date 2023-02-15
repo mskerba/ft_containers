@@ -15,16 +15,20 @@ class Iterator
     public:
         Iterator ();
         Iterator (pointer p);
-        Iterator (const Iterator& x);
-        Iterator& operator= (const Iterator& x);
+
+        template<typename cT, typename _Category>
+        friend class Iterator;
+
         template<typename cT>
-        cT (cT& x):__ptr(x.__ptr){}
+        Iterator (const Iterator<cT>& x) : __ptr(x.__ptr){}
+
         template<typename cT>
-        cT& operator= (cT& x)
+        Iterator<cT>& operator= (const T& x)
         {
             this->__ptr = x.__ptr;
             return (*this);
         }
+
         bool operator== (const Iterator& x) const;
         bool operator!= (const Iterator& x) const;
         reference operator* () const;
@@ -77,19 +81,19 @@ Iterator<T, Category>::Iterator (Iterator<T, Category>::pointer p): __ptr(p){}
 /*               copy constructor              */
 /***********************************************/
 
-template<typename T, typename Category>
-Iterator<T, Category>::Iterator (const Iterator<T, Category>& x):__ptr(x.__ptr){}
+// template<typename T, typename Category>
+// Iterator<T, Category>::Iterator (const Iterator<T, Category>& x):__ptr(x.__ptr){}
 
 /***********************************************/
 /*                 operator=                   */
 /***********************************************/
 
-template<typename T, typename Category>
-Iterator<T, Category>& Iterator<T, Category>::operator= (const Iterator<T, Category>& x)
-{
-    this->__ptr = x.__ptr;
-    return (*this);
-}
+// template<typename T, typename Category>
+// Iterator<T, Category>& Iterator<T, Category>::operator= (const Iterator<T, Category>& x)
+// {
+//     this->__ptr = x.__ptr;
+//     return (*this);
+// }
 
 /***********************************************/
 /*                 operator==                  */

@@ -6,6 +6,8 @@
 # include <iostream>
 # include <memory>
 
+// # define MAX_SIZE_T 18446744073709551615
+
 
 class   A
 {
@@ -63,8 +65,8 @@ class ft::vector
         typedef   const T*                              const_pointer;
         typedef   Iterator<T>                           iterator;
         typedef   Iterator<const T>                     const_iterator;
-        typedef   ft::reverse_iterator<const iterator>  const_reverse_iterator;
         typedef   ft::reverse_iterator<iterator>        reverse_iterator;
+        typedef   ft::reverse_iterator<const_iterator>  const_reverse_iterator;
         typedef   ptrdiff_t                             difference_type;
         typedef   size_t                                size_type;
 
