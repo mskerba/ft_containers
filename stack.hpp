@@ -1,7 +1,7 @@
 # ifndef __STACK_HPP__
 # define __STACK_HPP__
-// # include "ft_containers.hpp"
 # include "vector.hpp"
+# include "vector.tmp"
 # include <iostream>
 # include <memory>
 
@@ -18,6 +18,9 @@ class ft::stack
         typedef     T                        value_type;
         typedef     Container                container_type;
         typedef     size_t                   size_type;
+        typedef typename     Container::reference     reference;
+        typedef typename     Container::const_reference     const_reference;
+
 
     protected:
         container_type c;

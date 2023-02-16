@@ -8,7 +8,7 @@ OBJ= $(SRC:.cpp=.o)
 
 GA= git add .
 
-GC= git commit -m "working in vector"
+GC= git commit -m "Completed work on vector and stack and pair - all tests passed successfully!"
 
 GP= git push
 

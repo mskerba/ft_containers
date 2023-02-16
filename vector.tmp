@@ -42,7 +42,7 @@ ft::vector<T, A>::vector (InputIterator first, InputIterator last, const allocat
 /***********************************************/
 
 template<typename T, typename A>
-ft::vector<T, A>::vector(const vector& x): __size(x.__size), __capacity(x.__capacity)
+ft::vector<T, A>::vector (const vector& x): __size(x.__size), __capacity(x.__capacity)
 {
     if (!size()) return ;
     this->__container = __alloc.allocate(this->__size);
@@ -55,7 +55,7 @@ ft::vector<T, A>::vector(const vector& x): __size(x.__size), __capacity(x.__capa
 /***********************************************/
 
 template<typename T, typename A>
-ft::vector<T, A>::~vector()
+ft::vector<T, A>::~vector ()
 {
     this->destroyed();
     this->__size = 0;
