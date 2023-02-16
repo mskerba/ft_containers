@@ -1,7 +1,7 @@
 # ifndef __STACK_HPP__
 # define __STACK_HPP__
-# include "vector.hpp"
-# include "vector.tmp"
+# include "../vector/vector.hpp"
+# include "../vector/vector.tmp"
 # include <iostream>
 # include <memory>
 

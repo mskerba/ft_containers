@@ -2,13 +2,15 @@ NAME =ft_containers
 
 SRC=vector.cpp
 
-CPPFLAGS=-Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
+CXXFLAGS=-Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
+
+CXX=c++
 
 OBJ= $(SRC:.cpp=.o)
 
 GA= git add .
 
-GC= git commit -m "Completed work on vector and stack and pair - all tests passed successfully!"
+GC= git commit -m "$(ARGS)"
 
 GP= git push
 
@@ -16,7 +18,7 @@ all : $(NAME)
 
 
 $(NAME) : $(OBJ)
-	c++ $(CPPFLAGS) $(OBJ) -o $(NAME)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
 clean:
 	rm -rf $(OBJ)

@@ -1,7 +1,7 @@
 # ifndef __VECTOR_HPP__
 # define __VECTOR_HPP__
-# include "iterator.hpp"
-# include "reverse_iterator.hpp"
+# include "../iterator/iterator.hpp"
+# include "../iterator/reverse_iterator.hpp"
 # include <iostream>
 # include <memory>
 
