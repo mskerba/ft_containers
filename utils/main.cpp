@@ -15,8 +15,8 @@ int main()
     RBT<int , int>::Node s(4, 5);
 
     RBT<int , int>::Node a(5, 5);
-    e.insert(&s);
-    e.insert(&a);
+    e.Insert(&s);
+    e.Insert(&a);
 
     print(e.__root);
     e.left_Rotate(e.__root);
