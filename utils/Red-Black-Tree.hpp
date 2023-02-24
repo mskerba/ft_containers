@@ -210,5 +210,4 @@ typename RBT<Value, Key>::Node* RBT<Value, Key>::Minimum(Node *z)
 }
 
 
-$env:GITHUB_TOKEN="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"
 #endif
