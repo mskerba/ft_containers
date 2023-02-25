@@ -4,33 +4,33 @@
 
 
 
-template <typename Value, typename Key>
+template <typename Value>
 class RBT
 {
     public:
         typedef     Value       value_type;
-        typedef     Key         key_type;
 
     public:
 
         class Node
         {
             public:
-                key_type    __key;
                 value_type  __val;
                 bool        __color; // ? 0 = red & 1 =  black
                 Node        *__parent;
                 Node        *__left;
                 Node        *__right;
                 
-                Node(key_type key, value_type val) : __key(key), __val(val), __color(0), __parent(0), __left(0), __right(0){}
+                Node(value_type val) : __val(val), __color(0), __parent(0), __left(0), __right(0){}
         };
-        RBT():__root(0){}
+        RBT():__root(nullptr){}
         void    right_Rotate(Node *x);
         void    left_Rotate(Node *x);
         void    Insert(Node *z);
         void    Delete(Node *z);
         Node*   Minimum(Node *z);
+        void printTree(Node* node, std::string indent, bool last);
+
 
     public: // !private
         Node *__root;
@@ -38,8 +38,32 @@ class RBT
         void    transplant(Node *z, Node *y);
 };
 
-template <typename Value, typename Key>
-void RBT<Value, Key>::right_Rotate(Node *x)
+template<typename val>
+void RBT<val>::printTree(RBT<val>::Node* node, std::string indent, bool last)
+{
+    if (node != nullptr)
+    {
+        std::cout << indent;
+        if (last) {
+            std::cout << "├─";
+            indent += "│ ";
+        } else {
+            std::cout << "└─";
+            indent += "  ";
+        }
+
+        if (node->__color)
+            std::cout << "[" << node->__val << "]" << std::endl;
+        else
+            std::cout << "\033[31m" << "[" << node->__val << "]" << "\033[0m\n";
+
+        printTree(node->__right, indent, true);
+        printTree(node->__left, indent, false);
+    }
+}
+
+template <typename Value>
+void RBT<Value>::right_Rotate(Node *x)
 {
     Node *y = x->__left;
     x->__left = y->__right;
@@ -56,8 +80,8 @@ void RBT<Value, Key>::right_Rotate(Node *x)
     x->__parent = y;
 }
 
-template <typename Value, typename Key>
-void RBT<Value, Key>::left_Rotate(Node *x)
+template <typename Value>
+void RBT<Value>::left_Rotate(Node *x)
 {
     Node *y = x->__right;
     x->__right = y->__left;
@@ -74,15 +98,16 @@ void RBT<Value, Key>::left_Rotate(Node *x)
     x->__parent = y;
 }
 
-template <typename Value, typename Key>
-void RBT<Value, Key>::Insert(Node *z)
+template <typename Value>
+void RBT<Value>::Insert(Node *z)
 {
     Node *y = nullptr;
     Node *x = __root;
+
     while(x)
     {
         y = x;
-        if(z->__key < x->__key)
+        if(z->__val < x->__val)
             x = x->__left;
         else
             x = x->__right;
@@ -90,20 +115,20 @@ void RBT<Value, Key>::Insert(Node *z)
     z->__parent = y;
     if (!y)
         __root = z;
-    else if (z->__key < y->__key)
+    else if (z->__val < y->__val)
         y->__left = z;
     else
         y->__right = z;
     insert_FixUp(z);
 }
 
-
-template <typename Value, typename Key>
-void RBT<Value, Key>::insert_FixUp(Node *z)
+template <typename Value>
+void RBT<Value>::insert_FixUp(Node *z)
 {
     Node *y;
-    while (!z->__parent->__color)
+    while (z->__parent && z->__parent->__parent && !z->__parent->__color)
     {
+    std::cout << "\033[32m" << "success" << "\033[0m\n";
         if (z->__parent == z->__parent->__parent->__left)
         {
             y = z->__parent->__parent->__right;
@@ -128,43 +153,44 @@ void RBT<Value, Key>::insert_FixUp(Node *z)
         }
         else // ! the simetrique for this 3 cas 
         {
-            y = z->__parent->__parent->__left;
-            if (!y->__color)
-            {
-                z->__parent->__color = 1;
-                y->__color = 1;
-                z->__parent->__parent->__color = 0;
-                z = z->__parent->__parent;
-            }
-            else
-            {
-                if (z == z->__parent->__left)
-                {
-                    z = z->__parent;
-                    right_Rotate(z);
-                }
-                z->__parent->__color = 1;
-                z->__parent->__parent = 0;
-                left_Rotate(z);
-            }
+        //     y = z->__parent->__parent->__left;
+        //     if (!y->__color)
+        //     {
+        //         z->__parent->__color = 1;
+        //         y->__color = 1;
+        //         z->__parent->__parent->__color = 0;
+        //         z = z->__parent->__parent;
+        //     }
+        //     else
+        //     {
+        //         if (z == z->__parent->__left)
+        //         {
+        //             z = z->__parent;
+        //             right_Rotate(z);
+        //         }
+        //         z->__parent->__color = 1;
+        //         z->__parent->__parent = 0;
+        //         left_Rotate(z);
+        //     }
         }
     }
+    // std::cout << "\033[32m" << "success" << "\033[0m\n";
 }
 
-template <typename Value, typename Key>
-void    RBT<Value, Key>::transplant(Node *z, Node *y)
+template <typename Value>
+void    RBT<Value>::transplant(Node *z, Node *y)
 {
     if (!z->__parent)
         __root = y;
-    else if (z = z->__parent->__left)
+    else if (z == z->__parent->__left)
         z->__parent->__left = y;
     else
         z->__parent->__right = y;
         y->__parent = z->__parent;
 }
 
-template <typename Value, typename Key>
-void RBT<Value, Key>::Delete(Node *z)
+template <typename Value>
+void RBT<Value>::Delete(Node *z)
 {
     Node *y  = z;
     Node *x;
@@ -201,8 +227,8 @@ void RBT<Value, Key>::Delete(Node *z)
     //     Delete_FixUp(x);
 }
 
-template <typename Value, typename Key>
-typename RBT<Value, Key>::Node* RBT<Value, Key>::Minimum(Node *z)
+template <typename Value>
+typename RBT<Value>::Node* RBT<Value>::Minimum(Node *z)
 {
     while(z->__left)
         z = z->__left;

@@ -1,8 +1,14 @@
 # ifndef  __PAIR__HPP__
 # define  __PAIR__HPP__
 
+
+namespace ft{
+    template <class T1, class T2>
+        struct pair;
+}
+
 template <class T1, class T2>
-struct pair
+struct ft::pair
 {
     public:
         typedef      T1                 first_type;
@@ -44,7 +50,7 @@ struct pair
 };
 
 template <typename T1, typename T2>
-pair<T1,T2> make_pair (T1 x, T2 y)
+ft::pair<T1,T2> make_pair (T1 x, T2 y)
 {
     return (pair<T1, T2>(x, y));
 }

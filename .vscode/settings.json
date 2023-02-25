@@ -75,6 +75,8 @@
         "stack": "c",
         "iomanip": "cpp",
         "numeric": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "red-black-tree.hpp": "c",
+        "__memory": "cpp"
     }
 }
