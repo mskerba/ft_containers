@@ -29,11 +29,12 @@ class RBT
         void    Insert(Node *z);
         void    Delete(Node *z);
         Node*   Minimum(Node *z);
+        Node*   Maximum(Node *z);
         void printTree(Node* node, std::string indent, bool last);
 
 
     public: // !private
-        Node *__root;
+        Node    *__root;
         void    insert_FixUp(Node *z);
         void    transplant(Node *z, Node *y);
 };
@@ -41,6 +42,7 @@ class RBT
 template<typename val>
 void RBT<val>::printTree(RBT<val>::Node* node, std::string indent, bool last)
 {
+    if (indent == "" & !node) std::cout << "this tree is empty:D\n";
     if (node != nullptr)
     {
         std::cout << indent;
@@ -190,6 +192,7 @@ void    RBT<Value>::transplant(Node *z, Node *y)
         z->__parent->__left = y;
     else
         z->__parent->__right = y;
+    if (y)
         y->__parent = z->__parent;
 }
 
@@ -236,7 +239,15 @@ typename RBT<Value>::Node* RBT<Value>::Minimum(Node *z)
 {
     while(z->__left)
         z = z->__left;
-    retunr (z);
+    return (z);
+}
+
+template <typename Value>
+typename RBT<Value>::Node* RBT<Value>::Maximum(Node *z)
+{
+    while(z->__right)
+        z = z->__right;
+    return (z);
 }
 
 

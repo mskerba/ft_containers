@@ -5,12 +5,20 @@
 namespace ft{
     template <class T1, class T2>
         struct pair;
-template <typename T1, typename T2>
-std::ostream& operator<<(std::ostream& os, const ft::pair<T1, T2>& x)
-{
-    os << x.first<< ", " << x.second;
-    return os;
-}
+
+    template <typename T1, typename T2>
+    ft::pair<T1,T2> make_pair (T1 x, T2 y)
+    {
+        ft::pair<T1, T2> tmp(x, y);
+        return (tmp);
+    }
+
+    template <typename T1, typename T2>
+    std::ostream& operator<<(std::ostream& os, const ft::pair<T1, T2>& x)
+    {
+        os << x.first<< ", " << x.second;
+        return os;
+    }
 }
 
 template <class T1, class T2>
@@ -57,11 +65,6 @@ struct ft::pair
 
 
 
-template <typename T1, typename T2>
-ft::pair<T1,T2> make_pair (T1 x, T2 y)
-{
-    ft::pair<T1, T2> tmp(x, y);
-    return (tmp);
-}
+
 
 #endif 
