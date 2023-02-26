@@ -65,6 +65,7 @@ void RBT<val>::printTree(RBT<val>::Node* node, std::string indent, bool last)
 template <typename Value>
 void RBT<Value>::right_Rotate(Node *x)
 {
+    if (!x->__left) return ;
     Node *y = x->__left;
     x->__left = y->__right;
     if (y->__right)
@@ -83,6 +84,8 @@ void RBT<Value>::right_Rotate(Node *x)
 template <typename Value>
 void RBT<Value>::left_Rotate(Node *x)
 {
+    if (!x->__right) return ;
+
     Node *y = x->__right;
     x->__right = y->__left;
     if (y->__left)
@@ -126,13 +129,15 @@ template <typename Value>
 void RBT<Value>::insert_FixUp(Node *z)
 {
     Node *y;
+
+    if (!z->__parent)
+        z->__color = 1;
     while (z->__parent && z->__parent->__parent && !z->__parent->__color)
     {
-    std::cout << "\033[32m" << "success" << "\033[0m\n";
         if (z->__parent == z->__parent->__parent->__left)
         {
             y = z->__parent->__parent->__right;
-            if (!y->__color)
+            if (y && !y->__color)
             {
                 z->__parent->__color = 1;
                 y->__color = 1;
@@ -147,34 +152,33 @@ void RBT<Value>::insert_FixUp(Node *z)
                     left_Rotate(z);
                 }
                 z->__parent->__color = 1;
-                z->__parent->__parent = 0;
-                right_Rotate(z);
+                z->__parent->__parent->__color = 0;
+                right_Rotate(z->__parent->__parent);
             }
         }
-        else // ! the simetrique for this 3 cas 
+        else // ! the simetrique for this 3 cas ^\^
         {
-        //     y = z->__parent->__parent->__left;
-        //     if (!y->__color)
-        //     {
-        //         z->__parent->__color = 1;
-        //         y->__color = 1;
-        //         z->__parent->__parent->__color = 0;
-        //         z = z->__parent->__parent;
-        //     }
-        //     else
-        //     {
-        //         if (z == z->__parent->__left)
-        //         {
-        //             z = z->__parent;
-        //             right_Rotate(z);
-        //         }
-        //         z->__parent->__color = 1;
-        //         z->__parent->__parent = 0;
-        //         left_Rotate(z);
-        //     }
+            y = z->__parent->__parent->__left;
+            if (y && !y->__color)
+            {
+                z->__parent->__color = 1;
+                y->__color = 1;
+                z->__parent->__parent->__color = 0;
+                z = z->__parent->__parent;
+            }
+            else
+            {
+                if (z == z->__parent->__left)
+                {
+                    z = z->__parent;
+                    right_Rotate(z);
+                }
+                z->__parent->__color = 1;
+                z->__parent->__parent->__color = 0;
+                left_Rotate(z->__parent->__parent);
+            }
         }
     }
-    // std::cout << "\033[32m" << "success" << "\033[0m\n";
 }
 
 template <typename Value>

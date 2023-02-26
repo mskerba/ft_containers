@@ -1,17 +1,7 @@
 #include "Red-Black-Tree.hpp"
+#include "pair.hpp"
 #include <iostream>
 
-
-// # include <__config>
-// # include <__tree>
-// # include <__node_handle>
-// # include <iterator>
-// # include <memory>
-// # include <utility>
-// # include <functional>
-// # include <initializer_list>
-// # include <type_traits>
-// # include <__cxx_version>
 
 
 
@@ -44,22 +34,22 @@
 
 
 int main() {
-    RBT<int>::Node* s = new RBT<int>::Node(5);
-    RBT<int> r;
-    r.Insert(s);
-    s = new RBT<int>::Node(3);
-    r.Insert(s);
-    s = new RBT<int>::Node(8);
-    r.Insert(s);
-    s = new RBT<int>::Node(1);
-    r.Insert(s);
-    s = new RBT<int>::Node(4);
-    r.Insert(s);
-    s = new RBT<int>::Node(7);
-    r.Insert(s);
-    s = new RBT<int>::Node(9);
-    r.Insert(s);
-    s = new RBT<int>::Node(2);
+    RBT<ft::pair<int, int> >::Node* s = new RBT<ft::pair<int, int> >::Node(make_pair(0, 9));
+    RBT<ft::pair<int, int> > r;
+    // r.Insert(s);
+    // s = new RBT<ft::pair<int, int> >::Node(make_pair(5, 9));
+    // r.Insert(s);
+    // s = new RBT<ft::pair<int, int> >::Node(make_pair(4, 9));
+    // r.Insert(s);
+    // s = new RBT<ft::pair<int, int> >::Node(make_pair(1, 9));
+    // r.Insert(s);
+    // s = new RBT<ft::pair<int, int> >::Node(make_pair(4, 9));
+    // r.Insert(s);
+    // s = new RBT<ft::pair<int, int> >::Node(make_pair(7, 9));
+    // r.Insert(s);
+    // s = new RBT<ft::pair<int, int> >::Node(make_pair(9, 9));
+    // r.Insert(s);
+    // s = new RBT<ft::pair<int, int> >::Node(make_pair(2, 9));
     r.Insert(s);
     r.printTree(r.__root, "", true);
     return 0;

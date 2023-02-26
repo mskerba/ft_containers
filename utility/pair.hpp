@@ -5,6 +5,12 @@
 namespace ft{
     template <class T1, class T2>
         struct pair;
+template <typename T1, typename T2>
+std::ostream& operator<<(std::ostream& os, const ft::pair<T1, T2>& x)
+{
+    os << x.first<< ", " << x.second;
+    return os;
+}
 }
 
 template <class T1, class T2>
@@ -14,7 +20,6 @@ struct ft::pair
         typedef      T1                 first_type;
         typedef      T2                 second_type;
 
-    private:
         first_type first;
         second_type second;
     
@@ -49,10 +54,14 @@ struct ft::pair
             friend bool operator>= (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs.first >= rhs.first && lhs.second >= rhs.second);}
 };
 
+
+
+
 template <typename T1, typename T2>
 ft::pair<T1,T2> make_pair (T1 x, T2 y)
 {
-    return (pair<T1, T2>(x, y));
+    ft::pair<T1, T2> tmp(x, y);
+    return (tmp);
 }
 
 #endif 

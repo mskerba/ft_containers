@@ -78,5 +78,6 @@
         "random": "cpp",
         "red-black-tree.hpp": "c",
         "__memory": "cpp"
-    }
+    },
+    "ayat.repeatedEveryMinute": 20
 }

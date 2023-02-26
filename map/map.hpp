@@ -21,11 +21,11 @@ class ft::map
         typedef        ft::pair<const key_type,mapped_type>                           value_type;
         typedef        Compare                                                        key_compare;
         typedef        Alloc                                                          allocator_type;
-	    typedef        value_type&                                                    reference;
-	    typedef        const value_type&                                              const_reference;
-	    typedef	       value_type*                                                    pointer;
-	    typedef        const value_type*                                              const_pointer;
-        // ? typedef                   iterator;
+	    typedef        typename allocator_type::reference                             reference;
+	    typedef        typename allocator_type::const_reference                       const_reference;
+	    typedef	       typename allocator_type::pointer                               pointer;
+	    typedef        typename allocator_type::const_pointer	                      const_pointer;
+        // ? typedef                   iterator;`
         // ? typedef                   const_iterator;
         // ? typedef                   reverse_iterator;
         // ? typedef                   const_reverse_iterator;
@@ -40,6 +40,7 @@ class ft::map
 
     private: // *data member
         pointer              __container;
+        RBT<value_type>     *__root; 
         size_type            __size;
 
 };
