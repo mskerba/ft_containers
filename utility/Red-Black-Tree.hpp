@@ -78,6 +78,7 @@ class RBT
 
     private: //*func memb
         void    insert_FixUp(Node *z);
+        void    Delete_FixUp(Node *z);
         void    transplant(Node *z, Node *y);
         Node    *new_node(value_type val)
         {
@@ -313,5 +314,22 @@ typename RBT<Key, T, Compare, Alloc>::Node* RBT<Key, T, Compare, Alloc>::Maximum
     return (z);
 }
 
+template < typename Key, typename T, typename Compare, typename Alloc>
+void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
+{
+    Node* y;
+    while (z != __root && z->__color)
+    {
+        if (z == z->__parent->__left)
+        {
+            y = z->__parent->__right;
+        }
+        else
+        {
+
+        }
+    }
+    z->__color = 1;
+}
 
 #endif
