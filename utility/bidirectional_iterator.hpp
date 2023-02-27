@@ -22,7 +22,7 @@ class bidirectional
 
     public:
         bidirectional();
-        bidirectional(RBT<value_type, key_compare>    p);
+        bidirectional(RBT<key_type, mapped_type, key_compare>    p);
 
         template<typename cT, typename compare>
         friend class Iterator;
@@ -47,7 +47,7 @@ class bidirectional
         bidirectional operator++ (int);
         bidirectional operator-- (int);
     private:
-        RBT<value_type, key_compare>      __ptr;
+        RBT<key_type, mapped_type, key_compare>      __ptr;
 };
 
 /***********************************************/
@@ -62,7 +62,7 @@ bidirectional<Key, T, Compare>::bidirectional (){}
 /***********************************************/
 
 template < typename Key, typename T, typename Compare>
-bidirectional<Key, T, Compare>::bidirectional(RBT<value_type, key_compare>    p): __ptr(p){}
+bidirectional<Key, T, Compare>::bidirectional(RBT<key_type, mapped_type, key_compare>    p): __ptr(p){}
 
 /***********************************************/
 /*                  operator==                 */

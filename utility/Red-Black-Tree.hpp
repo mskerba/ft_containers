@@ -1,15 +1,18 @@
 # ifndef __RED_BLACK_TREE_HPP__
 # define __RED_BLACK_TREE_HPP__
+# include "pair.hpp"
 # include <iostream>
 
 
 
-template <typename Value, typename Compare, typename Alloc = std::allocator<Value> >
+template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T> > >
 class RBT
 {
     public:
-        typedef     Value       value_type;
-        typedef     Compare     key_compare;
+        typedef     Key                                            key_type;
+        typedef     T                                              mapped_type;
+        typedef     ft::pair<const key_type,mapped_type>           value_type;
+        typedef     Compare                                        key_compare;
     public:
         class Node
         {
@@ -44,10 +47,10 @@ class RBT
         Node*   Minimum(Node *z);
         Node*   Maximum(Node *z);
         void    printTree(Node* node, std::string indent, bool last);
-        // Node*   Searsh(Node *z, )
-        // {
-        //     if (less_than(z->__val , x->__val))
-        // }
+        mapped_type   Searsh(Node *z, const key_type& k)
+        {
+            if (less_than(z->__val , x->__val))
+        }
         void    clear_node(Node* z)
         {
             if(!z) return ;
@@ -91,8 +94,8 @@ class RBT
         }
 };
 
-template <typename Value, typename Compare, typename Alloc>
-void RBT<Value, Compare, Alloc>::printTree(RBT<Value, Compare, Alloc>::Node* node, std::string indent, bool last)
+template < typename Key, typename T, typename Compare, typename Alloc>
+void RBT<Key, T, Compare, Alloc>::printTree(RBT<Key, T, Compare, Alloc>::Node* node, std::string indent, bool last)
 {
     if (indent == "" & !node) std::cout << "this tree is empty:D\n";
     if (node != nullptr)
@@ -116,8 +119,8 @@ void RBT<Value, Compare, Alloc>::printTree(RBT<Value, Compare, Alloc>::Node* nod
     }
 }
 
-template <typename Value, typename Compare, typename Alloc>
-void RBT<Value, Compare, Alloc>::right_Rotate(Node *x)
+template < typename Key, typename T, typename Compare, typename Alloc>
+void RBT<Key, T, Compare, Alloc>::right_Rotate(Node *x)
 {
     if (!x->__left) return ;
     Node *y = x->__left;
@@ -135,8 +138,8 @@ void RBT<Value, Compare, Alloc>::right_Rotate(Node *x)
     x->__parent = y;
 }
 
-template <typename Value, typename Compare, typename Alloc>
-void RBT<Value, Compare, Alloc>::left_Rotate(Node *x)
+template < typename Key, typename T, typename Compare, typename Alloc>
+void RBT<Key, T, Compare, Alloc>::left_Rotate(Node *x)
 {
     if (!x->__right) return ;
 
@@ -155,8 +158,8 @@ void RBT<Value, Compare, Alloc>::left_Rotate(Node *x)
     x->__parent = y;
 }
 
-template <typename Value, typename Compare, typename Alloc>
-void RBT<Value, Compare, Alloc>::Insert(value_type n)
+template < typename Key, typename T, typename Compare, typename Alloc>
+void RBT<Key, T, Compare, Alloc>::Insert(value_type n)
 {
     Node *y = nullptr;
     Node *x = __root;
@@ -180,8 +183,8 @@ void RBT<Value, Compare, Alloc>::Insert(value_type n)
     insert_FixUp(z);
 }
 
-template <typename Value, typename Compare, typename Alloc>
-void RBT<Value, Compare, Alloc>::insert_FixUp(Node *z)
+template < typename Key, typename T, typename Compare, typename Alloc>
+void RBT<Key, T, Compare, Alloc>::insert_FixUp(Node *z)
 {
     Node *y;
 
@@ -236,8 +239,8 @@ void RBT<Value, Compare, Alloc>::insert_FixUp(Node *z)
     }
 }
 
-template <typename Value, typename Compare, typename Alloc>
-void    RBT<Value, Compare, Alloc>::transplant(Node *z, Node *y)
+template < typename Key, typename T, typename Compare, typename Alloc>
+void    RBT<Key, T, Compare, Alloc>::transplant(Node *z, Node *y)
 {
     if (!z->__parent)
         __root = y;
@@ -249,8 +252,8 @@ void    RBT<Value, Compare, Alloc>::transplant(Node *z, Node *y)
         y->__parent = z->__parent;
 }
 
-template <typename Value, typename Compare, typename Alloc>
-void RBT<Value, Compare, Alloc>::Delete(Node *z)
+template < typename Key, typename T, typename Compare, typename Alloc>
+void RBT<Key, T, Compare, Alloc>::Delete(Node *z)
 {
     Node *y  = z;
     Node *x;
@@ -287,16 +290,16 @@ void RBT<Value, Compare, Alloc>::Delete(Node *z)
     //     Delete_FixUp(x);
 }
 
-template <typename Value, typename Compare, typename Alloc>
-typename RBT<Value, Compare, Alloc>::Node* RBT<Value, Compare, Alloc>::Minimum(Node *z)
+template < typename Key, typename T, typename Compare, typename Alloc>
+typename RBT<Key, T, Compare, Alloc>::Node* RBT<Key, T, Compare, Alloc>::Minimum(Node *z)
 {
     while(z->__left)
         z = z->__left;
     return (z);
 }
 
-template <typename Value, typename Compare, typename Alloc>
-typename RBT<Value, Compare, Alloc>::Node* RBT<Value, Compare, Alloc>::Maximum(Node *z)
+template < typename Key, typename T, typename Compare, typename Alloc>
+typename RBT<Key, T, Compare, Alloc>::Node* RBT<Key, T, Compare, Alloc>::Maximum(Node *z)
 {
     while(z->__right)
         z = z->__right;

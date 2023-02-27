@@ -92,12 +92,11 @@ class ft::map
         mapped_type& operator[] (const key_type& k);
 
     private: // *data member
-        RBT<value_type, key_compare, allocator_type>     root; 
+        RBT<key_type, mapped_type, key_compare, allocator_type>     root; 
         size_type            __size;
 
-
     private: // *func member
-        void delete_node(RBT<value_type, key_compare, allocator_type> n,const  allocator_type& _alloc)
+        void delete_node(RBT<key_type, mapped_type, key_compare, allocator_type> n,const  allocator_type& _alloc)
         {
             if (!n) return;
             delete_node(n.__root->__left, _alloc);
@@ -303,7 +302,7 @@ bool ft::map<Key, T, Compare, Alloc>::empty() const
 template < class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>::mapped_type& ft::map<Key, T, Compare, Alloc>::operator[] (const ft::map<Key, T, Compare, Alloc>::key_type& k)
 {
-    
+
 }
 
 
