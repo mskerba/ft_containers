@@ -43,7 +43,7 @@ class RBT
         void    right_Rotate(Node *x);
         void    left_Rotate(Node *x);
         void    Insert(value_type n);
-        void    Delete(Node *z);
+        void    Delete(value_type n);
         Node*   Minimum(Node *z);
         Node*   Maximum(Node *z);
         void    printTree(Node* node, std::string indent, bool last);
@@ -258,8 +258,9 @@ void    RBT<Key, T, Compare, Alloc>::transplant(Node *z, Node *y)
 }
 
 template < typename Key, typename T, typename Compare, typename Alloc>
-void RBT<Key, T, Compare, Alloc>::Delete(Node *z)
+void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
 {
+    Node *z = new_node(n);
     Node *y  = z;
     Node *x;
     bool y_col = y->__color;
@@ -291,6 +292,7 @@ void RBT<Key, T, Compare, Alloc>::Delete(Node *z)
         y->__left->__parent = y;
         y->__color = z->__color;
     }
+    // ! destroy z here/! \!!!!
     // if (y_col)
     //     Delete_FixUp(x);
 }

@@ -101,7 +101,38 @@ class ft::map
 
         // ? swap
         void swap (map& x);
+        // ? key_comp
+        key_compare key_comp() const;
 
+        // ? value_comp
+        value_compare value_comp() const;
+
+        class value_compare
+        {
+            private:
+                friend class map;
+            protected:
+                key_compare comp;
+                value_compare (key_compare c) : comp(c) {}
+            public:
+                typedef bool result_type;
+                typedef value_type first_argument_type;
+                typedef value_type second_argument_type;
+                bool operator() (const value_type& x, const value_type& y) const
+                {
+                    return comp(x.first, y.first);
+                }
+        };
+
+        // ? value_comp
+        allocator_type get_allocator() const;
+      
+        // ? find
+        iterator find (const key_type& k);
+        const_iterator find (const key_type& k) const;
+
+        // ? count
+        size_type count (const key_type& k) const;
 
 
     private: // *data member
@@ -358,8 +389,77 @@ void ft::map<Key, T, Compare, Alloc>::insert (InputIterator first, InputIterator
 template < class Key, class T, class Compare, class Alloc>
 void ft::map<Key, T, Compare, Alloc>::swap (ft::map<Key, T, Compare, Alloc>& x)
 {
-    
+    *this = x;
 }
+
+/***********************************************/
+/*                  key_comp                  */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+key_compare key_comp() const
+{
+    return (key_compare());
+}
+
+/***********************************************/
+/*                  value_comp                 */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+ft::map<Key, T, Compare, Alloc>::value_compare ft::map<Key, T, Compare, Alloc>::value_comp() const
+{
+    return (value_compare());
+}
+
+/***********************************************/
+/*                get_allocator                */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::allocator_type ft::map<Key, T, Compare, Alloc>::get_allocator() const
+{
+    return (this->__alloc);
+}
+
+/***********************************************/
+/*                     find                    */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::find (const ft::map<Key, T, Compare, Alloc>::key_type& k)
+{
+    return (this->operator[](k));
+}
+
+template < class Key, class T, class Compare, class Alloc>
+ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::find (const ft::map<Key, T, Compare, Alloc>::key_type& k) const
+{
+    return (this->operator[](k));
+}
+
+/***********************************************/
+/*                    count                    */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, Alloc>::count (const ft::map<Key, T, Compare, Alloc>::key_type& k) const
+{
+    // ! value_type v;
+    // ! key_compare cmp;
+    // ! while(root)
+    // ! {
+    // !     v = root.__root->__val;
+    // !     if (cmp(k ,v->first))
+    // !         root = root.__root->__left;
+    // !     else if (k != v->first))
+    // !         root = root.__root->__right;
+    // !     else
+    // !         break ;
+    // ! }
+
+}
+
 
 
 #endif
