@@ -1,5 +1,5 @@
-# ifndef __iterator_HPP__
-# define __iterator_HPP__
+# ifndef __biterator_HPP__
+# define __biterator_HPP__
 # include <iostream>
 # include <functional>
 # include "Red-Black-Tree.hpp"

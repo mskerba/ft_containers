@@ -4,14 +4,13 @@
 
 
 
-template <typename Value>
+template <typename Value, typename Compare, typename Alloc>
 class RBT
 {
     public:
         typedef     Value       value_type;
-
+        typedef     Compare     key_compare;
     public:
-
         class Node
         {
             public:
@@ -23,24 +22,73 @@ class RBT
                 
                 Node(value_type val) : __val(val), __color(0), __parent(0), __left(0), __right(0){}
         };
+        typedef typename Alloc::template rebind<Node>::other    allocator_type;
+        typedef Alloc                                  val_allocator;
+
+
         RBT():__root(nullptr){}
+        RBT(const RBT& x)
+        {
+            duplicate_tree(x.__root);
+        }
+        RBT& operator= (const RBT& x)
+        {
+            if (__root) clear_node(__root);
+            duplicate_tree(x.__root);
+            return (*this);
+        }
         void    right_Rotate(Node *x);
         void    left_Rotate(Node *x);
-        void    Insert(Node *z);
+        void    Insert(value_type n);
         void    Delete(Node *z);
         Node*   Minimum(Node *z);
         Node*   Maximum(Node *z);
         void printTree(Node* node, std::string indent, bool last);
+        void clear_node(Node* z)
+        {
+            if(!z) return ;
+
+            clear_node(z->__left);
+            clear_node(z->__right);
+           __val__alloc.destroy(&z->__val);
+           __val__alloc.deallocate(&z->__val, 1);
+            __alloc.destroy(z);
+            __alloc.deallocate(z, 1);
+        }
 
 
     public: // !private
         Node    *__root;
+        allocator_type  __alloc;
+        val_allocator   __val__alloc;
+        key_compare     less_than;
+
+
+    private: //*func memb
         void    insert_FixUp(Node *z);
         void    transplant(Node *z, Node *y);
+        Node    *new_node(value_type val)
+        {
+            value_type* new_val = __val__alloc.allocate(1);
+            Node*       node = __alloc.allocate(1);
+
+            __val__alloc.construct(new_val, val);
+            __alloc.construct(node,*new_val);
+            
+            return node;
+        }
+        void duplicate_tree(Node *z)
+        {
+            if (z) return;
+
+            Insert(z->__val);
+            duplicate_tree(z->__left);
+            duplicate_tree(z->__right);
+        }
 };
 
-template<typename val>
-void RBT<val>::printTree(RBT<val>::Node* node, std::string indent, bool last)
+template <typename Value, typename Compare, typename Alloc>
+void RBT<Value, Compare, Alloc>::printTree(RBT<Value, Compare, Alloc>::Node* node, std::string indent, bool last)
 {
     if (indent == "" & !node) std::cout << "this tree is empty:D\n";
     if (node != nullptr)
@@ -64,8 +112,8 @@ void RBT<val>::printTree(RBT<val>::Node* node, std::string indent, bool last)
     }
 }
 
-template <typename Value>
-void RBT<Value>::right_Rotate(Node *x)
+template <typename Value, typename Compare, typename Alloc>
+void RBT<Value, Compare, Alloc>::right_Rotate(Node *x)
 {
     if (!x->__left) return ;
     Node *y = x->__left;
@@ -83,8 +131,8 @@ void RBT<Value>::right_Rotate(Node *x)
     x->__parent = y;
 }
 
-template <typename Value>
-void RBT<Value>::left_Rotate(Node *x)
+template <typename Value, typename Compare, typename Alloc>
+void RBT<Value, Compare, Alloc>::left_Rotate(Node *x)
 {
     if (!x->__right) return ;
 
@@ -103,11 +151,12 @@ void RBT<Value>::left_Rotate(Node *x)
     x->__parent = y;
 }
 
-template <typename Value>
-void RBT<Value>::Insert(Node *z)
+template <typename Value, typename Compare, typename Alloc>
+void RBT<Value, Compare, Alloc>::Insert(value_type n)
 {
     Node *y = nullptr;
     Node *x = __root;
+    Node *z = new_node(n);
 
     while(x)
     {
@@ -127,8 +176,8 @@ void RBT<Value>::Insert(Node *z)
     insert_FixUp(z);
 }
 
-template <typename Value>
-void RBT<Value>::insert_FixUp(Node *z)
+template <typename Value, typename Compare, typename Alloc>
+void RBT<Value, Compare, Alloc>::insert_FixUp(Node *z)
 {
     Node *y;
 
@@ -183,8 +232,8 @@ void RBT<Value>::insert_FixUp(Node *z)
     }
 }
 
-template <typename Value>
-void    RBT<Value>::transplant(Node *z, Node *y)
+template <typename Value, typename Compare, typename Alloc>
+void    RBT<Value, Compare, Alloc>::transplant(Node *z, Node *y)
 {
     if (!z->__parent)
         __root = y;
@@ -196,8 +245,8 @@ void    RBT<Value>::transplant(Node *z, Node *y)
         y->__parent = z->__parent;
 }
 
-template <typename Value>
-void RBT<Value>::Delete(Node *z)
+template <typename Value, typename Compare, typename Alloc>
+void RBT<Value, Compare, Alloc>::Delete(Node *z)
 {
     Node *y  = z;
     Node *x;
@@ -234,16 +283,16 @@ void RBT<Value>::Delete(Node *z)
     //     Delete_FixUp(x);
 }
 
-template <typename Value>
-typename RBT<Value>::Node* RBT<Value>::Minimum(Node *z)
+template <typename Value, typename Compare, typename Alloc>
+typename RBT<Value, Compare, Alloc>::Node* RBT<Value, Compare, Alloc>::Minimum(Node *z)
 {
     while(z->__left)
         z = z->__left;
     return (z);
 }
 
-template <typename Value>
-typename RBT<Value>::Node* RBT<Value>::Maximum(Node *z)
+template <typename Value, typename Compare, typename Alloc>
+typename RBT<Value, Compare, Alloc>::Node* RBT<Value, Compare, Alloc>::Maximum(Node *z)
 {
     while(z->__right)
         z = z->__right;

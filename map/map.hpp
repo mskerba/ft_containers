@@ -3,6 +3,7 @@
 # include <iostream>
 # include "../utility/Red-Black-Tree.hpp"
 # include "../utility/pair.hpp"
+# include "../utility/bidirectional_iterator.hpp"
 # include <functional>
 
 
@@ -25,8 +26,8 @@ class ft::map
 	    typedef        typename allocator_type::const_reference                       const_reference;
 	    typedef	       typename allocator_type::pointer                               pointer;
 	    typedef        typename allocator_type::const_pointer	                      const_pointer;
-        // ? typedef                   iterator;`
-        // ? typedef                   const_iterator;
+        typedef        bidirectional<key_type, mapped_type, key_compare>              iterator;
+        typedef        bidirectional<key_type, mapped_type, key_compare>              const_iterator;
         // ? typedef                   reverse_iterator;
         // ? typedef                   const_reverse_iterator;
         typedef        ptrdiff_t                                                      difference_type;
@@ -56,14 +57,19 @@ class ft::map
         // ?  clear
         void clear();
 
-    private: // *data member
-        RBT<value_type>     root; 
+        // ?  begin
+        iterator begin();
+
+        // ?  const begin
+        const_iterator begin() const;
+
+    // private: // *data member
+        RBT<value_type, key_compare, allocator_type>     root; 
         size_type            __size;
-        allocator_type       __alloc;
 
 
     private: // *func member
-        void delete_node(RBT<value_type> n,const  allocator_type& _alloc)
+        void delete_node(RBT<value_type, key_compare, allocator_type> n,const  allocator_type& _alloc)
         {
             if (!n) return;
             delete_node(n.__root->__left, _alloc);
@@ -78,7 +84,7 @@ class ft::map
 /***********************************************/
 
 template < class Key, class T, class Compare, class Alloc>
-ft::map<Key, T, Compare, Alloc>::map (const key_compare& comp, const allocator_type& alloc):__alloc(alloc), __size(0){}
+ft::map<Key, T, Compare, Alloc>::map (const key_compare& comp, const allocator_type& alloc):__size(0){}
 
 /***********************************************/
 /*               range constructor             */
@@ -86,20 +92,13 @@ ft::map<Key, T, Compare, Alloc>::map (const key_compare& comp, const allocator_t
 
 template < class Key, class T, class Compare, class Alloc>
 template <class InputIterator>
-    ft::map<Key, T, Compare, Alloc>::map (InputIterator first, InputIterator last, const key_compare& comp, const allocator_type& alloc):__alloc(alloc)
+    ft::map<Key, T, Compare, Alloc>::map (InputIterator first, InputIterator last, const key_compare& comp, const allocator_type& alloc)
     {
         // if (size() < 0)
         //     throw  std::length_error("map");
 
-        RBT<ft::pair<int, int> >::Node node;//* = new RBT<ft::pair<int, int> >::Node(make_pair(0, 9));
-
-        while (first != last)
-        {
-            node = this->__alloc.allocate(1);
-            alloc.construct(&node, *(first++));
-            root.Insert(node);
-            __size++;
-        }   
+        for (__size = 0; first != last; __size++)
+            root.Insert(*(first++));
     }
 
 /***********************************************/
@@ -107,17 +106,9 @@ template <class InputIterator>
 /***********************************************/
 
 template < class Key, class T, class Compare, class Alloc>
-ft::map<Key, T, Compare, Alloc>::map (const map& x) :__size(x.__size)
+ft::map<Key, T, Compare, Alloc>::map (const map& x) :__size(x.size())
 {
-    RBT<ft::pair<int, int> >::Node* node;
-    allocator_type alloc;
-
-    for(size_type i = 0; i < size(); i++)
-    {
-        node = alloc.allocate(1);
-        alloc.construct(&node, x[i]);
-        root.Insert(node);
-    }
+    this->root = x.root;
 }
 
 /***********************************************/
@@ -125,7 +116,11 @@ ft::map<Key, T, Compare, Alloc>::map (const map& x) :__size(x.__size)
 /***********************************************/
 
 template < class Key, class T, class Compare, class Alloc>
-ft::map<Key, T, Compare, Alloc>::~map(){}
+ft::map<Key, T, Compare, Alloc>::~map()
+{
+    __size = 0;
+    clear();
+}
 
 /***********************************************/
 /*                operator=                    */
@@ -134,10 +129,9 @@ ft::map<Key, T, Compare, Alloc>::~map(){}
 template < class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>& ft::map<Key, T, Compare, Alloc>::operator=(const map& x)
 {
-    this->__size = x.__size;
-    while(root.__root)
-        Delete(root.Minimum(root.__root));
-    
+    this->root = x.root;
+    __size = x.size();
+    return (*this);
 }
 
 /***********************************************/
@@ -151,13 +145,33 @@ typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, All
 }
 
 /***********************************************/
-/*                   clear                      */
+/*                   clear                     */
 /***********************************************/
 
 template < class Key, class T, class Compare, class Alloc>
 void ft::map<Key, T, Compare, Alloc>::clear()
 {
-    allocator_type alloc = allocator_type();
-    delete_node(this->root.__root, alloc);
+    root.clear_node(root.__root);
+    __size = 0;
+}
+
+/***********************************************/
+/*                   begin                     */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::begin()
+{
+    return ()
+}
+
+/***********************************************/
+/*                 const begin                 */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::begin() const
+{
+
 }
 #endif

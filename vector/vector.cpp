@@ -3,6 +3,8 @@
 #include <vector>
 #include "vector.hpp"
 #include "../map/map.hpp"
+#include "../utility/Red-Black-Tree.hpp"
+#include "../utility/pair.hpp"
 #include <stack>
 #include <map>
 #include <unistd.h>
@@ -10,10 +12,10 @@
 int main()
 {
 
-    std::map<int, int> m;
-    m.insert(std::pair<int, int>(1, 3 ));
-    m.insert(std::make_pair(2,  3));
-    m.insert(std::pair<int, int>(3, 3 ));
-    ft::map<int, int> ftm(m.begin(), m.end());
+    ft::map<int, int> m;
+    m.root.Insert(ft::pair<int, int>(1, 3 ));
+    m.root.Insert(ft::make_pair(2,  3));
+    m.root.Insert(ft::pair<int, int>(3, 3 ));
+    ft::map<int, int> ftm(m);
 
 }
