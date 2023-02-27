@@ -323,10 +323,64 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
         if (z == z->__parent->__left)
         {
             y = z->__parent->__right;
+            if (!y->__color)
+            {
+                y->__color = 1;
+                z->__parent->__colot = 0;
+                left_Rotate(z->__parent);
+                y - z->__parent->__right;
+            }
+            if (y->__left->__color && y->__right->__color)
+            {
+                y->__color = 0;
+                z = z->__parent;
+            }
+            else
+            {
+                if (y->__right->__color)
+                {
+                    y->__left->__color = 1;
+                    y->__color = 0;
+                    right_Rotate(y);
+                    y = z->__parent->__right;
+                }
+                y->__color = z->__parent->__color;
+                z->__parent->__color = 1;
+                y->__right->__color = 1;
+                left_Rotate(z->__parent);
+                z = __root;
+            }
         }
-        else
+        else 
         {
-
+            y = z->__parent->__left;
+            if (!y->__color)
+            {
+                y->__color = 1;
+                z->__parent->__colot = 0;
+                left_Rotate(z->__parent);
+                y - z->__parent->__left;
+            }
+            if (y->__right->__color && y->__left->__color)
+            {
+                y->__color = 0;
+                z = z->__parent;
+            }
+            else
+            {
+                if (y->__left->__color)
+                {
+                    y->__right->__color = 1;
+                    y->__color = 0;
+                    left_Rotate(y);
+                    y = z->__parent->__left;
+                }
+                y->__color = z->__parent->__color;
+                z->__parent->__color = 1;
+                y->__lef*t->__color = 1;
+                right_Rotate(z->__parent);
+                z = __root;
+            }
         }
     }
     z->__color = 1;
