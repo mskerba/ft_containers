@@ -47,10 +47,15 @@ class RBT
         Node*   Minimum(Node *z);
         Node*   Maximum(Node *z);
         void    printTree(Node* node, std::string indent, bool last);
-        mapped_type   Searsh(Node *z, const key_type& k)
+        Node*   Search(Node *z, const value_type& k)
         {
-            if (less_than(z->__val , x->__val))
+            if (!z || k == z->__val)
+                retrun (z);
+            if (less_than(k , z->__val))
+                return (Search(z->__left, k))
+            return (Search(z->__right, k));
         }
+
         void    clear_node(Node* z)
         {
             if(!z) return ;

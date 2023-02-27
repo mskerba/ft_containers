@@ -91,6 +91,19 @@ class ft::map
         // ? operator[]
         mapped_type& operator[] (const key_type& k);
 
+        // ? insert
+        pair<iterator,bool> insert (const value_type& val);
+        	
+        iterator insert (iterator position, const value_type& val);
+
+        template <class InputIterator>
+        void insert (InputIterator first, InputIterator last);
+
+        // ? swap
+        void swap (map& x);
+
+
+
     private: // *data member
         RBT<key_type, mapped_type, key_compare, allocator_type>     root; 
         size_type            __size;
@@ -302,9 +315,51 @@ bool ft::map<Key, T, Compare, Alloc>::empty() const
 template < class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>::mapped_type& ft::map<Key, T, Compare, Alloc>::operator[] (const ft::map<Key, T, Compare, Alloc>::key_type& k)
 {
-
+    iterator it = this->begin();
+    while(it->first != k && it != end()) it++;
+    return (it->second);
 }
 
+/***********************************************/
+/*                    insert                   */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+ft::pair<iterator,bool> ft::map<Key, T, Compare, Alloc>::insert (const value_type& val)
+{
+    this->__size++;
+    RBT<key_type, mapped_type, key_compare, allocator_type>::Node*    n = root->Search(root->__root, val);
+    bool is = (n) ? true : false;
+    if (!is)    this->root->Insert(val);
+    iterator it = this->begin();
+    while(it->first != k) it++;
+    return (ft::make_pair(it, !is));
+}
+
+template < class Key, class T, class Compare, class Alloc>
+ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::insert (iterator position, const value_type& val)
+{
+    this->insert(val);
+    return (position);
+}
+
+template < class Key, class T, class Compare, class Alloc>
+template <class InputIterator>
+void ft::map<Key, T, Compare, Alloc>::insert (InputIterator first, InputIterator last)
+{
+    while (first != last) this->insert(*(first++));
+}
+
+
+/***********************************************/
+/*                    swap                     */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+void ft::map<Key, T, Compare, Alloc>::swap (ft::map<Key, T, Compare, Alloc>& x)
+{
+    
+}
 
 
 #endif

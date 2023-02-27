@@ -60,7 +60,7 @@
 //     r.printTree(r.__root, "", true);
 //     return 0;
 
-int main() {;
+int main() {
     RBT<ft::pair<int, int>,std::less<int>, std::allocator<ft::pair<int, int> > > r;
     r.Insert(ft::make_pair(5, 9));
     r.Insert(ft::make_pair(4, 9));
