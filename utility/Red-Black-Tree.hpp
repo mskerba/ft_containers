@@ -4,7 +4,7 @@
 
 
 
-template <typename Value, typename Compare, typename Alloc>
+template <typename Value, typename Compare, typename Alloc = std::allocator<Value> >
 class RBT
 {
     public:
@@ -23,7 +23,7 @@ class RBT
                 Node(value_type val) : __val(val), __color(0), __parent(0), __left(0), __right(0){}
         };
         typedef typename Alloc::template rebind<Node>::other    allocator_type;
-        typedef Alloc                                  val_allocator;
+        typedef Alloc                                           val_allocator;
 
 
         RBT():__root(nullptr){}
@@ -31,7 +31,7 @@ class RBT
         {
             duplicate_tree(x.__root);
         }
-        RBT& operator= (const RBT& x)
+        RBT&    operator= (const RBT& x)
         {
             if (__root) clear_node(__root);
             duplicate_tree(x.__root);
@@ -43,8 +43,12 @@ class RBT
         void    Delete(Node *z);
         Node*   Minimum(Node *z);
         Node*   Maximum(Node *z);
-        void printTree(Node* node, std::string indent, bool last);
-        void clear_node(Node* z)
+        void    printTree(Node* node, std::string indent, bool last);
+        // Node*   Searsh(Node *z, )
+        // {
+        //     if (less_than(z->__val , x->__val))
+        // }
+        void    clear_node(Node* z)
         {
             if(!z) return ;
 
@@ -161,7 +165,7 @@ void RBT<Value, Compare, Alloc>::Insert(value_type n)
     while(x)
     {
         y = x;
-        if(z->__val < x->__val)
+        if(less_than(z->__val , x->__val)) //? (z->__val < x->__val)
             x = x->__left;
         else
             x = x->__right;
@@ -169,7 +173,7 @@ void RBT<Value, Compare, Alloc>::Insert(value_type n)
     z->__parent = y;
     if (!y)
         __root = z;
-    else if (z->__val < y->__val)
+    else if (less_than(z->__val , y->__val)) //? z->__val < y->__val
         y->__left = z;
     else
         y->__right = z;

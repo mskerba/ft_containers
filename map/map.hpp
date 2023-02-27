@@ -5,6 +5,7 @@
 # include "../utility/pair.hpp"
 # include "../utility/bidirectional_iterator.hpp"
 # include <functional>
+# include <memory>
 
 
 
@@ -27,9 +28,9 @@ class ft::map
 	    typedef	       typename allocator_type::pointer                               pointer;
 	    typedef        typename allocator_type::const_pointer	                      const_pointer;
         typedef        bidirectional<key_type, mapped_type, key_compare>              iterator;
-        typedef        bidirectional<key_type, mapped_type, key_compare>              const_iterator;
-        // ? typedef                   reverse_iterator;
-        // ? typedef                   const_reverse_iterator;
+        typedef        bidirectional<const key_type, const mapped_type, key_compare>  const_iterator;
+        typedef        ft::reverse_iterator<iterator>                                 reverse_iterator;
+        typedef        ft::reverse_iterator<const_iterator>                           const_reverse_iterator;
         typedef        ptrdiff_t                                                      difference_type;
         typedef        size_t                                                         size_type;
 
@@ -63,7 +64,34 @@ class ft::map
         // ?  const begin
         const_iterator begin() const;
 
-    // private: // *data member
+        // ?  end
+        iterator end();
+
+        // ?  const end
+        const_iterator end() const;
+
+        // ?  rbegin
+        iterator rbegin();
+
+        // ?  const rbegin
+        const_iterator rbegin() const;
+
+        // ?  rend
+        iterator rend();
+
+        // ?  constr end
+        const_iterator rend() const;
+
+        // ? max_size
+        size_type max_size() const;
+
+        // ? empty
+        bool empty() const;
+
+        // ? operator[]
+        mapped_type& operator[] (const key_type& k);
+
+    private: // *data member
         RBT<value_type, key_compare, allocator_type>     root; 
         size_type            __size;
 
@@ -154,6 +182,19 @@ void ft::map<Key, T, Compare, Alloc>::clear()
     root.clear_node(root.__root);
     __size = 0;
 }
+/***********************************************/
+/*                 max_size                    */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+size_t ft::map<Key, T, Compare, Alloc>::max_size() const
+{
+    int sizeT = sizeof(T);
+    if (sizeT == 1)
+        sizeT = 2;
+    return (std::numeric_limits<std::size_t>::max() / sizeT);
+    // return (MAX_SIZE_T / sizeT);
+}
 
 /***********************************************/
 /*                   begin                     */
@@ -162,7 +203,9 @@ void ft::map<Key, T, Compare, Alloc>::clear()
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::begin()
 {
-    return ()
+    iterator tmp(this->root);
+    tmp.__ptr.__root = tmp.__ptr.Minimum(tmp.__ptr.__root);
+    return (tmp);
 }
 
 /***********************************************/
@@ -172,6 +215,97 @@ typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Allo
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::begin() const
 {
-
+    iterator tmp(this->root);
+    tmp.__ptr.__root = tmp.__ptr.Minimum(tmp.__ptr.__root);
+    return (const_iterator(tmp));
 }
+
+/***********************************************/
+/*                   end                     */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::end()
+{
+    return (iterator(nullptr));
+}
+
+/***********************************************/
+/*                 const end                 */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::end() const
+{
+    return (const_iterator(nullptr));
+}
+
+/***********************************************/
+/*                   rbegin                     */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::rbegin()
+{
+    iterator tmp(this->root);
+    tmp.__ptr.__root = tmp.__ptr.Maximum(tmp.__ptr.__root);
+    return (tmp);
+}
+
+/***********************************************/
+/*                 const rbegin                 */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::rbegin() const
+{
+    iterator tmp(this->root);
+    tmp.__ptr.__root = tmp.__ptr.Maximum(tmp.__ptr.__root);
+    return (const_iterator(tmp));
+}
+
+/***********************************************/
+/*                   rend                     */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::rend()
+{
+    return (iterator(nullptr));
+}
+
+/***********************************************/
+/*                 const rend                 */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::rend() const
+{
+    return (const_iterator(nullptr));
+}
+
+/***********************************************/
+/*                   empty                     */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+bool ft::map<Key, T, Compare, Alloc>::empty() const
+{
+    if (this->__root)
+        return (false);
+    return (true);
+}
+
+/***********************************************/
+/*                   operator[]                */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+ft::map<Key, T, Compare, Alloc>::mapped_type& ft::map<Key, T, Compare, Alloc>::operator[] (const ft::map<Key, T, Compare, Alloc>::key_type& k)
+{
+    
+}
+
+
+
 #endif

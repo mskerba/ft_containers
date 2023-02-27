@@ -11,6 +11,7 @@ class bidirectional
     public:
         typedef   Category                                      iterator_category;
         typedef   Key                                           key_type;
+        typedef   Compare                                       key_compare;
         typedef   T                                             mapped_type;
         typedef   ft::pair<const key_type,mapped_type>          value_type;
         typedef   T                                             value_type;
@@ -21,7 +22,7 @@ class bidirectional
 
     public:
         bidirectional();
-        bidirectional(RBT<value_type>     __ptr);
+        bidirectional(RBT<value_type, key_compare>    p);
 
         template<typename cT, typename compare>
         friend class Iterator;
@@ -46,7 +47,7 @@ class bidirectional
         bidirectional operator++ (int);
         bidirectional operator-- (int);
     private:
-        RBT<value_type>     __ptr;
+        RBT<value_type, key_compare>      __ptr;
 };
 
 /***********************************************/
@@ -60,9 +61,8 @@ bidirectional<Key, T, Compare>::bidirectional (){}
 /*            parametrize constructor          */
 /***********************************************/
 
-template < class Key, class T, class Compare>
-bidirectional<Key, T, Compare>::bidirectional (RBT<value_type>     p): __ptr(p)
-{}
+template < typename Key, typename T, typename Compare>
+bidirectional<Key, T, Compare>::bidirectional(RBT<value_type, key_compare>    p): __ptr(p){}
 
 /***********************************************/
 /*                  operator==                 */
