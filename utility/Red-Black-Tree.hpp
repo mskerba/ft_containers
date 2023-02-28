@@ -1,6 +1,7 @@
 # ifndef __RED_BLACK_TREE_HPP__
 # define __RED_BLACK_TREE_HPP__
 # include "pair.hpp"
+# include "map_iterator.hpp"
 # include <iostream>
 
 
@@ -27,7 +28,8 @@ class RBT
         };
         typedef typename Alloc::template rebind<Node>::other    allocator_type;
         typedef Alloc                                           val_allocator;
-
+        typedef        map_iterator<Node, value_type>           iterator;
+        // typedef        map_iterator<Node, value_type>           const_iterator;
 
         RBT():__root(nullptr){}
         RBT(const RBT& x)
@@ -51,8 +53,8 @@ class RBT
         {
             if (!z || k == z->__val)
                 retrun (z);
-            if (less_than(k , z->__val))
-                return (Search(z->__left, k))
+            if (less_than(k.first , z->__val.first))
+                return (Search(z->__left, k));
             return (Search(z->__right, k));
         }
 
@@ -70,7 +72,7 @@ class RBT
 
 
     public: // !private
-        Node    *__root;
+        Node            *__root;
         allocator_type  __alloc;
         val_allocator   __val__alloc;
         key_compare     less_than;
@@ -174,7 +176,7 @@ void RBT<Key, T, Compare, Alloc>::Insert(value_type n)
     while(x)
     {
         y = x;
-        if(less_than(z->__val , x->__val)) //? (z->__val < x->__val)
+        if(less_than(z->__val.first , x->__val.first)) //? (z->__val < x->__val)
             x = x->__left;
         else
             x = x->__right;
@@ -182,7 +184,7 @@ void RBT<Key, T, Compare, Alloc>::Insert(value_type n)
     z->__parent = y;
     if (!y)
         __root = z;
-    else if (less_than(z->__val , y->__val)) //? z->__val < y->__val
+    else if (less_than(z->__val.first , y->__val.first)) //? z->__val < y->__val
         y->__left = z;
     else
         y->__right = z;
@@ -377,7 +379,7 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
                 }
                 y->__color = z->__parent->__color;
                 z->__parent->__color = 1;
-                y->__lef*t->__color = 1;
+                y->__left->__color = 1;
                 right_Rotate(z->__parent);
                 z = __root;
             }

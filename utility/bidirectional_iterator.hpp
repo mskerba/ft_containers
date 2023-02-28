@@ -9,29 +9,27 @@ template < class Key, class T, class Compare>
 class bidirectional
 {
     public:
-        typedef   Category                                      iterator_category;
+        // typedef   Category                                      iterator_category;
         typedef   Key                                           key_type;
         typedef   Compare                                       key_compare;
         typedef   T                                             mapped_type;
         typedef   ft::pair<const key_type,mapped_type>          value_type;
-        typedef   T                                             value_type;
-        typedef   T                                             value_type;
         typedef   ptrdiff_t                                     difference_type;
-        typedef   T*                                            pointer;
-        typedef   T&                                            reference;
+        typedef   value_type*                                   pointer;
+        typedef   value_type&                                   reference;
 
     public:
         bidirectional();
         bidirectional(RBT<key_type, mapped_type, key_compare>    p);
 
-        template<typename cT, typename compare>
-        friend class Iterator;
+        template < class cKey, class cT, class cCompare>
+        friend class bidirectional;
 
-        template<typename cT>
-        bidirectional (const bidirectional<cT>& x) : __ptr(x.__ptr){}
+        template < class cKey, class cT, class cCompare>
+        bidirectional (const bidirectional<cKey, cT, cCompare>& x) : __ptr(x.__ptr){}
 
-        template<typename cT>
-        bidirectional<cT>& operator= (const T& x)
+        template < class cKey, class cT, class cCompare>
+        bidirectional<cKey, cT, cCompare>& operator= (const bidirectional<cKey, cT, cCompare>& x)
         {
             this->__ptr = x.__ptr;
             return (*this);
@@ -117,7 +115,7 @@ bidirectional<Key, T, Compare>& bidirectional<Key, T, Compare>::operator++ ()
     else
         while (__ptr.__root->__parent && __ptr.__root == __ptr.__root->__parent->__left)
             __ptr = __ptr.__root->__parent;
-    return (*this)
+    return (*this);
 }
 
 /***********************************************/
@@ -132,7 +130,7 @@ bidirectional<Key, T, Compare>& bidirectional<Key, T, Compare>::operator-- ()
     else
         while (__ptr.__root->__parent && __ptr.__root == __ptr.__root->__parent->__right)
             __ptr = __ptr.__root->__parent;
-    return (*this)
+    return (*this);
 }
 
 /***********************************************/
@@ -144,7 +142,7 @@ bidirectional<Key, T, Compare> bidirectional<Key, T, Compare>::operator++ (int)
 {
     bidirectional tmp = (*this);
     (*this)++;
-    return (tmp)
+    return (tmp);
 }
 
 /***********************************************/
@@ -156,7 +154,7 @@ bidirectional<Key, T, Compare> bidirectional<Key, T, Compare>::operator-- (int)
 {
     bidirectional tmp = (*this);
     (*this)--;
-    return (tmp)
+    return (tmp);
 }
 
 

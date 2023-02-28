@@ -1,5 +1,5 @@
-#include "Red-Black-Tree.hpp"
-#include "pair.hpp"
+// #include "Red-Black-Tree.hpp"
+// #include "pair.hpp"
 #include <iostream>
 #include <map>
 #include <iterator>
@@ -62,19 +62,24 @@
 //     return 0;
 
 int main() {
-    RBT<ft::pair<int, int>,std::less<int>, std::allocator<ft::pair<int, int> > > r;
-    r.Insert(ft::make_pair(5, 9));
-    r.Insert(ft::make_pair(4, 9));
-    r.Insert(ft::make_pair(1, 9));
-    r.Insert(ft::make_pair(4, 9));
-    r.Insert(ft::make_pair(7, 9));
-    r.Insert(ft::make_pair(9, 9));
-    r.Insert(ft::make_pair(2, 9));
-    r.Insert(ft::make_pair(8, 9));
-    r.printTree(r.__root, "", true);
-    while(r.__root)
-        r.Delete(r.Minimum(r.__root));
-    r.printTree(r.__root, "", true);
+    // RBT<ft::pair<int, int>,std::less<int>, std::allocator<ft::pair<int, int> > > r;
+    // r.Insert(ft::make_pair(5, 9));
+    // r.Insert(ft::make_pair(4, 9));
+    // r.Insert(ft::make_pair(1, 9));
+    // r.Insert(ft::make_pair(4, 9));
+    // r.Insert(ft::make_pair(7, 9));
+    // r.Insert(ft::make_pair(9, 9));
+    // r.Insert(ft::make_pair(2, 9));
+    // r.Insert(ft::make_pair(8, 9));
+    // r.printTree(r.__root, "", true);
+    // while(r.__root)
+    //     r.Delete(r.Minimum(r.__root));
+    // r.printTree(r.__root, "", true);
+    std::less<int> less_than;
+bool result = less_than(2, 5); // renvoie true
+if(result) std::cout << ">";
+else std::cout << "<";
+
     return 0;
 }
 
