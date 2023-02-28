@@ -17,18 +17,40 @@ class map_iterator
     map_iterator():__ptr(0){}
     map_iterator(node *p) : __ptr(p) {}
 
+
+
+    template < class cK, class cV>
+    friend class map_iterator;
+
+    template < class cK, class cV>
+    map_iterator (const map_iterator<cK, cV>& x) : __ptr(x.__ptr){}
+
+    template < class cK, class cV>
+    map_iterator<cK, cV>& operator= (const map_iterator<cK, cV>& x)
+    {
+        this->__ptr = x.__ptr;
+        return (*this);
+    }
+
     // Dereference operators
-    reference operator*() const { return *__ptr->__val; }
+    reference operator*() const { return *(__ptr->__val); }
     pointer operator->() const { return &(operator*()); }
 
     // Increment operators
     map_iterator& operator++()
     {
+        if (!__ptr)
+            return (*this);
         if (__ptr->__right)
             __ptr = Min(__ptr->__right);
-        else
-            while (__ptr->__parent && __ptr == __ptr->__parent->__left)
+        else if (__ptr->__parent && __ptr == __ptr->__parent->__right)
+        {
+            while (__ptr->__parent && __ptr == __ptr->__parent->__right)
                 __ptr = __ptr->__parent;
+            __ptr = __ptr->__parent;
+        }
+        else
+            __ptr = __ptr->__parent;
         return (*this);
     }
     
@@ -42,9 +64,10 @@ class map_iterator
         return (*this);
     }
 
-    map_iterator operator++(int) {
+    map_iterator operator++(int)
+    {
         map_iterator tmp(*this);
-        (*this)++;
+        ++(*this);
         return tmp;
     }
 
@@ -60,13 +83,13 @@ class map_iterator
 
     private:
         node    *__ptr;
-        node* min(node *z)
+        node*   Min(node *z)
         {
             while(z->__left)
                 z = z->__left;
             return (z);
         }
-        node* max(node *z)
+        node*   Max(node *z)
         {
             while(z->__right)
                 z = z->__right;

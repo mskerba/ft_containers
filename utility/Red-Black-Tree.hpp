@@ -10,26 +10,26 @@ template < class Key, class T, class Compare = std::less<Key>, class Alloc = std
 class RBT
 {
     public:
-        typedef     Key                                            key_type;
-        typedef     T                                              mapped_type;
-        typedef     ft::pair<const key_type,mapped_type>           value_type;
-        typedef     Compare                                        key_compare;
+        typedef     Key                                         key_type;
+        typedef     T                                           mapped_type;
+        typedef     ft::pair<const key_type,mapped_type>        value_type;
+        typedef     Compare                                     key_compare;
     public:
         class Node
         {
             public:
-                value_type  __val;
+                value_type  *__val;
                 bool        __color; // ? 0 = red & 1 =  black
                 Node        *__parent;
                 Node        *__left;
                 Node        *__right;
                 
-                Node(value_type val) : __val(val), __color(0), __parent(0), __left(0), __right(0){}
+                Node(value_type *val) : __val(val), __color(0), __parent(0), __left(0), __right(0){}
         };
         typedef typename Alloc::template rebind<Node>::other    allocator_type;
         typedef Alloc                                           val_allocator;
-        typedef        map_iterator<Node, value_type>           iterator;
-        // typedef        map_iterator<Node, value_type>           const_iterator;
+        typedef map_iterator<Node, value_type>                  iterator;
+        typedef map_iterator<const Node, const value_type>      const_iterator;
 
         RBT():__root(nullptr){}
         RBT(const RBT& x)
@@ -39,7 +39,9 @@ class RBT
         RBT&    operator= (const RBT& x)
         {
             if (__root) clear_node(__root);
-            duplicate_tree(x.__root);
+            __root = 0;
+            if(x.__root)
+                duplicate_tree(x.__root);
             return (*this);
         }
         void    right_Rotate(Node *x);
@@ -51,9 +53,9 @@ class RBT
         void    printTree(Node* node, std::string indent, bool last);
         Node*   Search(Node *z, const value_type& k)
         {
-            if (!z || k == z->__val)
-                retrun (z);
-            if (less_than(k.first , z->__val.first))
+            if (!z || k.first == z->__val->first)
+                return (z);
+            if (less_than(k.first , z->__val->first))
                 return (Search(z->__left, k));
             return (Search(z->__right, k));
         }
@@ -64,8 +66,8 @@ class RBT
 
             clear_node(z->__left);
             clear_node(z->__right);
-           __val__alloc.destroy(&z->__val);
-           __val__alloc.deallocate(&z->__val, 1);
+           __val__alloc.destroy(z->__val);
+           __val__alloc.deallocate(z->__val, 1);
             __alloc.destroy(z);
             __alloc.deallocate(z, 1);
         }
@@ -88,17 +90,39 @@ class RBT
             Node*       node = __alloc.allocate(1);
 
             __val__alloc.construct(new_val, val);
-            __alloc.construct(node,*new_val);
+            __alloc.construct(node, new_val);
             
             return node;
         }
         void duplicate_tree(Node *z)
         {
-            if (z) return;
+            if (!z) return;
 
-            Insert(z->__val);
+            except_Insert(*z->__val);
             duplicate_tree(z->__left);
             duplicate_tree(z->__right);
+        }
+        void except_Insert(value_type n)
+        {
+            Node *y = nullptr;
+            Node *x = __root;
+            Node *z = new_node(n);
+
+            while(x)
+            {
+                y = x;
+                if(less_than(z->__val->first , x->__val->first)) //? (z->__val < x->__val)
+                    x = x->__left;
+                else
+                    x = x->__right;
+            }
+            z->__parent = y;
+            if (!y)
+                __root = z;
+            else if (less_than(z->__val->first , y->__val->first)) //? z->__val < y->__val
+                y->__left = z;
+            else
+                y->__right = z;
         }
 };
 
@@ -118,9 +142,9 @@ void RBT<Key, T, Compare, Alloc>::printTree(RBT<Key, T, Compare, Alloc>::Node* n
         }
 
         if (node->__color)
-            std::cout << "[" << node->__val << "]" << std::endl;
+            std::cout << "[" << node->__val->first << "]" << std::endl;
         else
-            std::cout << "\033[31m" << "[" << node->__val << "]" << "\033[0m\n";
+            std::cout << "\033[31m" << "[" << node->__val->first << "]" << "\033[0m\n";
 
         printTree(node->__right, indent, true);
         printTree(node->__left, indent, false);
@@ -176,7 +200,7 @@ void RBT<Key, T, Compare, Alloc>::Insert(value_type n)
     while(x)
     {
         y = x;
-        if(less_than(z->__val.first , x->__val.first)) //? (z->__val < x->__val)
+        if(less_than(z->__val->first , x->__val->first)) //? (z->__val < x->__val)
             x = x->__left;
         else
             x = x->__right;
@@ -184,7 +208,7 @@ void RBT<Key, T, Compare, Alloc>::Insert(value_type n)
     z->__parent = y;
     if (!y)
         __root = z;
-    else if (less_than(z->__val.first , y->__val.first)) //? z->__val < y->__val
+    else if (less_than(z->__val->first , y->__val->first)) //? z->__val < y->__val
         y->__left = z;
     else
         y->__right = z;
@@ -303,7 +327,7 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
 template < typename Key, typename T, typename Compare, typename Alloc>
 typename RBT<Key, T, Compare, Alloc>::Node* RBT<Key, T, Compare, Alloc>::Minimum(Node *z)
 {
-    while(z->__left)
+    while(z && z->__left)
         z = z->__left;
     return (z);
 }
@@ -311,7 +335,8 @@ typename RBT<Key, T, Compare, Alloc>::Node* RBT<Key, T, Compare, Alloc>::Minimum
 template < typename Key, typename T, typename Compare, typename Alloc>
 typename RBT<Key, T, Compare, Alloc>::Node* RBT<Key, T, Compare, Alloc>::Maximum(Node *z)
 {
-    while(z->__right)
+
+    while(z && z->__right)
         z = z->__right;
     return (z);
 }
