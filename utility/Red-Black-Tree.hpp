@@ -43,14 +43,18 @@ class RBT
             duplicate_tree(x.__root);
             return (*this);
         }
+        void swap(Node *x)
+        {
+            std::swap(this->__root, x);
+        }
         void    right_Rotate(Node *x);
         void    left_Rotate(Node *x);
         void    Insert(value_type n);
         void    Delete(value_type n);
-        Node*   Minimum(Node *z);
-        Node*   Maximum(Node *z);
+        Node*   Minimum(Node *z) const;
+        Node*   Maximum(Node *z) const;
         void    printTree(Node* node, std::string indent, bool last);
-        Node*   Search(Node *z, const value_type& k)
+        Node*   Search(Node *z, const value_type& k) const
         {
             if (!z || k.first == z->__val->first)
                 return (z);
@@ -59,18 +63,38 @@ class RBT
             return (Search(z->__right, k));
         }
 
-        void    clear_node(Node* z)
+        Node*   find(Node *z, const value_type& k) const
         {
-            if(!z) return ;
+            if (!z || k.first == z->__val->first )
+                return (z);
+            Node *x;
+            if (less_than(k.first , z->__val->first))
+            {
+                x = Search(z->__left, k);
+                if(!x)
+                    return (z);
+                return (x);
+            }
+            else
+            {
+                x = Search(z->__right, k);
+                if(!x)
+                    return (z);
+                return (x);
+            }
+        }
+
+        void clear_node(Node* z)
+        {
+            if(!z) return;
 
             clear_node(z->__left);
             clear_node(z->__right);
-           __val__alloc.destroy(z->__val);
-           __val__alloc.deallocate(z->__val, 1);
+            __val__alloc.destroy(z->__val);
+            // __val__alloc.deallocate(z->__val, 1);
             __alloc.destroy(z);
-            __alloc.deallocate(z, 1);
+            // __alloc.deallocate(z, 1);
         }
-
 
     public: // !private
         Node            *__root;
@@ -324,7 +348,7 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
 }
 
 template < typename Key, typename T, typename Compare, typename Alloc>
-typename RBT<Key, T, Compare, Alloc>::Node* RBT<Key, T, Compare, Alloc>::Minimum(Node *z)
+typename RBT<Key, T, Compare, Alloc>::Node* RBT<Key, T, Compare, Alloc>::Minimum(Node *z) const
 {
     while(z && z->__left)
         z = z->__left;
@@ -332,7 +356,7 @@ typename RBT<Key, T, Compare, Alloc>::Node* RBT<Key, T, Compare, Alloc>::Minimum
 }
 
 template < typename Key, typename T, typename Compare, typename Alloc>
-typename RBT<Key, T, Compare, Alloc>::Node* RBT<Key, T, Compare, Alloc>::Maximum(Node *z)
+typename RBT<Key, T, Compare, Alloc>::Node* RBT<Key, T, Compare, Alloc>::Maximum(Node *z) const
 {
 
     while(z && z->__right)

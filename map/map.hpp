@@ -163,8 +163,8 @@ class ft::map
             if (lhs.size() != rhs.size())
                 return (false);
             typename ft::map<_Key,_T,_Compare,_Alloc>::const_iterator it = lhs.begin(), it1 = rhs.begin();
-            for (; it1 != rhs.end() && it != lhs.end(); it++, it1++)
-                if (*it != *it1)
+            while ( it1 != rhs.end())
+                if (*(it++) != *(it1++))
                     return (false);
             return (true);
         }
@@ -176,12 +176,14 @@ class ft::map
             friend bool operator<  ( const map<_Key,_T,_Compare,_Alloc>& lhs, const map<_Key,_T,_Compare,_Alloc>& rhs )
             {
                 typename ft::map<_Key,_T,_Compare,_Alloc>::const_iterator it = lhs.begin(), it1 = rhs.begin();
-                for (; it1 != rhs.end() && it != lhs.end(); it++, it1++)
+                while (it1 != rhs.end() && it != lhs.end())
                 {
                     if (*it > *it1)
                         return (false);
-                    else if (*it < *it1)
+                    if (*it < *it1)
                         return (true);
+                    it++;
+                    it1++;
                 }
                 if (lhs.size() < rhs.size())
                     return (true);
@@ -326,8 +328,8 @@ typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Allo
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::begin() const
 {
-    RBT<key_type, mapped_type, key_compare, allocator_type> tmp_r(root);
-    return (const_iterator(tmp_r.Minimum(root.__root),tmp_r.__root));
+    // RBT<key_type, mapped_type, key_compare, allocator_type> tmp_r(root);
+    return (const_iterator(root.Minimum(root.__root),root.__root));
 }
 
 /***********************************************/
@@ -490,9 +492,8 @@ void ft::map<Key, T, Compare, Alloc>::erase (typename ft::map<Key, T, Compare, A
 template < class Key, class T, class Compare, class Alloc>
 void ft::map<Key, T, Compare, Alloc>::swap (ft::map<Key, T, Compare, Alloc>& x)
 {
-    map s = *this;
-    *this = x;
-    x = s;
+    this->root.swap(x.root.__root);
+    std::swap(__size, x.__size);
 }
 
 /***********************************************/
@@ -532,17 +533,15 @@ typename ft::map<Key, T, Compare, Alloc>::allocator_type ft::map<Key, T, Compare
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::find (const ft::map<Key, T, Compare, Alloc>::key_type& k)
 {
-    if (root.Search(root.__root, ft::make_pair(k, 0)))
-        return (iterator(root.Search(root.__root, ft::make_pair(k, 0)), root.__root));
-    return (end());
+    mapped_type j = mapped_type();
+    return (iterator(root.Search(root.__root, ft::make_pair(k, j)), root.__root));
 }
 
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::find (const ft::map<Key, T, Compare, Alloc>::key_type& k) const
 {
-    if (root.Search(root.__root, ft::make_pair(k, 0)))
-        return (const_iterator(root.Search(root.__root, ft::make_pair(k, 0)), root.__root));
-    return (end());
+    mapped_type j = mapped_type();
+    return (const_iterator(root.find(root.__root, ft::make_pair(k, j)), root.__root));
 }
 
 /***********************************************/
@@ -552,7 +551,7 @@ typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, Alloc>::count (const ft::map<Key, T, Compare, Alloc>::key_type& k) const
 {
-    if (root.Search(root.__root, ft::make_pair(k, 0)))
+    if (find(k)!= end())
         return (1);
     return (0);
 }
@@ -564,13 +563,17 @@ typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, All
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::iterator  ft::map<Key, T, Compare, Alloc>::lower_bound (const typename ft::map<Key, T, Compare, Alloc>::key_type& k)
 {
-    
+    iterator it (root.find(root.__root, ft::make_pair(k,mapped_type())), root.__root);
+    return it;
 }
 
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::const_iterator    ft::map<Key, T, Compare, Alloc>::lower_bound (const typename ft::map<Key, T, Compare, Alloc>::key_type& k) const
 {
-
+    const_iterator it = begin();
+    while (it != end() && it->first < k)
+        it++;
+    return it;
 }
 
 /***********************************************/
@@ -580,13 +583,13 @@ typename ft::map<Key, T, Compare, Alloc>::const_iterator    ft::map<Key, T, Comp
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::iterator  ft::map<Key, T, Compare, Alloc>::upper_bound (const typename ft::map<Key, T, Compare, Alloc>::key_type& k)
 {
-    
+    return (lower_bound(k)++);
 }
 
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::const_iterator    ft::map<Key, T, Compare, Alloc>::upper_bound (const typename ft::map<Key, T, Compare, Alloc>::key_type& k) const
 {
-
+    return (lower_bound(k)++);
 }
 
 /***********************************************/
@@ -594,15 +597,15 @@ typename ft::map<Key, T, Compare, Alloc>::const_iterator    ft::map<Key, T, Comp
 /***********************************************/
 
 template < class Key, class T, class Compare, class Alloc>
-ft::pair<const_iterator,const_iterator> equal_range (const key_type& k) const
+ft::pair<typename ft::map<Key, T, Compare, Alloc>::const_iterator,typename ft::map<Key, T, Compare, Alloc>::const_iterator> ft::map<Key, T, Compare, Alloc>::equal_range (const typename ft::map<Key, T, Compare, Alloc>::key_type& k) const
 {
-
+    return (ft::make_pair(lower_bound(k), upper_bound(k)));
 }
 
 template < class Key, class T, class Compare, class Alloc>
-ft::pair<iterator,iterator>             equal_range (const key_type& k)
+ft::pair<typename ft::map<Key, T, Compare, Alloc>::iterator,typename ft::map<Key, T, Compare, Alloc>::iterator> ft::map<Key, T, Compare, Alloc>::equal_range (const typename ft::map<Key, T, Compare, Alloc>::key_type& k)
 {
-
+    return (ft::make_pair(lower_bound(k), upper_bound(k)));
 }
 
 
