@@ -228,14 +228,14 @@ class ft::vector
     }
 
     template <class _T, class  _Alloc>
-        friend bool operator!= (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs)
-    {
-        if (lhs.size() != rhs.size() || lhs.capacity() != rhs.capacity())
-            return (true);
-        for (size_type i = 0; i < rhs.size() && i < lhs.size(); i++)
-            if (lhs.__container[i] != rhs.__container[i]) return (true);
-        return (false);
-    }
+        friend bool operator!= (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs) {return !(lhs == rhs);}
+    // {
+    //     if (lhs.size() != rhs.size() || lhs.capacity() != rhs.capacity())
+    //         return (true);
+    //     for (size_type i = 0; i < rhs.size() && i < lhs.size(); i++)
+    //         if (lhs.__container[i] != rhs.__container[i]) return (true);
+    //     return (false);
+    // }
 
     template <class _T, class  _Alloc>
         friend bool operator<  (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs)

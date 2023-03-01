@@ -40,6 +40,7 @@ struct ft::pair
         {
             first = pr.first;
             second = pr.second;
+            return (*this);
         }
 
 

@@ -80,7 +80,8 @@ typename ft::reverse_iterator<Iterator>::iterator_type ft::reverse_iterator<Iter
 template<typename Iterator>
 typename ft::reverse_iterator<Iterator>::reference ft::reverse_iterator<Iterator>::operator*() const
 {
-    return (*(__it - 1));
+    Iterator tmp (__it);
+    return (*(--tmp)); // ? return (*(__it - 1))
 }
 
 template<typename Iterator>
@@ -150,8 +151,10 @@ typename ft::reverse_iterator<Iterator>::difference_type ft::reverse_iterator<It
 template<typename Iterator>
 typename ft::reverse_iterator<Iterator>::pointer ft::reverse_iterator<Iterator>::operator->() const
 {
-    return &(this->operator*());
-    // return (*__it);
+
+    Iterator tmp (__it);
+    (--tmp);
+    return &(*tmp); // ? return (*(__it - 1))
 }
 
 template<typename Iterator>

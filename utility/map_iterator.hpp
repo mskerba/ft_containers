@@ -4,31 +4,34 @@
 # include <functional>
 # include "Red-Black-Tree.hpp"
 
-template <typename K, typename V>
+template <typename K, typename V, typename Category = std::bidirectional_iterator_tag>
 class map_iterator
 {
     public:
+        typedef   Category              iterator_category;
         typedef   K                     node;
         typedef   V                     value_type;
         typedef   value_type*           pointer;
         typedef   value_type&           reference;
+        typedef   ptrdiff_t             difference_type;
+        typedef   size_t                size_type;
     
     public:
-    map_iterator():__ptr(0){}
+    map_iterator():__ptr(0) , __root(0){}
     map_iterator(node *p, node* root) : __ptr(p), __root(root) {}
 
 
-
-    template < class cK, class cV>
+    template < typename cK, typename cV, typename _Category>
     friend class map_iterator;
 
-    template < class cK, class cV>
-    map_iterator (const map_iterator<cK, cV>& x) : __ptr(x.__ptr){}
+    template < typename cK, typename cV>
+    map_iterator (const map_iterator<cK, cV>& x) : __ptr(x.__ptr), __root(x.__root){}
 
-    template < class cK, class cV>
+    template < typename cK, typename cV>
     map_iterator<cK, cV>& operator= (const map_iterator& x)
     {
         this->__ptr = x.__ptr;
+        this->__root = x.__root;
         return (*this);
     }
 
@@ -100,7 +103,7 @@ class map_iterator
         }
         node*   Max(node *z)
         {
-            while(z->__right)
+            while(z && z->__right)
                 z = z->__right;
             return (z);
         }
