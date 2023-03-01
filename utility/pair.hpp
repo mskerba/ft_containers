@@ -44,22 +44,22 @@ struct ft::pair
 
 
         template <class _T1, class _T2>
-            friend bool operator== (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs->first == rhs->first && lhs->second == rhs->second);}
+            friend bool operator== (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs.first == rhs.first && lhs.second == rhs.second);}
 
         template <class _T1, class _T2>
-            friend bool operator!= (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs->first != rhs->first && lhs->second != rhs->second);}
+            friend bool operator!= (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs.first != rhs.first && lhs.second != rhs.second);}
 
         template <class _T1, class _T2>
-            friend bool operator<  (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs->first < rhs->first && lhs->second < rhs->second);}
+            friend bool operator<  (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs.first < rhs.first && lhs.second < rhs.second);}
 
         template <class _T1, class _T2>
-            friend bool operator<= (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs->first <= rhs->first && lhs->second <= rhs->second);}
+            friend bool operator<= (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs.first <= rhs.first && lhs.second <= rhs.second);}
 
         template <class _T1, class _T2>
-            friend bool operator>  (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs->first > rhs->first && lhs->second > rhs->second);}
+            friend bool operator>  (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs.first > rhs.first && lhs.second > rhs.second);}
 
         template <class _T1, class _T2>
-            friend bool operator>= (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs->first >= rhs->first && lhs->second >= rhs->second);}
+            friend bool operator>= (const pair<_T1,_T2>& lhs, const pair<_T1,_T2>& rhs) { return (lhs.first >= rhs.first && lhs.second >= rhs.second);}
 };
 
 

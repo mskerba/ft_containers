@@ -15,7 +15,7 @@ class map_iterator
     
     public:
     map_iterator():__ptr(0){}
-    map_iterator(node *p) : __ptr(p) {}
+    map_iterator(node *p, node* root) : __ptr(p), __root(root) {}
 
 
 
@@ -26,7 +26,7 @@ class map_iterator
     map_iterator (const map_iterator<cK, cV>& x) : __ptr(x.__ptr){}
 
     template < class cK, class cV>
-    map_iterator<cK, cV>& operator= (const map_iterator<cK, cV>& x)
+    map_iterator<cK, cV>& operator= (const map_iterator& x)
     {
         this->__ptr = x.__ptr;
         return (*this);
@@ -56,11 +56,18 @@ class map_iterator
     
     map_iterator& operator--()
     {
-        if(__ptr->__left)
-            __ptr = Max(__ptr->__right);
-        else
-            while (__ptr->__parent && __ptr == __ptr->__parent->__right)
+        if (!__ptr)
+            __ptr = Max(__root);
+        else if (__ptr->__left)
+            __ptr = Max(__ptr->__left);
+        else if (__ptr->__parent && __ptr == __ptr->__parent->__left)
+        {
+            while (__ptr->__parent && __ptr == __ptr->__parent->__left)
                 __ptr = __ptr->__parent;
+            __ptr = __ptr->__parent;
+        }
+        else
+            __ptr = __ptr->__parent;;
         return (*this);
     }
 
@@ -71,9 +78,10 @@ class map_iterator
         return tmp;
     }
 
-    map_iterator operator--(int) {
+    map_iterator operator--(int)
+    {
         map_iterator tmp(*this);
-        (*this)--;
+        --(*this);
         return tmp;
     }
 
@@ -83,6 +91,7 @@ class map_iterator
 
     private:
         node    *__ptr;
+        node    *__root;
         node*   Min(node *z)
         {
             while(z->__left)

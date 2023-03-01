@@ -40,8 +40,7 @@ class RBT
         {
             if (__root) clear_node(__root);
             __root = 0;
-            if(x.__root)
-                duplicate_tree(x.__root);
+            duplicate_tree(x.__root);
             return (*this);
         }
         void    right_Rotate(Node *x);
