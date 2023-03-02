@@ -43,9 +43,9 @@ class RBT
             duplicate_tree(x.__root);
             return (*this);
         }
-        void swap(Node *x)
+        void swap(RBT *x)
         {
-            std::swap(this->__root, x);
+            std::swap(this->__root, x->__root);
         }
         void    right_Rotate(Node *x);
         void    left_Rotate(Node *x);
@@ -91,9 +91,9 @@ class RBT
             clear_node(z->__left);
             clear_node(z->__right);
             __val__alloc.destroy(z->__val);
-            // __val__alloc.deallocate(z->__val, 1);
+            __val__alloc.deallocate(z->__val, 1);
             __alloc.destroy(z);
-            // __alloc.deallocate(z, 1);
+            __alloc.deallocate(z, 1);
         }
 
     public: // !private
@@ -310,7 +310,9 @@ void    RBT<Key, T, Compare, Alloc>::transplant(Node *z, Node *y)
 template < typename Key, typename T, typename Compare, typename Alloc>
 void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
 {
-    Node *z = new_node(n);
+    Node *z = Search(__root, n);
+    if(!z)
+        return ;
     Node *y  = z;
     Node *x;
     bool y_col = y->__color;
@@ -326,7 +328,10 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
     }
     else
     {
+        
         y = Minimum(z->__right);
+
+            // throw std::runtime_error("Dereferencing null pointer");
         y_col = y->__color;
         x = y->__right;
         if (y->__parent == z)
@@ -345,6 +350,7 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
     // ! destroy z here/! \!!!!
     // if (y_col)
     //     Delete_FixUp(x);
+    __root->__color = 1;
 }
 
 template < typename Key, typename T, typename Compare, typename Alloc>
@@ -368,17 +374,18 @@ template < typename Key, typename T, typename Compare, typename Alloc>
 void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
 {
     Node* y;
-    while (z != __root && z->__color)
+    // std::cout << "****************************************************---****\n";
+    while (z && z != __root && z->__color)
     {
-        if (z == z->__parent->__left)
+        if (z->__parent && z == z->__parent->__left)
         {
             y = z->__parent->__right;
             if (!y->__color)
             {
                 y->__color = 1;
-                z->__parent->__colot = 0;
+                z->__parent->__color = 0;
                 left_Rotate(z->__parent);
-                y - z->__parent->__right;
+                y = z->__parent->__right;
             }
             if (y->__left->__color && y->__right->__color)
             {
@@ -407,9 +414,9 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
             if (!y->__color)
             {
                 y->__color = 1;
-                z->__parent->__colot = 0;
+                z->__parent->__color = 0;
                 left_Rotate(z->__parent);
-                y - z->__parent->__left;
+                y = z->__parent->__left;
             }
             if (y->__right->__color && y->__left->__color)
             {
@@ -433,7 +440,10 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
             }
         }
     }
-    z->__color = 1;
+    if (z)
+        z->__color = 1;
+    // std::cout << "********************+++++++++++++++++++++****\n";
+
 }
 
 #endif

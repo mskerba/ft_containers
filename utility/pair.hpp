@@ -16,7 +16,7 @@ namespace ft{
     template <typename T1, typename T2>
     std::ostream& operator<<(std::ostream& os, const ft::pair<T1, T2>& x)
     {
-        os << x->first<< ", " << x->second;
+        os << x.first<< ", " << x.first;
         return os;
     }
 }
@@ -29,7 +29,7 @@ struct ft::pair
 
         first_type first;
         second_type second;
-        pair(){}
+        pair() : first(0),  second(0){}
         template<class U, class V>
             pair (const pair<U,V>& pr) : first(pr.first), second(pr.second){}
         pair (const first_type& a, const second_type& b) : first(a) , second(b){}
