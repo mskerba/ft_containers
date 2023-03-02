@@ -79,5 +79,6 @@
         "red-black-tree.hpp": "c",
         "__memory": "cpp"
     },
-    "ayat.repeatedEveryMinute": 20
+    "ayat.repeatedEveryMinute": 20,
+    "C_Cpp.dimInactiveRegions": false
 }

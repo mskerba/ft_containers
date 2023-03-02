@@ -200,7 +200,7 @@ class ft::map
             friend bool operator>= ( const map<_Key,_T,_Compare,_Alloc>& lhs, const map<_Key,_T,_Compare,_Alloc>& rhs ) {return !(lhs < rhs);}
 
     // private: // *data member
-        RBT<key_type, mapped_type, key_compare, allocator_type>     root; 
+        RBT<key_type, mapped_type, key_compare, allocator_type>     root;
         size_type            __size;
 
     private: // *func member
@@ -259,7 +259,6 @@ ft::map<Key, T, Compare, Alloc>::map (const map& x) :__size(x.size())
 template < class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>::~map()
 {
-    __size = 0;
     clear();
 }
 
@@ -270,9 +269,9 @@ ft::map<Key, T, Compare, Alloc>::~map()
 template < class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>& ft::map<Key, T, Compare, Alloc>::operator=(const map& x)
 {
-    // if (!x.root.__root) return (*this);
     this->root = x.root;
     __size = x.size();
+    return (*this);
     return (*this);
 }
 
@@ -442,8 +441,15 @@ ft::pair<typename ft::map<Key, T, Compare, Alloc>::iterator,bool> ft::map<Key, T
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::insert (iterator position, const value_type& val)
 {
-    this->insert(val);
-    return (position);
+    (void) position;
+    bool is = (root.Search(root.__root, val)) ? true : false;
+    if (!is)   
+    {
+        this->__size++;
+        this->root.Insert(val);
+    }
+    iterator it(root.Search(root.__root, val), root.__root);
+    return (it);
 }
 
 template < class Key, class T, class Compare, class Alloc>
@@ -488,7 +494,7 @@ void ft::map<Key, T, Compare, Alloc>::erase (typename ft::map<Key, T, Compare, A
 template < class Key, class T, class Compare, class Alloc>
 void ft::map<Key, T, Compare, Alloc>::swap (ft::map<Key, T, Compare, Alloc>& x)
 {
-    this->root.swap(&x.root);
+    std::swap(this->root.__root, x.root.__root);
     std::swap(__size, x.__size);
 }
 
@@ -558,8 +564,13 @@ template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::iterator  ft::map<Key, T, Compare, Alloc>::lower_bound (const typename ft::map<Key, T, Compare, Alloc>::key_type& k)
 {
     iterator it (root.find(root.__root, ft::make_pair(k, mapped_type())), root.__root);
-        while (it != end() && it->first < k)
+    if (it != begin() && it->first < k)
+       while (it != end() && it->first < k) it++;
+    else if (it != begin()  && it->first > k)
+    {
+        while (it != begin() && it->first > k) --it;
         it++;
+    }
     return it;
 }
 
@@ -567,8 +578,13 @@ template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::const_iterator    ft::map<Key, T, Compare, Alloc>::lower_bound (const typename ft::map<Key, T, Compare, Alloc>::key_type& k) const
 {
     const_iterator it (root.find(root.__root, ft::make_pair(k, mapped_type())), root.__root);
-    while (it != end() && it->first < k)
+    if (it != begin() && it->first < k)
+       while (it != end() && it->first < k) it++;
+    else if (it != begin()  && it->first > k)
+    {
+        while (it != begin() && it->first > k) --it;
         it++;
+    }
     return it;
 }
 
@@ -580,7 +596,7 @@ template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::iterator  ft::map<Key, T, Compare, Alloc>::upper_bound (const typename ft::map<Key, T, Compare, Alloc>::key_type& k)
 {
     iterator it  = lower_bound(k);
-    if (it->first == k)
+    if (it != end() && it->first == k)
         return (++it);
     return (it);
 }
@@ -589,7 +605,7 @@ template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::const_iterator    ft::map<Key, T, Compare, Alloc>::upper_bound (const typename ft::map<Key, T, Compare, Alloc>::key_type& k) const
 {
     const_iterator it  = lower_bound(k);
-    if (it->first == k)
+    if (it != end() && it->first == k)
         return (++it);
     return (it);
 }

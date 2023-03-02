@@ -91,8 +91,8 @@ class RBT
             clear_node(z->__left);
             clear_node(z->__right);
             __val__alloc.destroy(z->__val);
-            __val__alloc.deallocate(z->__val, 1);
             __alloc.destroy(z);
+            __val__alloc.deallocate(z->__val, 1);
             __alloc.deallocate(z, 1);
         }
 
@@ -348,8 +348,8 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
         y->__color = z->__color;
     }
     // ! destroy z here/! \!!!!
-    // if (y_col)
-    //     Delete_FixUp(x);
+    if (y_col)
+        Delete_FixUp(x);
     __root->__color = 1;
 }
 

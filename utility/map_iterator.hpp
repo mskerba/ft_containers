@@ -36,14 +36,7 @@ class map_iterator
     }
 
     // Dereference operators
-    // reference operator*() const { return *(__ptr->__val); }
-    reference operator*() const {
-    // if (__ptr == nullptr) {
-    //     throw std::runtime_error("Dereferencing null pointer");
-    // }
-    return *(__ptr->__val);
-}
-
+    reference operator*() const { return *(__ptr->__val); }
     pointer operator->() const { return &(operator*()); }
 
     // Increment operators

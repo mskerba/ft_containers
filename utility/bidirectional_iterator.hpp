@@ -1,161 +1,132 @@
-# ifndef __biterator_HPP__
-# define __biterator_HPP__
+# ifndef __MAP_ITERATOR_HPP__
+# define __MAP_ITERATOR_HPP__
 # include <iostream>
 # include <functional>
-// # include "Red-Black-Tree.hpp"
+# include "Red-Black-Tree.hpp"
 
-
-template < class Key, class T, class Compare>
-class bidirectional
+template <typename K, typename V, typename Category = std::random_access_iterator_tag>
+class map_iterator
 {
     public:
-        // typedef   Category                                      iterator_category;
-        typedef   Key                                           key_type;
-        typedef   Compare                                       key_compare;
-        typedef   T                                             mapped_type;
-        typedef   ft::pair<const key_type,mapped_type>          value_type;
-        typedef   ptrdiff_t                                     difference_type;
-        typedef   value_type*                                   pointer;
-        typedef   value_type&                                   reference;
-
+        typedef   Category              iterator_category;
+        typedef   K                     node;
+        typedef   V                     value_type;
+        typedef   value_type*           pointer;
+        typedef   value_type&           reference;
+        typedef   ptrdiff_t             difference_type;
+        typedef   size_t                size_type;
+    
     public:
-        bidirectional();
-        bidirectional(RBT<key_type, mapped_type, key_compare>    p);
+    map_iterator():__ptr(0) , __root(0){}
+    map_iterator(node *p, node* root) : __ptr(p), __root(root) {}
 
-        template < class cKey, class cT, class cCompare>
-        friend class bidirectional;
 
-        template < class cKey, class cT, class cCompare>
-        bidirectional (const bidirectional<cKey, cT, cCompare>& x) : __ptr(x.__ptr){}
+    template < typename cK, typename cV, typename _Category>
+    friend class map_iterator;
 
-        template < class cKey, class cT, class cCompare>
-        bidirectional<cKey, cT, cCompare>& operator= (const bidirectional<cKey, cT, cCompare>& x)
-        {
-            this->__ptr = x.__ptr;
+    template < typename cK, typename cV>
+    map_iterator (const map_iterator<cK, cV>& x) : __ptr(x.__ptr), __root(x.__root){}
+
+    template < typename cK, typename cV>
+    map_iterator<cK, cV>& operator= (const map_iterator& x)
+    {
+        this->__ptr = x.__ptr;
+        this->__root = x.__root;
+        return (*this);
+    }
+
+
+    Comparison operators
+    template <class cK, class  cV>
+       bool operator== (const map_iterator<cK, cV>& rhs ) { return __ptr == rhs.__ptr; }
+    template <class cK, class  cV>
+       bool operator!= (const map_iterator<cK, cV>& rhs ) { return !(*this == rhs); }
+
+        // bool operator== (const map_iterator& x) const
+        // {
+        //      return __ptr == x.__ptr; 
+        // }
+        // bool operator!= (const map_iterator& x) const
+        // {
+        //     return  !(*this == x);
+        // }
+
+    reference operator*() const {
+    // if (__ptr == nullptr) {
+    //     throw std::runtime_error("Dereferencing null pointer");
+    // }
+    return *(__ptr->__val);
+}
+
+    pointer operator->() const { return &(operator*()); }
+
+    // Increment operators
+    map_iterator& operator++()
+    {
+        if (!__ptr)
             return (*this);
+        if (__ptr->__right)
+            __ptr = Min(__ptr->__right);
+        else if (__ptr->__parent && __ptr == __ptr->__parent->__right)
+        {
+            while (__ptr->__parent && __ptr == __ptr->__parent->__right)
+                __ptr = __ptr->__parent;
+            __ptr = __ptr->__parent;
         }
+        else
+            __ptr = __ptr->__parent;
+        return (*this);
+    }
+    
+    map_iterator& operator--()
+    {
+        if (!__ptr)
+            __ptr = Max(__root);
+        else if (__ptr->__left)
+            __ptr = Max(__ptr->__left);
+        else if (__ptr->__parent && __ptr == __ptr->__parent->__left)
+        {
+            while (__ptr->__parent && __ptr == __ptr->__parent->__left)
+                __ptr = __ptr->__parent;
+            __ptr = __ptr->__parent;
+        }
+        else
+            __ptr = __ptr->__parent;;
+        return (*this);
+    }
 
-        bool operator== (const bidirectional& x) const;
-        bool operator!= (const bidirectional& x) const;
+    map_iterator operator++(int)
+    {
+        map_iterator tmp(*this);
+        ++(*this);
+        return tmp;
+    }
 
-        reference operator* () const;
-        pointer operator-> () const;
-        bidirectional& operator++ ();
-        bidirectional& operator-- ();
-        bidirectional operator++ (int);
-        bidirectional operator-- (int);
+    map_iterator operator--(int)
+    {
+        map_iterator tmp(*this);
+        --(*this);
+        return tmp;
+    }
+
+   
     private:
-        RBT<key_type, mapped_type, key_compare>      __ptr;
+        node    *__ptr;
+        node    *__root;
+        node*   Min(node *z)
+        {
+            while(z->__left)
+                z = z->__left;
+            return (z);
+        }
+        node*   Max(node *z)
+        {
+            while(z && z->__right)
+                z = z->__right;
+            return (z);
+        }
 };
 
-/***********************************************/
-/*                default constructor          */
-/***********************************************/
-
-template < class Key, class T, class Compare>
-bidirectional<Key, T, Compare>::bidirectional (){}
-
-/***********************************************/
-/*            parametrize constructor          */
-/***********************************************/
-
-template < typename Key, typename T, typename Compare>
-bidirectional<Key, T, Compare>::bidirectional(RBT<key_type, mapped_type, key_compare>    p): __ptr(p){}
-
-/***********************************************/
-/*                  operator==                 */
-/***********************************************/
-
-template < class Key, class T, class Compare>
-bool bidirectional<Key, T, Compare>::operator== (const bidirectional& x) const
-{
-    return (this->__ptr == x.__ptr);
-}
-
-/***********************************************/
-/*                  operator!=                 */
-/***********************************************/
-
-template < class Key, class T, class Compare>
-bool bidirectional<Key, T, Compare>::operator!= (const bidirectional& x) const
-{
-    return !(*this == x);
-}
-
-/***********************************************/
-/*                  operator*                 */
-/***********************************************/
-
-template < class Key, class T, class Compare>
-typename bidirectional<Key, T, Compare>::reference bidirectional<Key, T, Compare>::operator* () const
-{
-    return (*__ptr);
-}
-
-/***********************************************/
-/*                  operator->                 */
-/***********************************************/
-
-template < class Key, class T, class Compare>
-typename bidirectional<Key, T, Compare>::pointer bidirectional<Key, T, Compare>::operator-> () const
-{
-    return (__ptr);
-}
-
-
-/***********************************************/
-/*                  operator++                 */
-/***********************************************/
-
-template < class Key, class T, class Compare>
-bidirectional<Key, T, Compare>& bidirectional<Key, T, Compare>::operator++ ()
-{
-    if(__ptr.__root->__right)
-        __ptr.__root = __ptr.Minimum(__ptr.__root->__right);
-    else
-        while (__ptr.__root->__parent && __ptr.__root == __ptr.__root->__parent->__left)
-            __ptr = __ptr.__root->__parent;
-    return (*this);
-}
-
-/***********************************************/
-/*                  operator--                 */
-/***********************************************/
-
-template < class Key, class T, class Compare>
-bidirectional<Key, T, Compare>& bidirectional<Key, T, Compare>::operator-- ()
-{
-    if(__ptr.__root->__left)
-        __ptr.__root = __ptr.Maximum(__ptr.__root->__right);
-    else
-        while (__ptr.__root->__parent && __ptr.__root == __ptr.__root->__parent->__right)
-            __ptr = __ptr.__root->__parent;
-    return (*this);
-}
-
-/***********************************************/
-/*                  ++operator                 */
-/***********************************************/
-
-template < class Key, class T, class Compare>
-bidirectional<Key, T, Compare> bidirectional<Key, T, Compare>::operator++ (int)
-{
-    bidirectional tmp = (*this);
-    (*this)++;
-    return (tmp);
-}
-
-/***********************************************/
-/*                  --operator                 */
-/***********************************************/
-
-template < class Key, class T, class Compare>
-bidirectional<Key, T, Compare> bidirectional<Key, T, Compare>::operator-- (int)
-{
-    bidirectional tmp = (*this);
-    (*this)--;
-    return (tmp);
-}
 
 
 #endif
