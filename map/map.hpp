@@ -331,7 +331,6 @@ typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Allo
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::begin() const
 {
-    // RBT<key_type, mapped_type, key_compare, allocator_type> tmp_r(root);
     return (const_iterator(root.Minimum(root.__root),root.__root));
 }
 
@@ -482,7 +481,6 @@ typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, All
     z.__root = root.Search(root.__root, n);
     if (!z.__root)
         return (0);
-    // root.printTree(root.__root, "" , true);
     this->erase(iterator(z.__root, root.__root));
     return (1);
 }
@@ -490,9 +488,8 @@ typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, All
 template < class Key, class T, class Compare, class Alloc>
 void ft::map<Key, T, Compare, Alloc>::erase (typename ft::map<Key, T, Compare, Alloc>::iterator first, typename ft::map<Key, T, Compare, Alloc>::iterator last)
 {
-    while (first != last) {
+    while (first != last)
         erase(first++);
-    }      
 }
 
 /***********************************************/

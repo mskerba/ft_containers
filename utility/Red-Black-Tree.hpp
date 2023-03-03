@@ -40,21 +40,15 @@ class RBT
         RBT&    operator= (const RBT& x)
         {
             clear_node(__root);
-            // if (x.__root)
-            //     __root = new_node(*(x.__root->__val));
-            // duplicate_tree(__root, x.__root);
-            in(x);
+            create_tree(x);
             return (*this);
         }
-        void in(const RBT& x)
+        void create_tree(const RBT& x)
         {
             __root = 0;
             if (x.__root)
-            {
                 __root = new_node(*(x.__root->__val));
-                __root->__color = 1;
-            }
-
+            __root->__color = 1;
             duplicate_tree(__root, x.__root);
         }
         void    swap(RBT *x)
@@ -140,26 +134,26 @@ class RBT
         void duplicate_tree(Node *z , Node* y)
         {
             if (!y) return;
-            except_Insert(z, y);
+            right_Insert(z, y);
+            left_Insert(z, y);
             duplicate_tree(z->__left,y->__left);
             duplicate_tree(z->__right,y->__right);
         }
-        void except_Insert(Node *z,Node * y)
+        void right_Insert(Node *z,Node * y)
         {
-            if (y->__right)
-            {
-            Node* right = new_node(*(y->__right->__val));
-            right->__parent = z;
-            right->__color = y->__color;
-            z->__right = right;
-
-            }
-            if (!y->__left)
-                return ;
+            if (!y->__left) return ;
             Node* left = new_node(*(y->__left->__val));
             left->__color = y->__color;
             left->__parent = z;
             z->__left = left;
+        }
+        void left_Insert(Node *z,Node * y)
+        {
+            if (y->__right) return ;
+            Node* right = new_node(*(y->__right->__val));
+            right->__parent = z;
+            right->__color = y->__color;
+            z->__right = right;
         }
 };
 
@@ -387,7 +381,7 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
 {
     Node* y;
     // std::cout << "****************************************************---****\n";
-        this->printTree(__root, "", 1);
+        // this->printTree(__root, "", 1);
     while (z != __root && z->__color)
     {
         std::cerr << "++++++\n" << std::endl;
