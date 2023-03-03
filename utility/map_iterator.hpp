@@ -4,24 +4,24 @@
 # include <functional>
 # include "Red-Black-Tree.hpp"
 
-template <typename K, typename V, typename Category = std::bidirectional_iterator_tag>
+template <typename K, typename V>
 class map_iterator
 {
     public:
-        typedef   Category              iterator_category;
-        typedef   K                     node;
-        typedef   V                     value_type;
-        typedef   value_type*           pointer;
-        typedef   value_type&           reference;
-        typedef   ptrdiff_t             difference_type;
-        typedef   size_t                size_type;
+        typedef   std::bidirectional_iterator_tag              iterator_category;
+        typedef   K                                            node;
+        typedef   V                                            value_type;
+        typedef   value_type*                                  pointer;
+        typedef   value_type&                                  reference;
+        typedef   ptrdiff_t                                    difference_type;
+        typedef   size_t                                       size_type;
     
     public:
-    map_iterator():__ptr(0) , __root(0){}
+    map_iterator():__ptr() , __root(){}
     map_iterator(node *p, node* root) : __ptr(p), __root(root) {}
 
 
-    template < typename cK, typename cV, typename _Category>
+    template < typename cK, typename cV>
     friend class map_iterator;
 
     template < typename cK, typename cV>
@@ -89,8 +89,11 @@ class map_iterator
     }
 
     // Comparison operators
-    bool operator==(const map_iterator& rhs) const { return __ptr == rhs.__ptr; }
-    bool operator!=(const map_iterator& rhs) const { return !(*this == rhs); }
+    template < typename _K, typename _P, typename _V>
+        friend bool operator==(const map_iterator<_K, _V>& lhs, const map_iterator<_P, _V>& rhs) { return (lhs.__ptr == rhs.__ptr); }
+
+    template < typename _K, typename _P, typename _V>
+        friend bool operator!=(const map_iterator<_K, _V>& lhs, const map_iterator<_P, _V>& rhs) { return !(lhs == rhs); }
 
     private:
         node    *__ptr;

@@ -29,7 +29,7 @@ class RBT
         typedef typename Alloc::template rebind<Node>::other    allocator_type;
         typedef Alloc                                           val_allocator;
         typedef map_iterator<Node, value_type>                  iterator;
-        typedef map_iterator<const Node, const value_type>      const_iterator;
+        typedef map_iterator<const Node, value_type>      const_iterator;
 
         RBT():__root(nullptr){}
         RBT(const RBT& x)

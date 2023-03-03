@@ -358,8 +358,7 @@ typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::reverse_iterator ft::map<Key, T, Compare, Alloc>::rbegin()
 {
-    iterator tmp(this->root.Maximum(root.__root), root.__root);
-    return reverse_iterator(tmp);
+    return reverse_iterator(end());
 }
 
 /***********************************************/
@@ -368,10 +367,8 @@ typename ft::map<Key, T, Compare, Alloc>::reverse_iterator ft::map<Key, T, Compa
 
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::const_reverse_iterator ft::map<Key, T, Compare, Alloc>::rbegin() const
-{
-    RBT<key_type, mapped_type, key_compare, allocator_type> tmp_r(root);
-    iterator tmp(tmp_r.Minimum(root.__root),tmp_r.__root);
-    return (const_reverse_iterator(tmp));
+{;
+    return (const_reverse_iterator(end()));
 }
 
 /***********************************************/
@@ -381,8 +378,7 @@ typename ft::map<Key, T, Compare, Alloc>::const_reverse_iterator ft::map<Key, T,
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::reverse_iterator ft::map<Key, T, Compare, Alloc>::rend()
 {
-    iterator tmp(nullptr, root.__root);
-    return (reverse_iterator(tmp));
+    return (reverse_iterator(begin()));
 }
 
 /***********************************************/
@@ -392,8 +388,7 @@ typename ft::map<Key, T, Compare, Alloc>::reverse_iterator ft::map<Key, T, Compa
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::const_reverse_iterator ft::map<Key, T, Compare, Alloc>::rend() const
 {
-    iterator tmp(nullptr, root.__root);
-    return (const_reverse_iterator(tmp));
+    return (const_reverse_iterator(begin()));
 }
 
 /***********************************************/
