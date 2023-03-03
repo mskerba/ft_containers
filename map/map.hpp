@@ -269,9 +269,11 @@ ft::map<Key, T, Compare, Alloc>::~map()
 template < class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>& ft::map<Key, T, Compare, Alloc>::operator=(const map& x)
 {
-    this->root = x.root;
+    if (size())
+        this->root = x.root;
+    else
+        this->root.in(x.root);
     __size = x.size();
-    return (*this);
     return (*this);
 }
 
@@ -462,6 +464,11 @@ void ft::map<Key, T, Compare, Alloc>::insert (InputIterator first, InputIterator
 template < class Key, class T, class Compare, class Alloc>
 void ft::map<Key, T, Compare, Alloc>::erase (typename ft::map<Key, T, Compare, Alloc>::iterator position)
 {
+    if(size() == 1)
+    {
+        this->clear();
+        return ;
+    }
     value_type n = (*position);
     root.Delete(n);
     __size--;
@@ -470,8 +477,13 @@ void ft::map<Key, T, Compare, Alloc>::erase (typename ft::map<Key, T, Compare, A
 template < class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, Alloc>::erase (const typename ft::map<Key, T, Compare, Alloc>::key_type& k)
 {
-    root.Delete(ft::make_pair(k, mapped_type()));
-    __size--;
+    value_type n = ft::make_pair(k, mapped_type());
+    RBT<key_type, mapped_type, key_compare, allocator_type> z;
+    z.__root = root.Search(root.__root, n);
+    if (!z.__root)
+        return (0);
+    // root.printTree(root.__root, "" , true);
+    this->erase(iterator(z.__root, root.__root));
     return (1);
 }
 

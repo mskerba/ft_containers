@@ -39,12 +39,25 @@ class RBT
         }
         RBT&    operator= (const RBT& x)
         {
-            if (__root) clear_node(__root);
-            __root = 0;
-            duplicate_tree(x.__root);
+            clear_node(__root);
+            // if (x.__root)
+            //     __root = new_node(*(x.__root->__val));
+            // duplicate_tree(__root, x.__root);
+            in(x);
             return (*this);
         }
-        void swap(RBT *x)
+        void in(const RBT& x)
+        {
+            __root = 0;
+            if (x.__root)
+            {
+                __root = new_node(*(x.__root->__val));
+                __root->__color = 1;
+            }
+
+            duplicate_tree(__root, x.__root);
+        }
+        void    swap(RBT *x)
         {
             std::swap(this->__root, x->__root);
         }
@@ -124,57 +137,51 @@ class RBT
             
             return node;
         }
-        void duplicate_tree(Node *z)
+        void duplicate_tree(Node *z , Node* y)
         {
-            if (!z) return;
-
-            except_Insert(*z->__val);
-            duplicate_tree(z->__left);
-            duplicate_tree(z->__right);
+            if (!y) return;
+            except_Insert(z, y);
+            duplicate_tree(z->__left,y->__left);
+            duplicate_tree(z->__right,y->__right);
         }
-        void except_Insert(value_type n)
+        void except_Insert(Node *z,Node * y)
         {
-            Node *y = nullptr;
-            Node *x = __root;
-            Node *z = new_node(n);
-
-            while(x)
+            if (y->__right)
             {
-                y = x;
-                if(less_than(z->__val->first , x->__val->first)) //? (z->__val < x->__val)
-                    x = x->__left;
-                else
-                    x = x->__right;
+            Node* right = new_node(*(y->__right->__val));
+            right->__parent = z;
+            right->__color = y->__color;
+            z->__right = right;
+
             }
-            z->__parent = y;
-            if (!y)
-                __root = z;
-            else if (less_than(z->__val->first , y->__val->first)) //? z->__val < y->__val
-                y->__left = z;
-            else
-                y->__right = z;
+            if (!y->__left)
+                return ;
+            Node* left = new_node(*(y->__left->__val));
+            left->__color = y->__color;
+            left->__parent = z;
+            z->__left = left;
         }
 };
 
 template < typename Key, typename T, typename Compare, typename Alloc>
 void RBT<Key, T, Compare, Alloc>::printTree(RBT<Key, T, Compare, Alloc>::Node* node, std::string indent, bool last)
 {
-    if (indent == "" & !node) std::cout << "this tree is empty:D\n";
+    if (indent == "" & !node) std::cerr << "this tree is empty:D\n";
     if (node != nullptr)
     {
-        std::cout << indent;
+        std::cerr << indent;
         if (last) {
-            std::cout << "├─";
+            std::cerr << "├─";
             indent += "│ ";
         } else {
-            std::cout << "└─";
+            std::cerr << "└─";
             indent += "  ";
         }
 
         if (node->__color)
-            std::cout << "[" << node->__val->first << "]" << std::endl;
+            std::cerr << "[" << node->__val->first << "]" << std::endl;
         else
-            std::cout << "\033[31m" << "[" << node->__val->first << "]" << "\033[0m\n";
+            std::cerr << "\033[31m" << "[" << node->__val->first << "]" << "\033[0m\n";
 
         printTree(node->__right, indent, true);
         printTree(node->__left, indent, false);
@@ -337,8 +344,6 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
     {
         
         y = Minimum(z->__right);
-
-            // throw std::runtime_error("Dereferencing null pointer");
         y_col = y->__color;
         x = y->__right;
         if (y->__parent == z)
@@ -354,9 +359,9 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
         y->__left->__parent = y;
         y->__color = z->__color;
     }
-    destroy_n(z);// ! destroy z here/! \!!!!
     if (y_col)
         Delete_FixUp(x);
+    destroy_n(z); // ! destroy z here/! \!!!!
     __root->__color = 1;
 }
 
@@ -382,8 +387,10 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
 {
     Node* y;
     // std::cout << "****************************************************---****\n";
-    while (z && z != __root && z->__color)
+        this->printTree(__root, "", 1);
+    while (z != __root && z->__color)
     {
+        std::cerr << "++++++\n" << std::endl;
         if (z->__parent && z == z->__parent->__left)
         {
             y = z->__parent->__right;
