@@ -134,12 +134,12 @@ class RBT
         void duplicate_tree(Node *z , Node* y)
         {
             if (!y) return;
-            right_Insert(z, y);
             left_Insert(z, y);
+            right_Insert(z, y);
             duplicate_tree(z->__left,y->__left);
             duplicate_tree(z->__right,y->__right);
         }
-        void right_Insert(Node *z,Node * y)
+        void left_Insert(Node *z,Node * y)
         {
             if (!y->__left) return ;
             Node* left = new_node(*(y->__left->__val));
@@ -147,9 +147,9 @@ class RBT
             left->__parent = z;
             z->__left = left;
         }
-        void left_Insert(Node *z,Node * y)
+        void right_Insert(Node *z,Node * y)
         {
-            if (y->__right) return ;
+            if (!y->__right) return ;
             Node* right = new_node(*(y->__right->__val));
             right->__parent = z;
             right->__color = y->__color;
