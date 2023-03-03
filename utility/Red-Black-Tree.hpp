@@ -37,20 +37,40 @@ class RBT
         {
             duplicate_tree(x.__root);
         }
-        RBT&    operator= (const RBT& x)
+        // RBT&    operator= (const RBT& x)
+        // {
+        //     clear_node(__root);
+        //     create_tree(x);
+        //     return (*this);
+        // }
+                RBT&    operator= (const RBT& x)
         {
             clear_node(__root);
-            create_tree(x);
+            // if (x.__root)
+            //     __root = new_node(*(x.__root->__val));
+            // duplicate_tree(__root, x.__root);
+            in(x);
             return (*this);
         }
-        void    create_tree(const RBT& x)
+        void in(const RBT& x)
         {
             __root = 0;
             if (x.__root)
+            {
                 __root = new_node(*(x.__root->__val));
-            __root->__color = 1;
+                __root->__color = 1;
+            }
+
             duplicate_tree(__root, x.__root);
         }
+        // void    create_tree(const RBT& x)
+        // {
+        //     __root = 0;
+        //     if (x.__root)
+        //         __root = new_node(*(x.__root->__val));
+        //     __root->__color = 1;
+        //     duplicate_tree(__root, x.__root);
+        // }
         void    swap(RBT *x)
         {
             std::swap(this->__root, x->__root);
@@ -131,30 +151,54 @@ class RBT
             
             return node;
         }
-        void duplicate_tree(Node *z , Node* y)
+                void duplicate_tree(Node *z , Node* y)
         {
             if (!y) return;
-            left_Insert(z, y);
-            right_Insert(z, y);
+            except_Insert(z, y);
             duplicate_tree(z->__left,y->__left);
             duplicate_tree(z->__right,y->__right);
         }
-        void left_Insert(Node *z,Node * y)
+        void except_Insert(Node *z,Node * y)
         {
-            if (!y->__left) return ;
+            if (y->__right)
+            {
+            Node* right = new_node(*(y->__right->__val));
+            right->__parent = z;
+            right->__color = y->__color;
+            z->__right = right;
+
+            }
+            if (!y->__left)
+                return ;
             Node* left = new_node(*(y->__left->__val));
             left->__color = y->__color;
             left->__parent = z;
             z->__left = left;
         }
-        void right_Insert(Node *z,Node * y)
-        {
-            if (!y->__right) return ;
-            Node* right = new_node(*(y->__right->__val));
-            right->__parent = z;
-            right->__color = y->__color;
-            z->__right = right;
-        }
+        // void duplicate_tree(Node *z , Node* y)
+        // {
+        //     if (!y) return;
+        //     left_Insert(z, y);
+        //     right_Insert(z, y);
+        //     duplicate_tree(z->__left,y->__left);
+        //     duplicate_tree(z->__right,y->__right);
+        // }
+        // void left_Insert(Node *z,Node * y)
+        // {
+        //     if (!y->__left) return ;
+        //     Node* left = new_node(*(y->__left->__val));
+        //     left->__color = y->__color;
+        //     left->__parent = z;
+        //     z->__left = left;
+        // }
+        // void right_Insert(Node *z,Node * y)
+        // {
+        //     if (!y->__right) return ;
+        //     Node* right = new_node(*(y->__right->__val));
+        //     right->__parent = z;
+        //     right->__color = y->__color;
+        //     z->__right = right;
+        // }
 };
 
 template < typename Key, typename T, typename Compare, typename Alloc>
