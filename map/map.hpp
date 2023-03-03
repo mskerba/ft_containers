@@ -292,7 +292,9 @@ typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, All
 template < class Key, class T, class Compare, class Alloc>
 void ft::map<Key, T, Compare, Alloc>::clear()
 {
-    root.clear_node(root.__root);
+    if (size())
+        root.clear_node(root.__root);
+    root.__root = 0;
     __size = 0;
 }
 /***********************************************/
@@ -460,7 +462,6 @@ void ft::map<Key, T, Compare, Alloc>::insert (InputIterator first, InputIterator
 template < class Key, class T, class Compare, class Alloc>
 void ft::map<Key, T, Compare, Alloc>::erase (typename ft::map<Key, T, Compare, Alloc>::iterator position)
 {
-
     value_type n = (*position);
     root.Delete(n);
     __size--;

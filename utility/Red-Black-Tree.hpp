@@ -25,6 +25,7 @@ class RBT
                 Node        *__right;
                 
                 Node(value_type *val) : __val(val), __color(0), __parent(0), __left(0), __right(0){}
+                ~Node(){ __parent = 0; __left = 0; __right = 0;}
         };
         typedef typename Alloc::template rebind<Node>::other    allocator_type;
         typedef Alloc                                           val_allocator;
@@ -84,16 +85,22 @@ class RBT
             }
         }
 
+        void destroy_n(Node* z)
+        {
+            __val__alloc.destroy(z->__val);
+            __alloc.destroy(z);
+            if (sizeof(z->__val))
+                __val__alloc.deallocate(z->__val, 1);
+            if (sizeof(z))
+                __alloc.deallocate(z, 1);
+        }
         void clear_node(Node* z)
         {
             if(!z) return;
 
             clear_node(z->__left);
             clear_node(z->__right);
-            __alloc.destroy(z);
-            __val__alloc.destroy(z->__val);
-            __alloc.deallocate(z, 1);
-            __val__alloc.deallocate(z->__val, 1);
+            destroy_n(z);
         }
 
     public: // !private
@@ -347,7 +354,7 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
         y->__left->__parent = y;
         y->__color = z->__color;
     }
-    // ! destroy z here/! \!!!!
+    destroy_n(z);// ! destroy z here/! \!!!!
     if (y_col)
         Delete_FixUp(x);
     __root->__color = 1;
