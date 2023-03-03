@@ -430,7 +430,7 @@ ft::pair<typename ft::map<Key, T, Compare, Alloc>::iterator,bool> ft::map<Key, T
         this->root.Insert(val);
     }
     iterator it(root.Search(root.__root, val), root.__root);
-    return (ft::make_pair(begin(), !is));
+    return (ft::make_pair(it, !is));
 }
 
 template < class Key, class T, class Compare, class Alloc>

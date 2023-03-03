@@ -90,10 +90,10 @@ class RBT
 
             clear_node(z->__left);
             clear_node(z->__right);
-            __val__alloc.destroy(z->__val);
             __alloc.destroy(z);
-            __val__alloc.deallocate(z->__val, 1);
+            __val__alloc.destroy(z->__val);
             __alloc.deallocate(z, 1);
+            __val__alloc.deallocate(z->__val, 1);
         }
 
     public: // !private
