@@ -43,7 +43,7 @@ class RBT
             create_tree(x);
             return (*this);
         }
-        void create_tree(const RBT& x)
+        void    create_tree(const RBT& x)
         {
             __root = 0;
             if (x.__root)

@@ -272,7 +272,7 @@ ft::map<Key, T, Compare, Alloc>& ft::map<Key, T, Compare, Alloc>::operator=(cons
     if (size())
         this->root = x.root;
     else
-        this->root.in(x.root);
+        this->root.create_tree(x.root);
     __size = x.size();
     return (*this);
 }
