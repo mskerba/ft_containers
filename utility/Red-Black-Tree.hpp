@@ -397,7 +397,7 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
         y->__left->__parent = y;
         y->__color = z->__color;
     }
-    if (y_col)
+    if (x && y_col)
         Delete_FixUp(x);
     destroy_n(z); // ! destroy z here/! \!!!!
     __root->__color = 1;
@@ -424,11 +424,8 @@ template < typename Key, typename T, typename Compare, typename Alloc>
 void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
 {
     Node* y;
-    // std::cout << "****************************************************---****\n";
-        // this->printTree(__root, "", 1);
     while (z != __root && z->__color)
     {
-        std::cerr << "++++++\n" << std::endl;
         if (z->__parent && z == z->__parent->__left)
         {
             y = z->__parent->__right;
@@ -438,6 +435,8 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
                 z->__parent->__color = 0;
                 left_Rotate(z->__parent);
                 y = z->__parent->__right;
+                if(!y)
+                    break;
             }
             if (y->__left->__color && y->__right->__color)
             {
@@ -446,7 +445,7 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
             }
             else
             {
-                if (y->__right->__color)
+                if (y->__right && y->__right->__color)
                 {
                     y->__left->__color = 1;
                     y->__color = 0;
@@ -455,7 +454,8 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
                 }
                 y->__color = z->__parent->__color;
                 z->__parent->__color = 1;
-                y->__right->__color = 1;
+                if(y->__right)
+                    y->__right->__color = 1;
                 left_Rotate(z->__parent);
                 z = __root;
             }
@@ -469,6 +469,8 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
                 z->__parent->__color = 0;
                 left_Rotate(z->__parent);
                 y = z->__parent->__left;
+                if(!y)
+                    break;
             }
             if (y->__right->__color && y->__left->__color)
             {
@@ -492,8 +494,7 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
             }
         }
     }
-    if (z)
-        z->__color = 1;
+    z->__color = 1;
     // std::cout << "********************+++++++++++++++++++++****\n";
 
 }

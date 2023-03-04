@@ -383,6 +383,8 @@ void ft::vector<T, A>::push_back (const value_type& val)
 template<typename T, typename A>
 void ft::vector<T, A>::pop_back ()
 {
+    if (!size())
+        return ;
     this->__size--;
     __alloc.destroy(&__container[__size]);
 }
@@ -402,6 +404,7 @@ typename ft::vector<T, A>::iterator ft::vector<T, A>::insert (typename ft::vecto
 
         newcapacity *= 2;
         if(!newcapacity) newcapacity++;
+        
         newcontainer = __alloc.allocate(newcapacity);
         __alloc.construct(&newcontainer[n], val);
         for (difference_type i = 0; i < n; i++)
@@ -427,7 +430,8 @@ typename ft::vector<T, A>::iterator ft::vector<T, A>::insert (typename ft::vecto
 template<typename T, typename A>
 void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, size_t n, const T& val)
 {
-    if(!n)
+    
+    if(!n && size() + n >= max_size())
         return;
     difference_type j = position - begin();
     if (this->capacity() < this->size() + n)
@@ -435,8 +439,8 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, siz
         pointer newcontainer;
         size_type newcapacity = capacity() * 2;
         
-        if (capacity() < n)
-            newcapacity += n - capacity();
+        if (newcapacity < n + __size)
+            newcapacity = n + __size;
 
         if (!newcapacity) newcapacity = n;
         newcontainer = __alloc.allocate(newcapacity);
@@ -454,10 +458,16 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, siz
         __container = newcontainer;
         return ;
     }
-    difference_type i = (end() - begin());
-    difference_type e = i - (difference_type)n;
-    while (--i >= e)
+    difference_type i = (end() - begin()) - 1;
+    difference_type e = (difference_type)n - i;
+// std::cerr << std::endl << (i + n) << " " << this->capacity() << std::endl;
+    while (i >= e)
         __alloc.construct(&__container[i + n], __container[i - 1]);
+// }
+// catch (const std::bad_alloc& ex){
+// std::cerr << "\n\n\n\n\n\n\n\nhna kayn lblan\n\n\n\n\n\n\n\n"  << std::endl;
+// exit(0);
+// }
     while (i >= j)
     {
         __container[i] = __container[i - 1];
@@ -485,6 +495,8 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, typ
             newcapacity += n - capacity();
 
         if (!newcapacity) newcapacity = n;
+        
+
         newcontainer = __alloc.allocate(newcapacity);
         for (difference_type i = 0; i < (difference_type)n; i++ )
         {
@@ -527,6 +539,8 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, typ
 template<typename T, typename A>
 typename ft::vector<T, A>::iterator ft::vector<T, A>::erase (typename ft::vector<T, A>::iterator position)
 {
+    if (!size())
+        return (position);
     iterator tmp = this->begin() - 1;
 
     while (tmp != position - 1)   tmp++;
@@ -542,7 +556,8 @@ template<typename T, typename A>
 typename ft::vector<T, A>::iterator ft::vector<T, A>::erase (typename ft::vector<T, A>::iterator first, ft::vector<T, A>::iterator last)
 {
     difference_type n = last - first;
-    if (!this->size() || !n) return (first);
+
+    if ((size_type)n > __size || !this->size() || !n) return (first);
     iterator tmp = first;
 
     while ((tmp + n) != this->end())  *tmp = *(tmp++ + n);
