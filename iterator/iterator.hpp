@@ -29,8 +29,30 @@ class Iterator
             return (*this);
         }
 
-        bool operator== (const Iterator& x) const;
-        bool operator!= (const Iterator& x) const;
+    template < typename _K, typename _P>
+        friend bool operator==(const Iterator<_K>& lhs, const Iterator<_P>& rhs) { return (lhs.__ptr == rhs.__ptr); }
+
+    template < typename _K, typename _P>
+        friend bool operator!=(const Iterator<_K>& lhs, const Iterator<_P>& rhs) { return !(lhs == rhs); }
+    
+    template < typename _K, typename _P>
+       friend bool  operator< (const Iterator<_K>& lhs, const Iterator<_P>& rhs) 
+    {
+        if (lhs.__ptr < rhs.__ptr) return (true);
+        return (false);
+    }
+
+    template < typename _K, typename _P>
+       friend bool  operator<= (const Iterator<_K>& lhs, const Iterator<_P>& rhs) {return !(rhs < lhs);}
+    
+    template < typename _K, typename _P>
+       friend bool  operator> (const Iterator<_K>& lhs, const Iterator<_P>& rhs) {return (rhs < lhs);}
+    
+    template < typename _K, typename _P>
+       friend bool  operator>= (const Iterator<_K>& lhs, const Iterator<_P>& rhs) {return !(lhs < rhs);}
+    
+    
+
         reference operator* () const;
         pointer operator-> () const;
         Iterator& operator++ ();
@@ -40,10 +62,6 @@ class Iterator
         difference_type operator- (const Iterator& it);
         Iterator operator+ (difference_type n) const;
         Iterator operator- (difference_type n) const;
-        bool operator< (const Iterator& x) const;
-        bool operator> (const Iterator& x) const;
-        bool operator>= (const Iterator& x) const;
-        bool operator<= (const Iterator& x) const;
         Iterator& operator+= (difference_type n);
         Iterator& operator-= (difference_type n);
         reference operator[] (difference_type n) const;
@@ -99,67 +117,67 @@ Iterator<T, Category>::Iterator (Iterator<T, Category>::pointer p): __ptr(p){}
 /*                 operator==                  */
 /***********************************************/
 
-template<typename T, typename Category>
-bool    Iterator<T, Category>::operator== (const Iterator<T, Category>& x) const
-{
-    if (this->__ptr == x.__ptr) return (true);
-    return (false);
-}
+// template<typename T, typename Category>
+// bool    Iterator<T, Category>::operator== (const Iterator<T, Category>& x) const
+// {
+//     if (this->__ptr == x.__ptr) return (true);
+//     return (false);
+// }
 
 /***********************************************/
 /*                 operator!=                  */
 /***********************************************/
 
-template<typename T, typename Category>
-bool    Iterator<T, Category>::operator!= (const Iterator<T, Category>& x) const
-{
-    if (this->__ptr != x.__ptr) return (true);
-    return (false);
-}
+// template<typename T, typename Category>
+// bool    Iterator<T, Category>::operator!= (const Iterator<T, Category>& x) const
+// {
+//     if (this->__ptr != x.__ptr) return (true);
+//     return (false);
+// }
 
 /***********************************************/
 /*                 operator>=                  */
 /***********************************************/
 
-template<typename T, typename Category>
-bool    Iterator<T, Category>::operator>= (const Iterator<T, Category>& x) const
-{
-    if (this->__ptr >= x.__ptr) return (true);
-    return (false);
-}
+// template<typename T, typename Category>
+// bool    Iterator<T, Category>::operator>= (const Iterator<T, Category>& x) const
+// {
+//     if (this->__ptr >= x.__ptr) return (true);
+//     return (false);
+// }
 
 /***********************************************/
 /*                 operator<=                  */
 /***********************************************/
 
-template<typename T, typename Category>
-bool    Iterator<T, Category>::operator<= (const Iterator<T, Category>& x) const
-{
-    if (this->__ptr <= x.__ptr) return (true);
-    return (false);
-}
+// template<typename T, typename Category>
+// bool    Iterator<T, Category>::operator<= (const Iterator<T, Category>& x) const
+// {
+//     if (this->__ptr <= x.__ptr) return (true);
+//     return (false);
+// }
 
 /***********************************************/
 /*                  operator<                  */
 /***********************************************/
 
-template<typename T, typename Category>
-bool    Iterator<T, Category>::operator< (const Iterator<T, Category>& x) const
-{
-    if (this->__ptr < x.__ptr) return (true);
-    return (false);
-}
+// template<typename T, typename Category>
+// bool    Iterator<T, Category>::operator< (const Iterator<T, Category>& x) const
+// {
+//     if (this->__ptr < x.__ptr) return (true);
+//     return (false);
+// }
 
 /***********************************************/
 /*                  operator>                  */
 /***********************************************/
 
-template<typename T, typename Category>
-bool    Iterator<T, Category>::operator> (const Iterator<T, Category>& x) const
-{
-    if (this->__ptr > x.__ptr) return (true);
-    return (false);
-}
+// template<typename T, typename Category>
+// bool    Iterator<T, Category>::operator> (const Iterator<T, Category>& x) const
+// {
+//     if (this->__ptr > x.__ptr) return (true);
+//     return (false);
+// }
 
 /***********************************************/
 /*                  operator*                  */

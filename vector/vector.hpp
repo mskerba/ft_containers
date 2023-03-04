@@ -14,8 +14,11 @@ namespace ft
     class vector;
 
     
-    // template <typename T, typename A>
-    // void swap (ft::vector<T, std::allocator<T> >& x, ft::vector<T, std::allocator<T> >& y);
+    template <typename T, typename A>
+    void swap (ft::vector<T, A>& x, ft::vector<T, A>& y)
+    {
+        x.swap(y);
+    }
 }
 
 class   A
@@ -85,18 +88,11 @@ class ft::vector
         explicit vector (const allocator_type& alloc = allocator_type());
         
         // ? fill constructor
-        // explicit vector (size_type n) : __container(nullptr), __size(n), __capacity (n)
-        // {
-        //     __container = __alloc.allocate(__capacity);
-        //     for (size_type i = 0; i < __size; i++)
-        //         __alloc.construct(__container + i);
-        // }
         explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
         
         // ? range constructor
         template <class InputIterator>
         vector (typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc = allocator_type());
-        // vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 
         
         // ? copy constructor
@@ -151,9 +147,9 @@ class ft::vector
         const value_type* data() const throw();
 
         // ? assigner
-        template <class InputIterator>
-        void assign (InputIterator first, InputIterator last);
         void assign (size_type n, const value_type& val);
+        template <class InputIterator>
+        void assign (InputIterator first,  typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type  last);
 
         // ? push_back
         void push_back (const value_type& val);
@@ -178,7 +174,7 @@ class ft::vector
         
         // ? insert range
 		template <class InputIterator>
-		void insert (iterator position, InputIterator first, InputIterator last);
+		void insert (iterator position, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last);
 
 		// ? erase
 		iterator erase (iterator position);
@@ -202,23 +198,6 @@ class ft::vector
         reverse_iterator rend();
         const_reverse_iterator rend() const;
 
-        // // ? operator!=
-        // bool operator!=(const vector& x);
-
-        // // ? operator==
-        // bool operator==(const vector& x);
-
-        // // ? operator>
-        // bool operator> (const vector& x);
-        
-        // // ? operator<
-        // bool operator< (const vector& x);
-
-        // // ? operator>=
-        // bool operator>= (const vector& x);
-
-        // // ? operator<=
-        // bool operator<= (const vector& x);
 
     template <class _T, class  _Alloc>
         friend bool operator== (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs)
@@ -232,13 +211,7 @@ class ft::vector
 
     template <class _T, class  _Alloc>
         friend bool operator!= (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs) {return !(lhs == rhs);}
-    // {
-    //     if (lhs.size() != rhs.size() || lhs.capacity() != rhs.capacity())
-    //         return (true);
-    //     for (size_type i = 0; i < rhs.size() && i < lhs.size(); i++)
-    //         if (lhs.__container[i] != rhs.__container[i]) return (true);
-    //     return (false);
-    // }
+
 
     template <class _T, class  _Alloc>
         friend bool operator<  (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs)
