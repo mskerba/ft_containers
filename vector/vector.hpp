@@ -4,6 +4,7 @@
 # include "../iterator/reverse_iterator.hpp"
 # include <iostream>
 # include <memory>
+#include <type_traits>
 
 // # define MAX_SIZE_T 18446744073709551615
 
@@ -84,17 +85,19 @@ class ft::vector
         explicit vector (const allocator_type& alloc = allocator_type());
         
         // ? fill constructor
-        explicit vector (size_type n) : __container(nullptr), __size(n), __capacity (n)
-        {
-            __container = __alloc.allocate(__capacity);
-            for (size_type i = 0; i < __size; i++)
-                __alloc.construct(__container + i);
-        }
+        // explicit vector (size_type n) : __container(nullptr), __size(n), __capacity (n)
+        // {
+        //     __container = __alloc.allocate(__capacity);
+        //     for (size_type i = 0; i < __size; i++)
+        //         __alloc.construct(__container + i);
+        // }
         explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
         
         // ? range constructor
         template <class InputIterator>
-        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+        vector (typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc = allocator_type());
+        // vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+
         
         // ? copy constructor
         vector (const vector& x);

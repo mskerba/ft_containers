@@ -1,6 +1,7 @@
 # ifndef __ITERATOR_TRAITS_HPP__
 # define __ITERATOR_TRAITS_HPP__
 # include <iostream>
+# include <iterator>
 
 template <typename Iterator>
 class iterator_traits
@@ -13,7 +14,7 @@ class iterator_traits
         typedef  typename   Iterator::iterator_category        iterator_category;
 };
 
-// template <class T>
+// template <class T>    
 // class iterator_traits<T*>
 // {
 //     public:

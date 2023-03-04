@@ -25,9 +25,11 @@ ft::vector<T, A>::vector (size_type n, const value_type& val, const allocator_ty
 /*               range constructor             */
 /***********************************************/
 
+// ft::vector<T, A>::vector (InputIterator first, InputIterator last, const allocator_type& alloc): __size(last - first), __capacity(__size), __alloc(alloc)
 template<typename T, typename A>
-template <class InputIterator> 
-ft::vector<T, A>::vector (InputIterator first, InputIterator last, const allocator_type& alloc): __size(last - first), __capacity(__size), __alloc(alloc)
+template <class InputIterator>
+ft::vector<T, A>::vector (typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc): __size(last - first), __capacity(__size), __alloc(alloc)
+
 {
     if (size() < 0)
         throw  std::length_error("vector");
@@ -774,4 +776,3 @@ void ft::vector<T, A>::destroyed()
             __alloc.deallocate(__container, this->__capacity);
     }
 }
-
