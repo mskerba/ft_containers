@@ -27,15 +27,23 @@ ft::vector<T, A>::vector (size_type n, const value_type& val, const allocator_ty
 
 template<typename T, typename A>
 template <class InputIterator>
-ft::vector<T, A>::vector (typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc): __size(last - first), __capacity(__size), __alloc(alloc)
-
+ft::vector<T, A>::vector (typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc):__alloc(alloc)
 {
+    ft::vector<T, A> cp_vc;
+    
+    while(first != last)
+    {
+        cp_vc.push_back(*first);
+        first++;
+    }
+    __size = cp_vc.size();
+    __capacity = __size;
     if (size() < 0)
         throw  std::length_error("vector");
-    this->__container = __alloc.allocate(this->__size);
-    size_type i = -1;
-    while (first != last)
-        __alloc.construct(&__container[++i], *(first++));
+    if(size())
+        this->__container = __alloc.allocate(this->__size);
+    for (size_type i = 0; i < size(); i++)
+        __alloc.construct(&__container[i], cp_vc[i]);
 }
 
 /***********************************************/
@@ -43,7 +51,7 @@ ft::vector<T, A>::vector (typename std::enable_if<!std::is_integral<InputIterato
 /***********************************************/
 
 template<typename T, typename A>
-ft::vector<T, A>::vector (const vector& x): __size(x.__size), __capacity(x.__capacity)
+ft::vector<T, A>::vector (const vector& x): __size(x.__size), __capacity(x.__size)
 {
     if (!size()) return ;
     this->__container = __alloc.allocate(this->__size);
@@ -77,7 +85,7 @@ ft::vector<T, A>& ft::vector<T, A>::operator= (const ft::vector<T, A>& x)
         for (size_t i = 0; i < x.size(); i++)
             __alloc.construct(&__container[i], x.__container[i]);
         this->__size = x.size();
-        this->__capacity = x.__capacity;
+        this->__capacity = x.__size;
         return (*this);
     }
     for (size_t i = 0; i < x.size(); i++)
@@ -326,7 +334,11 @@ template<typename T, typename A>
 template <class InputIterator>
 void ft::vector<T, A>::assign (InputIterator first,  typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type  last)
 {
-    size_type n = last - first;
+    ft::vector<T, A> cp_vc(first, last);
+
+    size_type n = cp_vc.size();
+    if (!n)
+        return ;
     if (n < 0)
     {
         this->~vector();
@@ -339,15 +351,15 @@ void ft::vector<T, A>::assign (InputIterator first,  typename std::enable_if<!st
         this->__capacity = n;
         this->__size = n;
         for(size_type i = 0; i < __size; i++)
-            __alloc.construct(&__container[i], *(first++));
+            __alloc.construct(&__container[i], cp_vc[i]);
         return ;
     }
     for(size_type i = 0; i < n && i < size(); i++)
-        __container[i] = *(first++);
+        __container[i] = cp_vc[i];
     for(size_type i = __size; i > n; i--)
         __alloc.destroy(&this->__container[i - 1]);
     for(size_type i = __size; i < n; i++)
-        __alloc.construct(&__container[i], *(first++));
+        __alloc.construct(&__container[i], cp_vc[i]);
     __size = n;
 }
 
@@ -430,7 +442,6 @@ typename ft::vector<T, A>::iterator ft::vector<T, A>::insert (typename ft::vecto
 template<typename T, typename A>
 void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, size_t n, const T& val)
 {
-    
     if(!n && size() + n >= max_size())
         return;
     difference_type j = position - begin();
@@ -458,16 +469,11 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, siz
         __container = newcontainer;
         return ;
     }
-    difference_type i = (end() - begin()) - 1;
+    difference_type i = (end() - begin());
     difference_type e = (difference_type)n - i;
-// std::cerr << std::endl << (i + n) << " " << this->capacity() << std::endl;
     while (i >= e)
         __alloc.construct(&__container[i + n], __container[i - 1]);
-// }
-// catch (const std::bad_alloc& ex){
-// std::cerr << "\n\n\n\n\n\n\n\nhna kayn lblan\n\n\n\n\n\n\n\n"  << std::endl;
-// exit(0);
-// }
+
     while (i >= j)
     {
         __container[i] = __container[i - 1];
@@ -482,7 +488,9 @@ template<typename T, typename A>
 template <typename InputIterator>
 void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
 {
-    size_t n = last - first;
+    ft::vector<T, A> cp_vc(first, last);
+ 
+    size_type n = cp_vc.size();
     if(!n)
         return;
     difference_type j = position - begin();
@@ -499,10 +507,7 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, typ
 
         newcontainer = __alloc.allocate(newcapacity);
         for (difference_type i = 0; i < (difference_type)n; i++ )
-        {
-            __alloc.construct(&newcontainer[j + i], *first);
-            ++first;
-        }
+            __alloc.construct(&newcontainer[j + i], cp_vc[i]);
 
         for (difference_type i = 0; i < j; i++)
             __alloc.construct(&newcontainer[i], __container[i]);
@@ -525,10 +530,7 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, typ
         i--;
     }
     for (difference_type k = 0; k < (difference_type)n; k++)
-    {
-        *(position + k) = *first;
-        ++first;
-    }
+        *(position + k) = cp_vc[i];
     __size += n;
 }
 
@@ -554,18 +556,12 @@ typename ft::vector<T, A>::iterator ft::vector<T, A>::erase (typename ft::vector
 
 template<typename T, typename A>
 typename ft::vector<T, A>::iterator ft::vector<T, A>::erase (typename ft::vector<T, A>::iterator first, ft::vector<T, A>::iterator last)
-{
+{ 
     difference_type n = last - first;
-
     if ((size_type)n > __size || !this->size() || !n) return (first);
-    iterator tmp = first;
-
-    while ((tmp + n) != this->end())  *tmp = *(tmp++ + n);
     
-
-    for (difference_type i = this->__size; i >= (end() - last - 1); i--)
-        __alloc.destroy(&this->__container[i - 1]);
-        this->__size -= n;
+    while(first != last)
+        this->erase(--last);
     return (first);
 }
 
