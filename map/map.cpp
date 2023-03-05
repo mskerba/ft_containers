@@ -5,24 +5,16 @@
 
 int main()
 {
-        {
-            std::map<int, std::string> m1;
-            std::map<int, std::string> m2;
-            ft::map<int, std::string> ft_m1;
-            ft::map<int, std::string> ft_m2;
-            for (int i = 0; i < 1e6; ++i)
-            {
-                m1.insert(std::make_pair(i, "string1"));
-                m2.insert(std::make_pair(i, "string2"));
-                ft_m1.insert(ft::make_pair(i, "string1"));
-                ft_m2.insert(ft::make_pair(i, "string2"));
-            }
-
-            m1 = m2;
-            /*-----------------------------------------------------*/
-            /*------------------ ft::map ---------------------*/
-            std::cout << "db\n";
-            ft_m1 = ft_m2;
-            /*----------------------------------------------------*/
-        }
+    ft::map<int, std::string> ft_m2;
+    for (int i = 0; i < 4; ++i)
+        ft_m2.insert(ft::make_pair(i, "string2"));
+    ft_m2.root.printTree(ft_m2.root.__root, "", 1);
+    ft_m2.erase(0);
+    // std::cout << std::endl;
+    // ft_m2.erase(1);
+    // std::cout << std::endl;
+    // ft_m2.erase(2);
+    // std::cout << std::endl;
+    // ft_m2.erase(3);
+    // ft_m2.erase(7);
 }

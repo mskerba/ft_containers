@@ -109,23 +109,6 @@ class ft::set
         key_compare key_comp() const;
 
         // ? value_comp
-        // class value_compare
-        // {
-        //     private:
-        //         friend class map;
-        //     protected:
-        //         key_compare comp;
-        //     public:
-        //         value_compare (key_compare c) : comp(c) {} // !protected
-        //         typedef bool result_type;
-        //         typedef value_type first_argument_type;
-        //         typedef value_type second_argument_type;
-        //         bool operator() (const value_type& x, const value_type& y) const
-        //         {
-        //             return comp(x, y);
-        //         }
-        // };
-
         value_compare value_comp() const;
 
         // ? get_allocator
@@ -300,7 +283,7 @@ size_t ft::set<Key, Compare, Alloc>::max_size() const
 template < class Key, class Compare, class Alloc>
 typename ft::set<Key, Compare, Alloc>::iterator ft::set<Key, Compare, Alloc>::begin()
 {
-    iterator tmp(this->root.Minimum(root.__root), root.__root);
+    iterator tmp(this->root.Minimum(root.__root), root.__max);
     return (tmp);
 }
 
@@ -311,7 +294,7 @@ typename ft::set<Key, Compare, Alloc>::iterator ft::set<Key, Compare, Alloc>::be
 template < class Key, class Compare, class Alloc>
 typename ft::set<Key, Compare, Alloc>::const_iterator ft::set<Key, Compare, Alloc>::begin() const
 {
-    return (const_iterator(root.Minimum(root.__root),root.__root));
+    return (const_iterator(root.Minimum(root.__root),root.__max));
 }
 
 /***********************************************/
@@ -321,7 +304,7 @@ typename ft::set<Key, Compare, Alloc>::const_iterator ft::set<Key, Compare, Allo
 template < class Key, class Compare, class Alloc>
 typename ft::set<Key, Compare, Alloc>::iterator ft::set<Key, Compare, Alloc>::end()
 {
-    return (iterator(nullptr, root.__root));
+    return (iterator(nullptr, root.__max));
 }
 
 /***********************************************/
@@ -331,7 +314,7 @@ typename ft::set<Key, Compare, Alloc>::iterator ft::set<Key, Compare, Alloc>::en
 template < class Key, class Compare, class Alloc>
 typename ft::set<Key, Compare, Alloc>::const_iterator ft::set<Key, Compare, Alloc>::end() const
 {
-    return (const_iterator(nullptr, root.__root));
+    return (const_iterator(nullptr, root.__max));
 }
 
 /***********************************************/
@@ -399,7 +382,7 @@ ft::pair<typename ft::set<Key, Compare, Alloc>::iterator,bool> ft::set<Key, Comp
         this->__size++;
         this->root.Insert(val);
     }
-    iterator it(root.Search(root.__root, val), root.__root);
+    iterator it(root.Search(root.__root, val), root.__max);
     return (ft::make_pair(it, !is));
 }
 
@@ -413,7 +396,7 @@ typename ft::set<Key, Compare, Alloc>::iterator ft::set<Key, Compare, Alloc>::in
         this->__size++;
         this->root.Insert(val);
     }
-    iterator it(root.Search(root.__root, val), root.__root);
+    iterator it(root.Search(root.__root, val), root.__max);
     return (it);
 }
 
@@ -435,8 +418,11 @@ void ft::set<Key, Compare, Alloc>::erase (typename ft::set<Key, Compare, Alloc>:
         this->clear();
         return ;
     }
+    // std::cerr  << "khfjkdsfhdsjk\n" << std::endl;
     value_type n = (*position);
+    // std::cerr  << " 1 " << n << std::endl;
     root.Delete(n);
+    // std::cerr  << " 2 " <<  n << std::endl;
     __size--;
 }
 
@@ -447,7 +433,7 @@ typename ft::set<Key, Compare, Alloc>::size_type ft::set<Key, Compare, Alloc>::e
     z.__root = root.Search(root.__root, k);
     if (!z.__root)
         return (0);
-    this->erase(iterator(z.__root, root.__root));
+    this->erase(iterator(z.__root, root.__max));
     return (1);
 }
 
@@ -506,7 +492,7 @@ typename ft::set<Key, Compare, Alloc>::allocator_type ft::set<Key, Compare, Allo
 template < class Key, class Compare, class Alloc>
 typename ft::set<Key, Compare, Alloc>::iterator ft::set<Key, Compare, Alloc>::find (const ft::set<Key, Compare, Alloc>::value_type& val) const
 {
-    return (iterator(root.Search(root.__root, val), root.__root));
+    return (iterator(root.Search(root.__root, val), root.__max));
 }
 
 /***********************************************/
@@ -528,7 +514,7 @@ typename ft::set<Key, Compare, Alloc>::size_type ft::set<Key, Compare, Alloc>::c
 template < class Key, class Compare, class Alloc>
 typename ft::set<Key, Compare, Alloc>::iterator  ft::set<Key, Compare, Alloc>::lower_bound (const typename ft::set<Key, Compare, Alloc>::value_type& k) const 
 {
-    iterator it (root.find(root.__root, k), root.__root);
+    iterator it (root.find(root.__root, k), root.__max);
     if (it != begin() && *(it) < k)
        while (it != end() && *(it) < k) it++;
     else if (it != begin()  && *(it) > k)

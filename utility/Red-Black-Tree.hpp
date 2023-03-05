@@ -32,7 +32,7 @@ class RBT
         typedef map_iterator<Node, value_type>                  iterator;
         typedef map_iterator<const Node, value_type>      const_iterator;
 
-        RBT():__root(nullptr){}
+        RBT():__root(nullptr), __max(nullptr){}
         RBT(const RBT& x)
         {
             duplicate_tree(x.__root);
@@ -115,6 +115,7 @@ class RBT
 
     public: // !private
         Node            *__root;
+        Node            *__max;
         allocator_type  __alloc;
         val_allocator   __val__alloc;
         key_compare     less_than;
@@ -247,6 +248,8 @@ void RBT<Key, T, Compare, Alloc>::Insert(value_type n)
     else
         y->__right = z;
     insert_FixUp(z);
+    this->__root->__color = 1;
+    this->__max = this->Maximum(this->__root);
 }
 
 template < typename Key, typename T, typename Compare, typename Alloc>
@@ -327,6 +330,10 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
     Node *y  = z;
     Node *x;
     bool y_col = y->__color;
+
+
+
+    this->__max = (z == __max) ? z->__parent : __max;
     if (!z->__left)
     {
         x = z->__right;
@@ -343,13 +350,14 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
         y = Minimum(z->__right);
         y_col = y->__color;
         x = y->__right;
-        if (y->__parent == z)
+        if (x && y->__parent == z)
             x->__parent = y;
         else
         {
             transplant(y, y->__right);
             y->__right = z->__right;
-            y->__right->__parent = y;
+            if(y->__right)
+                y->__right->__parent = y;
         }
         transplant(z,y);
         y->__left = z->__left;
@@ -358,7 +366,7 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
     }
     if (x && y_col)
         Delete_FixUp(x);
-    destroy_n(z); // ! destroy z here/! \!!!!
+    destroy_n(z);
     __root->__color = 1;
 }
 
@@ -383,8 +391,11 @@ template < typename Key, typename T, typename Compare, typename Alloc>
 void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
 {
     Node* y;
+    static int i = 0;
+
     while (z != __root && z->__color)
     {
+        
         if (z->__parent && z == z->__parent->__left)
         {
             y = z->__parent->__right;
@@ -395,7 +406,10 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
                 left_Rotate(z->__parent);
                 y = z->__parent->__right;
                 if(!y)
+                {
+                    z = z->__parent;
                     break;
+                }
             }
             if (y->__left->__color && y->__right->__color)
             {
@@ -420,16 +434,22 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
             }
         }
         else 
-        {
+        {i++;
             y = z->__parent->__left;
+            // std::cerr << y->__color << std::endl;
             if (!y->__color)
             {
                 y->__color = 1;
                 z->__parent->__color = 0;
                 left_Rotate(z->__parent);
-                y = z->__parent->__left;
+                this->printTree(this->__root, "" , 1);
+                    y = z->__parent->__left;
+    std::cerr << i << std::endl;
                 if(!y)
+                {
+                    z = z->__parent;
                     break;
+                }
             }
             if (y->__right->__color && y->__left->__color)
             {
@@ -452,10 +472,9 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
                 z = __root;
             }
         }
+
     }
     z->__color = 1;
-    // std::cout << "********************+++++++++++++++++++++****\n";
-
 }
 
 #endif

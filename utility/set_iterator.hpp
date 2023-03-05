@@ -60,7 +60,7 @@ class set_iterator
     set_iterator& operator--()
     {
         if (!__ptr)
-            __ptr = Max(__root);
+            __ptr = __root;
         else if (__ptr->__left)
             __ptr = Max(__ptr->__left);
         else if (__ptr->__parent && __ptr == __ptr->__parent->__left)
