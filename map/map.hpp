@@ -2,8 +2,8 @@
 # define __MAP_HPP__
 # include <iostream>
 # include "../utility/Red-Black-Tree.hpp"
-# include "../iterator/reverse_iterator.hpp"
 # include "../utility/pair.hpp"
+# include "../iterator/reverse_iterator.hpp"
 # include <functional>
 # include <memory>
 
@@ -54,11 +54,14 @@ class ft::map
         // ?  operator=
          map& operator= (const map& x);
 
+        // ? empty
+        bool empty() const;
+
         // ?  size
         size_type size() const;
 
-        // ?  clear
-        void clear();
+        // ? max_size
+        size_type max_size() const;
 
         // ?  begin
         iterator begin();
@@ -81,17 +84,14 @@ class ft::map
         // ?  rend
         reverse_iterator rend();
 
-        // ?  constr end
+        // ?  const rend
         const_reverse_iterator rend() const;
-
-        // ? max_size
-        size_type max_size() const;
-
-        // ? empty
-        bool empty() const;
 
         // ? operator[]
         mapped_type& operator[] (const key_type& k);
+
+        // ?  clear
+        void clear();
 
         // ? insert
         pair<iterator,bool> insert (const value_type& val);
@@ -101,7 +101,7 @@ class ft::map
         template <class InputIterator>
         void insert (InputIterator first, InputIterator last);
         
-        // ? insert
+        // ? erase
         void erase (iterator position);
 
         size_type erase (const key_type& k);
@@ -110,6 +110,7 @@ class ft::map
 
         // ? swap
         void swap (map& x);
+
         // ? key_comp
         key_compare key_comp() const;
 
@@ -133,7 +134,7 @@ class ft::map
 
         value_compare value_comp() const;
 
-        // ? value_comp
+        // ? get_allocator
         allocator_type get_allocator() const;
       
         // ? find
@@ -155,8 +156,7 @@ class ft::map
         pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
         pair<iterator,iterator>             equal_range (const key_type& k);
 
-
-
+        // ? relation operation
         template <class _Key, class _T, class _Compare, class _Alloc>
             friend bool operator== ( const map<_Key,_T,_Compare,_Alloc>& lhs, const map<_Key,_T,_Compare,_Alloc>& rhs )
         {
