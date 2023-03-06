@@ -243,8 +243,33 @@ class ft::vector
     
     private: // *member function
         void destroyed();
-};
+        template <typename InputIterator>
+        void check_iter_cp (typename std::enable_if< std::is_same< std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category >::value , InputIterator>::type first,
+                     InputIterator last);
 
+        template <typename InputIterator>
+        void check_iter_cp(typename std::enable_if< !std::is_same< std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category >::value , InputIterator>::type first,
+                     InputIterator last);
+ 
+        template <typename InputIterator>
+        void check_iter_ass (typename std::enable_if< std::is_same< std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category >::value , InputIterator>::type first,
+                     InputIterator last);
+
+        template <typename InputIterator>
+        void check_iter_ass(typename std::enable_if< !std::is_same< std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category >::value , InputIterator>::type first,
+                     InputIterator last);
+ 
+        template <typename InputIterator>
+        void check_iter_ins (iterator position, typename std::enable_if< std::is_same< std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category >::value , InputIterator>::type first,
+                     InputIterator last);
+
+        template <typename InputIterator>
+        void check_iter_ins(iterator position, typename std::enable_if< !std::is_same< std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category >::value , InputIterator>::type first,
+                     InputIterator last);
+ 
+
+
+};
 
 
 

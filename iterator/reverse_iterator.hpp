@@ -26,7 +26,6 @@ class  ft::reverse_iterator
     public:
         reverse_iterator();
         explicit reverse_iterator (iterator_type it);
-        // reverse_iterator (const reverse_iterator& rev_it);
 
         template<typename cit>
         reverse_iterator (const reverse_iterator<cit>& rev_it) : __it(rev_it.base()){}
@@ -68,8 +67,7 @@ ft::reverse_iterator<Iterator>::reverse_iterator () :__it(){}
 template<typename Iterator>
 ft::reverse_iterator<Iterator>::reverse_iterator (typename ft::reverse_iterator<Iterator>::iterator_type it): __it(it){}
 
-// template<typename Iterator>
-// ft::reverse_iterator<Iterator>::reverse_iterator (const reverse_iterator<Iterator>& rev_it):__it(rev_it.__it){}
+
 
 template<typename Iterator>
 typename ft::reverse_iterator<Iterator>::iterator_type ft::reverse_iterator<Iterator>::base() const

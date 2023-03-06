@@ -27,23 +27,31 @@ ft::vector<T, A>::vector (size_type n, const value_type& val, const allocator_ty
 
 template<typename T, typename A>
 template <class InputIterator>
-ft::vector<T, A>::vector (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc):__alloc(alloc)
+ft::vector<T, A>::vector (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc):__size(0), __capacity(0), __alloc(alloc)
 {
-    ft::vector<T, A> cp_vc;
-    
-    while(first != last)
-    {
-        cp_vc.push_back(*first);
-        first++;
-    }
-    __size = cp_vc.size();
+    check_iter_cp(first, last);
+}
+
+template<typename T, typename A>
+template <typename InputIterator>
+void ft::vector<T, A>::check_iter_cp(typename std::enable_if< std::is_same< std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category >::value, InputIterator >::type first, InputIterator last)
+{
+    __size = last - first;
     __capacity = __size;
     if (size() < 0)
         throw  std::length_error("vector");
     if(size())
         this->__container = __alloc.allocate(this->__size);
     for (size_type i = 0; i < size(); i++)
-        __alloc.construct(&__container[i], cp_vc[i]);
+        __alloc.construct(&__container[i], *(first++));
+}
+
+template<typename T, typename A>
+template <typename InputIterator>
+void ft::vector<T, A>::check_iter_cp(typename std::enable_if< !std::is_same< std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category >::value, InputIterator>::type first, InputIterator last)
+{
+    while(first != last)
+        push_back(*(first++));
 }
 
 /***********************************************/
@@ -334,9 +342,25 @@ template<typename T, typename A>
 template <class InputIterator>
 void ft::vector<T, A>::assign (InputIterator first,  typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type  last)
 {
-    ft::vector<T, A> cp_vc(first, last);
+     check_iter_ass(first, last);
+}
 
-    size_type n = cp_vc.size();
+template<typename T, typename A>
+template <typename InputIterator>
+void ft::vector<T, A>::check_iter_ass(typename std::enable_if< !std::is_same< std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category >::value , InputIterator>::type first,
+        InputIterator last)
+{
+    this->clear();
+    while(first != last)
+        push_back(*(first++));
+}
+
+template<typename T, typename A>
+template <typename InputIterator>
+void ft::vector<T, A>::check_iter_ass(typename std::enable_if< std::is_same< std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category >::value , InputIterator>::type first,
+        InputIterator last)
+{
+    size_type n = last - first;
     if (!n)
     {
         this->clear();
@@ -354,15 +378,15 @@ void ft::vector<T, A>::assign (InputIterator first,  typename ft::enable_if<!ft:
         this->__capacity = n;
         this->__size = n;
         for(size_type i = 0; i < __size; i++)
-            __alloc.construct(&__container[i], cp_vc[i]);
+            __alloc.construct(&__container[i], *(first++));
         return ;
     }
     for(size_type i = 0; i < n && i < size(); i++)
-        __container[i] = cp_vc[i];
+        __container[i] = *(first++);
     for(size_type i = __size; i > n; i--)
         __alloc.destroy(&this->__container[i - 1]);
     for(size_type i = __size; i < n; i++)
-        __alloc.construct(&__container[i], cp_vc[i]);
+        __alloc.construct(&__container[i], *(first++));
     __size = n;
 }
 
@@ -499,8 +523,16 @@ template<typename T, typename A>
 template <typename InputIterator>
 void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
 {
+    check_iter_ins(position, first, last);
+}
+
+template<typename T, typename A>
+template <typename InputIterator>
+void ft::vector<T, A>::check_iter_ins(typename ft::vector<T, A>::iterator position, typename std::enable_if< !std::is_same< std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category >::value , InputIterator>::type first,
+                InputIterator last)
+{
     ft::vector<T, A> cp_vc(first, last);
- 
+
     size_type n = cp_vc.size();
     if(!n)
         return;
@@ -551,6 +583,61 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, typ
     __size += n;
 }
 
+template<typename T, typename A>
+template <typename InputIterator>
+void ft::vector<T, A>::check_iter_ins(typename ft::vector<T, A>::iterator position, typename std::enable_if< std::is_same< std::random_access_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category >::value , InputIterator>::type first,
+                InputIterator last)
+{
+    size_type n = last - first;
+    if(!n)
+        return;
+    difference_type j = position - begin();
+    if (this->capacity() < this->size() + n)
+    {
+        pointer newcontainer;
+        size_type newcapacity = capacity() * 2;
+        
+        if (capacity() < n)
+            newcapacity += n - capacity();
+
+        if (!newcapacity) newcapacity = n;
+        
+
+        newcontainer = __alloc.allocate(newcapacity);
+        for (difference_type i = 0; i < (difference_type)n; i++ )
+            __alloc.construct(&newcontainer[j + i], *(first++));
+
+        for (difference_type i = 0; i < j; i++)
+            __alloc.construct(&newcontainer[i], __container[i]);
+        for (difference_type i = j; i < (end() - begin()); i++) 
+            __alloc.construct(&newcontainer[i + n], __container[i]);
+        if (capacity())
+            destroyed();
+        __capacity = newcapacity;
+        __size += n;
+        __container = newcontainer;
+        return ;
+    }
+    difference_type i = j;
+    while(i < (difference_type)__size)
+    {
+        if (i + (difference_type)n >= (difference_type)__size)
+            __alloc.construct(&__container[i + n], __container[i]);
+        else
+            __container[i + n] = __container[i];
+        i++;
+    }
+
+    for (difference_type k = n; k; k--)
+    {
+        if (k + j > (difference_type)__size)
+            __alloc.construct(&__container[j + k - 1], *(--last));
+        else
+            __container[j + k - 1] = *(--last);
+    }
+    __size += n;
+}
+
 /***********************************************/
 /*                  erase                     */
 /***********************************************/
@@ -575,7 +662,7 @@ template<typename T, typename A>
 typename ft::vector<T, A>::iterator ft::vector<T, A>::erase (typename ft::vector<T, A>::iterator first, ft::vector<T, A>::iterator last)
 { 
     difference_type n = last - first;
-    if ((size_type)n > __size || !this->size() || !n) return (first);
+    // if ((size_type)n > __size || !this->size() || !n) return (first);
     
     while(first != last)
         this->erase(--last);

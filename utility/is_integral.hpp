@@ -91,5 +91,4 @@ struct is_integral<volatile T> : is_integral<T> {};
 template <typename T>
 struct is_integral<const volatile T> : is_integral<T> {};
 }
-
 #endif

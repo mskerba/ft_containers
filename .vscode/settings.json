@@ -79,7 +79,8 @@
         "red-black-tree.hpp": "c",
         "__memory": "cpp",
         "reverse_iterator.hpp": "c",
-        "__functional_base_03": "c"
+        "__functional_base_03": "c",
+        "iterator_traits.hpp": "c"
     },
     "ayat.repeatedEveryMinute": 20,
     "C_Cpp.dimInactiveRegions": false
