@@ -27,7 +27,7 @@ ft::vector<T, A>::vector (size_type n, const value_type& val, const allocator_ty
 
 template<typename T, typename A>
 template <class InputIterator>
-ft::vector<T, A>::vector (typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc):__alloc(alloc)
+ft::vector<T, A>::vector (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc):__alloc(alloc)
 {
     ft::vector<T, A> cp_vc;
     
@@ -332,13 +332,16 @@ void ft::vector<T, A>::assign (size_type n, const value_type& val)
 
 template<typename T, typename A>
 template <class InputIterator>
-void ft::vector<T, A>::assign (InputIterator first,  typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type  last)
+void ft::vector<T, A>::assign (InputIterator first,  typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type  last)
 {
     ft::vector<T, A> cp_vc(first, last);
 
     size_type n = cp_vc.size();
     if (!n)
+    {
+        this->clear();
         return ;
+    }
     if (n < 0)
     {
         this->~vector();
@@ -445,6 +448,7 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, siz
     if(!n && size() + n >= max_size())
         return;
     difference_type j = position - begin();
+    difference_type s = j;
     if (this->capacity() < this->size() + n)
     {
         pointer newcontainer;
@@ -469,24 +473,31 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, siz
         __container = newcontainer;
         return ;
     }
-    difference_type i = (end() - begin());
-    difference_type e = (difference_type)n - i;
-    while (i >= e)
-        __alloc.construct(&__container[i + n], __container[i - 1]);
+    
+    if (position == end())
+        s++;
 
-    while (i >= j)
+    for (difference_type  i = __size - 1; i >= s; i--)
     {
-        __container[i] = __container[i - 1];
-        i--;
+        if (i + (difference_type)n >= (difference_type)__size)
+            __alloc.construct(&__container[i + n], __container[i]);
+        else
+            __container[i + n] = __container[i];
     }
-    for (difference_type k = 0; k < (difference_type)n; k++)
-        *(position + k) = val;
+    for (difference_type k = n; k; k--)
+    {
+        if (k + j > (difference_type)__size)
+            __alloc.construct(&__container[j + k - 1], val);
+        else
+            __container[j + k - 1] = val;
+    }
     __size += n;
+    
 }
 
 template<typename T, typename A>
 template <typename InputIterator>
-void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
+void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
 {
     ft::vector<T, A> cp_vc(first, last);
  
@@ -520,17 +531,23 @@ void ft::vector<T, A>::insert (typename ft::vector<T, A>::iterator position, typ
         __container = newcontainer;
         return ;
     }
-    difference_type i = (end() - begin());
-    difference_type e = i - (difference_type)n;
-    while (--i >= e)
-        __alloc.construct(&__container[i + n], __container[i - 1]);
-    while (i >= j)
+    difference_type i = j;
+    while(i < (difference_type)__size)
     {
-        __container[i] = __container[i - 1];
-        i--;
+        if (i + (difference_type)n >= (difference_type)__size)
+            __alloc.construct(&__container[i + n], __container[i]);
+        else
+            __container[i + n] = __container[i];
+        i++;
     }
-    for (difference_type k = 0; k < (difference_type)n; k++)
-        *(position + k) = cp_vc[i];
+
+    for (difference_type k = n; k; k--)
+    {
+        if (k + j > (difference_type)__size)
+            __alloc.construct(&__container[j + k - 1], cp_vc[k -1]);
+        else
+            __container[j + k - 1] = cp_vc[k - 1];
+    }
     __size += n;
 }
 

@@ -77,7 +77,9 @@
         "numeric": "cpp",
         "random": "cpp",
         "red-black-tree.hpp": "c",
-        "__memory": "cpp"
+        "__memory": "cpp",
+        "reverse_iterator.hpp": "c",
+        "__functional_base_03": "c"
     },
     "ayat.repeatedEveryMinute": 20,
     "C_Cpp.dimInactiveRegions": false

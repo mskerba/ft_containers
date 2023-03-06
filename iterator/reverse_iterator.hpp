@@ -9,8 +9,8 @@ namespace ft
     class  reverse_iterator;
 }
 
-template <class Iterator>
-class iterator_traits;
+// template <class Iterator>
+// class ft::iterator_traits;
 
 template <typename Iterator> 
 class  ft::reverse_iterator

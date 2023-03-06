@@ -4,7 +4,7 @@
 # include "../iterator/reverse_iterator.hpp"
 # include <iostream>
 # include <memory>
-#include <type_traits>
+# include "../utility/enable_if.hpp"
 
 // # define MAX_SIZE_T 18446744073709551615
 
@@ -92,7 +92,7 @@ class ft::vector
         
         // ? range constructor
         template <class InputIterator>
-        vector (typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc = allocator_type());
+        vector (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc = allocator_type());
 
         
         // ? copy constructor
@@ -149,7 +149,7 @@ class ft::vector
         // ? assigner
         void assign (size_type n, const value_type& val);
         template <class InputIterator>
-        void assign (InputIterator first,  typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type  last);
+        void assign (InputIterator first,  typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type  last);
 
         // ? push_back
         void push_back (const value_type& val);
@@ -174,7 +174,7 @@ class ft::vector
         
         // ? insert range
 		template <class InputIterator>
-		void insert (iterator position, typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last);
+		void insert (iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last);
 
 		// ? erase
 		iterator erase (iterator position);
@@ -202,7 +202,7 @@ class ft::vector
     template <class _T, class  _Alloc>
         friend bool operator== (const vector<_T, _Alloc>& lhs, const vector<_T, _Alloc>& rhs)
     {
-        if (lhs.size() != rhs.size() || lhs.capacity() != rhs.capacity())
+        if (lhs.size() != rhs.size())
             return (false);
         for (size_type i = 0; i < rhs.size() && i < lhs.size(); i++)
             if (lhs.__container[i] != rhs.__container[i]) return (false);
