@@ -30,17 +30,26 @@ class RBT
         typedef typename Alloc::template rebind<Node>::other    allocator_type;
         typedef Alloc                                           val_allocator;
         typedef map_iterator<Node, value_type>                  iterator;
-        typedef map_iterator<const Node, value_type>      const_iterator;
+        typedef map_iterator<const Node, value_type>            const_iterator;
 
-        RBT():__root(nullptr), __max(nullptr){}
+        RBT():__root(nullptr), __max(nullptr)
+        {
+            nil = new_node(value_type());
+            nil->__color = 1;
+        }
         RBT(const RBT& x)
         {
             duplicate_tree(x.__root);
+            nil = new_node(value_type());
+            nil->__color = 1;
+            this->__max = this->Maximum(this->__root);
         }
+        ~RBT(){destroy_n(nil);}
         RBT&    operator= (const RBT& x)
         {
             clear_node(__root);
             in(x);
+            this->__max = this->Maximum(this->__root);
             return (*this);
         }
         void in(const RBT& x)
@@ -116,6 +125,7 @@ class RBT
     public: // !private
         Node            *__root;
         Node            *__max;
+        Node            *nil;
         allocator_type  __alloc;
         val_allocator   __val__alloc;
         key_compare     less_than;
@@ -135,7 +145,7 @@ class RBT
             
             return node;
         }
-                void duplicate_tree(Node *z , Node* y)
+        void duplicate_tree(Node *z , Node* y)
         {
             if (!y) return;
             except_Insert(z, y);
@@ -247,6 +257,7 @@ void RBT<Key, T, Compare, Alloc>::Insert(value_type n)
         y->__left = z;
     else
         y->__right = z;
+    this->__root->__color = 1;
     insert_FixUp(z);
     this->__root->__color = 1;
     this->__max = this->Maximum(this->__root);
@@ -311,14 +322,16 @@ void RBT<Key, T, Compare, Alloc>::insert_FixUp(Node *z)
 template < typename Key, typename T, typename Compare, typename Alloc>
 void    RBT<Key, T, Compare, Alloc>::transplant(Node *z, Node *y)
 {
+    if(!y)
+        y = nil;
     if (!z->__parent)
         __root = y;
     else if (z == z->__parent->__left)
         z->__parent->__left = y;
     else
         z->__parent->__right = y;
-    if (y)
-        y->__parent = z->__parent;
+    y->__parent = z->__parent;
+
 }
 
 template < typename Key, typename T, typename Compare, typename Alloc>
@@ -364,8 +377,17 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
         y->__left->__parent = y;
         y->__color = z->__color;
     }
+    if(!x)
+        x = nil;
     if (x && y_col)
         Delete_FixUp(x);
+    if (x == nil)
+    {
+        if (x->__parent->__left == x)
+            x->__parent->__left = nullptr;
+        else
+            x->__parent->__right = nullptr;
+    }
     destroy_n(z);
     __root->__color = 1;
 }
@@ -391,15 +413,18 @@ template < typename Key, typename T, typename Compare, typename Alloc>
 void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
 {
     Node* y;
-    static int i = 0;
 
     while (z != __root && z->__color)
     {
-        
+        // printTree(__root, "", 1);
         if (z->__parent && z == z->__parent->__left)
         {
+        std::cout << 1 << std::endl;
             y = z->__parent->__right;
-            if (!y->__color)
+        std::cout << 2 << std::endl;
+
+        std::cout << 3 << std::endl;
+            if (y &&!y->__color)
             {
                 y->__color = 1;
                 z->__parent->__color = 0;
@@ -411,7 +436,8 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
                     break;
                 }
             }
-            if (y->__left->__color && y->__right->__color)
+        std::cout << 4 << std::endl;
+            if ((!y->__left || y->__left->__color) && (!y->__right || y->__right->__color))
             {
                 y->__color = 0;
                 z = z->__parent;
@@ -434,24 +460,21 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
             }
         }
         else 
-        {i++;
+        {
             y = z->__parent->__left;
-            // std::cerr << y->__color << std::endl;
             if (!y->__color)
             {
                 y->__color = 1;
                 z->__parent->__color = 0;
                 left_Rotate(z->__parent);
-                this->printTree(this->__root, "" , 1);
-                    y = z->__parent->__left;
-    std::cerr << i << std::endl;
+                y = z->__parent->__left;
                 if(!y)
                 {
                     z = z->__parent;
                     break;
                 }
             }
-            if (y->__right->__color && y->__left->__color)
+            if ((!y->__left || y->__left->__color) && (!y->__right || y->__right->__color))
             {
                 y->__color = 0;
                 z = z->__parent;

@@ -23,7 +23,7 @@ class Iterator
         Iterator (const Iterator<cT>& x) : __ptr(x.__ptr){}
 
         template<typename cT>
-        Iterator<cT>& operator= (const T& x)
+        Iterator<T>& operator= (const cT& x)
         {
             this->__ptr = x.__ptr;
             return (*this);

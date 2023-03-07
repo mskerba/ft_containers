@@ -643,16 +643,11 @@ void ft::vector<T, A>::check_iter_ins(typename ft::vector<T, A>::iterator positi
 /***********************************************/
 
 template<typename T, typename A>
-typename ft::vector<T, A>::iterator ft::vector<T, A>::erase (typename ft::vector<T, A>::iterator position)
+typename ft::vector<T, A>::iterator ft::vector<T, A>::erase (iterator position)
 {
-    if (!size())
-        return (position);
-    iterator tmp = this->begin() - 1;
-
-    while (tmp != position - 1)   tmp++;
-
-    while ((++tmp) != this->end() - 1)  *tmp = *(tmp + 1);
-
+    iterator tmp(position);
+    while (++tmp != end())
+        *(tmp - 1) = *tmp;
     this->__alloc.destroy(&__container[--this->__size]);
 
     return (position);
@@ -660,12 +655,16 @@ typename ft::vector<T, A>::iterator ft::vector<T, A>::erase (typename ft::vector
 
 template<typename T, typename A>
 typename ft::vector<T, A>::iterator ft::vector<T, A>::erase (typename ft::vector<T, A>::iterator first, ft::vector<T, A>::iterator last)
-{ 
-    difference_type n = last - first;
-    // if ((size_type)n > __size || !this->size() || !n) return (first);
+{
+    difference_type j = (last - first);
+    iterator tmp (first);
+    while (last != end())
+        *(tmp++) = *(last++);
     
-    while(first != last)
-        this->erase(--last);
+
+    for (size_type i = 1; i <= (size_type)j; ++i)
+        __alloc.destroy(__container + __size - i);
+    __size -= j;
     return (first);
 }
 

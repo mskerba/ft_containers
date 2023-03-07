@@ -93,6 +93,11 @@ class ft::map
         // ?  clear
         void clear();
 
+        // ?  at
+        mapped_type& at (const key_type& k);
+        const mapped_type& at (const key_type& k) const;
+
+
         // ? insert
         pair<iterator,bool> insert (const value_type& val);
         	
@@ -407,6 +412,28 @@ bool ft::map<Key, T, Compare, Alloc>::empty() const
 }
 
 /***********************************************/
+/*                     at                      */
+/***********************************************/
+
+template < class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::mapped_type& ft::map<Key, T, Compare, Alloc>::at (const typename ft::map<Key, T, Compare, Alloc>::key_type& k)
+{
+    iterator it(root.Search(root.__root, ft::make_pair(k, mapped_type())), root.__max);
+    if (it == end())
+        throw std::out_of_range("vector");
+    return (it->second);
+}
+
+template < class Key, class T, class Compare, class Alloc>
+const typename ft::map<Key, T, Compare, Alloc>::mapped_type& ft::map<Key, T, Compare, Alloc>::at (const typename ft::map<Key, T, Compare, Alloc>::key_type& k) const
+{
+    iterator it(root.Search(root.__root, ft::make_pair(k, mapped_type())), root.__max);
+    if (it == end())
+        throw std::out_of_range("vector");
+    return (it->second);
+}
+
+/***********************************************/
 /*                   operator[]                */
 /***********************************************/
 
@@ -468,8 +495,16 @@ void ft::map<Key, T, Compare, Alloc>::erase (typename ft::map<Key, T, Compare, A
         this->clear();
         return ;
     }
-    value_type n = (*position);
-    root.Delete(n);
+    try
+    {
+        value_type n = (*position);
+        root.Delete(n);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
     __size--;
 }
 

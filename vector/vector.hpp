@@ -2,6 +2,7 @@
 # define __VECTOR_HPP__
 # include "../iterator/iterator.hpp"
 # include "../iterator/reverse_iterator.hpp"
+# include "../utility/pair.hpp"
 # include <iostream>
 # include <memory>
 # include "../utility/enable_if.hpp"
