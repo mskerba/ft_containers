@@ -495,15 +495,8 @@ void ft::map<Key, T, Compare, Alloc>::erase (typename ft::map<Key, T, Compare, A
         this->clear();
         return ;
     }
-    try
-    {
         value_type n = (*position);
         root.Delete(n);
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
     
     __size--;
 }
@@ -524,9 +517,7 @@ template < class Key, class T, class Compare, class Alloc>
 void ft::map<Key, T, Compare, Alloc>::erase (typename ft::map<Key, T, Compare, Alloc>::iterator first, typename ft::map<Key, T, Compare, Alloc>::iterator last)
 {
     while (first != last)
-    {
         erase(first++);
-    }
 }
 
 /***********************************************/

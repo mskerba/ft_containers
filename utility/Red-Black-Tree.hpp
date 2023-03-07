@@ -90,14 +90,14 @@ class RBT
             Node *x;
             if (less_than(k.first , z->__val->first))
             {
-                x = Search(z->__left, k);
+                x = find(z->__left, k);
                 if(!x)
                     return (z);
                 return (x);
             }
             else
             {
-                x = Search(z->__right, k);
+                x = find(z->__right, k);
                 if(!x)
                     return (z);
                 return (x);
@@ -177,19 +177,19 @@ void RBT<Key, T, Compare, Alloc>::printTree(RBT<Key, T, Compare, Alloc>::Node* n
     if (indent == "" & !node) std::cerr << "this tree is empty:D\n";
     if (node != nullptr)
     {
-        std::cerr << indent;
+        std::cout << indent;
         if (last) {
-            std::cerr << "├─";
+            std::cout << "├─";
             indent += "│ ";
         } else {
-            std::cerr << "└─";
+            std::cout << "└─";
             indent += "  ";
         }
 
         if (node->__color)
-            std::cerr << "[" << node->__val->first << "]" << std::endl;
+            std::cout << "[" << node->__val->first << "]" << std::endl;
         else
-            std::cerr << "\033[31m" << "[" << node->__val->first << "]" << "\033[0m\n";
+            std::cout << "\033[31m" << "[" << node->__val->first << "]" << "\033[0m\n";
 
         printTree(node->__right, indent, true);
         printTree(node->__left, indent, false);
@@ -345,7 +345,6 @@ void RBT<Key, T, Compare, Alloc>::Delete(value_type n)
     bool y_col = y->__color;
 
 
-
     this->__max = (z == __max) ? z->__parent : __max;
     if (!z->__left)
     {
@@ -414,16 +413,21 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
 {
     Node* y;
 
+
+    if (z == nil)
+    {
+        if(z == z->__parent->__left &&  !z->__parent->__right)
+            z->__parent->__color = 1;
+        else if(z == z->__parent->__left &&  !z->__parent->__right)
+            z->__parent->__color = 1;
+        return ;
+    }
+
     while (z != __root && z->__color)
     {
-        // printTree(__root, "", 1);
         if (z->__parent && z == z->__parent->__left)
         {
-        std::cout << 1 << std::endl;
             y = z->__parent->__right;
-        std::cout << 2 << std::endl;
-
-        std::cout << 3 << std::endl;
             if (y &&!y->__color)
             {
                 y->__color = 1;
@@ -436,7 +440,6 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
                     break;
                 }
             }
-        std::cout << 4 << std::endl;
             if ((!y->__left || y->__left->__color) && (!y->__right || y->__right->__color))
             {
                 y->__color = 0;
@@ -467,6 +470,8 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
                 y->__color = 1;
                 z->__parent->__color = 0;
                 left_Rotate(z->__parent);
+                if(!z->__parent)
+                    break;
                 y = z->__parent->__left;
                 if(!y)
                 {
