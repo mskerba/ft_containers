@@ -1,4 +1,4 @@
-VECO=vector.out
+VECO=vec
 
 MAPO=map.out
 
@@ -21,7 +21,8 @@ GC= git commit -m "$(ARGS)"
 
 GP= git push
 
-all:
+all: $(VECO)
+$(VECO) : $(OBJS)
 	@echo "\033[31m------------------std_vector-------------------------\033[0m\n"
 	$(CXX) $(CXXFLAGS) $(VECS) -o $(VECO)
 	@./$(VECO) > std_vector.txt 
@@ -29,7 +30,7 @@ all:
 	$(CXX) $(CXXFLAGS) $(VECF) -o $(VECO)
 	@./$(VECO)  > ft_vector.txt  
 	@echo "\033[31m------------------diff_vector------------------------\033[0m\n\n"
-	@diff ft_vector.txt std_vector.txt > vector_diff.log && rm $(VECO) ft_vector.txt std_vector.txt
+	@diff ft_vector.txt std_vector.txt > vector_diff.log && rm ft_vector.txt std_vector.txt
 	@echo "\033[31m------------------std_map-------------------------\033[0m\n"
 	$(CXX) $(CXXFLAGS) $(MAPS) -o $(MAPO)
 	@./$(MAPO) > std_map.txt 
@@ -41,6 +42,7 @@ all:
 
 
 clean:
+	rm -rf $(VECO)
 
 fclean : clean
 	rm -rf vector_diff.log map_diff.log
