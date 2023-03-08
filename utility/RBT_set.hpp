@@ -30,17 +30,27 @@ class RBT_S
         typedef set_iterator<Node, value_type>                  iterator;
         typedef set_iterator<const Node, value_type>            const_iterator;
 
-        RBT_S():__root(nullptr), __max(nullptr){}
+        RBT_S():__root(nullptr), __max(nullptr)
+        {
+            nil = new_node(value_type());
+            nil->__color = 1;
+        }
         RBT_S(const RBT_S& x)
         {
             duplicate_tree(x.__root);
+            nil = new_node(value_type());
+            nil->__color = 1;
+            this->__max = this->Maximum(this->__root);
         }
          RBT_S&    operator= (const RBT_S& x)
         {
             clear_node(__root);
             in(x);
+            this->__max = this->Maximum(this->__root);
             return (*this);
         }
+        
+        ~RBT_S(){destroy_n(nil);}
         void in(const RBT_S& x)
         {
             __root = 0;
@@ -78,14 +88,14 @@ class RBT_S
             Node *x;
             if (less_than(k, *(z->__val)))
             {
-                x = Search(z->__left, k);
+                x = find(z->__left, k);
                 if(!x)
                     return (z);
                 return (x);
             }
             else
             {
-                x = Search(z->__right, k);
+                x = find(z->__right, k);
                 if(!x)
                     return (z);
                 return (x);
@@ -113,6 +123,7 @@ class RBT_S
     public: // !private
         Node            *__root;
         Node            *__max;
+        Node            *nil;
         allocator_type  __alloc;
         val_allocator   __val__alloc;
         key_compare     less_than;
@@ -245,6 +256,7 @@ void RBT_S<Key, Compare, Alloc>::Insert(value_type n)
     else
         y->__right = z;
     insert_FixUp(z);
+    this->__root->__color = 1;
     this->__max = this->Maximum(this->__root);
 }
 
@@ -279,7 +291,7 @@ void RBT_S<Key, Compare, Alloc>::insert_FixUp(Node *z)
                 right_Rotate(z->__parent->__parent);
             }
         }
-        else // ! the simetrique for this 3 cas ^\^
+        else // * the simetrique for this 3 cas ^\^
         {
             y = z->__parent->__parent->__left;
             if (y && !y->__color)
@@ -307,14 +319,15 @@ void RBT_S<Key, Compare, Alloc>::insert_FixUp(Node *z)
 template < typename Key, typename Compare, typename Alloc>
 void    RBT_S<Key, Compare, Alloc>::transplant(Node *z, Node *y)
 {
+    if(!y)
+        y = nil;
     if (!z->__parent)
         __root = y;
     else if (z == z->__parent->__left)
         z->__parent->__left = y;
     else
         z->__parent->__right = y;
-    if (y)
-        y->__parent = z->__parent;
+    y->__parent = z->__parent;
 }
 
 template < typename Key, typename Compare, typename Alloc>
@@ -326,7 +339,6 @@ void RBT_S<Key, Compare, Alloc>::Delete(value_type n)
     Node *y  = z;
     Node *x;
     bool y_col = y->__color;
-
 
 
     this->__max = (z == __max) ? z->__parent : __max;
@@ -360,8 +372,17 @@ void RBT_S<Key, Compare, Alloc>::Delete(value_type n)
         y->__left->__parent = y;
         y->__color = z->__color;
     }
+    if(!x)
+        x = nil;
     if (x && y_col)
         Delete_FixUp(x);
+    if (x == nil)
+    {
+        if (x->__parent->__left == x)
+            x->__parent->__left = nullptr;
+        else
+            x->__parent->__right = nullptr;
+    }
     destroy_n(z);
     __root->__color = 1;
 }
@@ -388,13 +409,22 @@ void RBT_S<Key, Compare, Alloc>::Delete_FixUp(Node *z)
 {
     Node* y;
 
+
+    if (z == nil)
+    {
+        if(z == z->__parent->__left &&  !z->__parent->__right)
+            z->__parent->__color = 1;
+        else if(z == z->__parent->__left &&  !z->__parent->__right)
+            z->__parent->__color = 1;
+        return ;
+    }
+
     while (z != __root && z->__color)
     {
-        
         if (z->__parent && z == z->__parent->__left)
         {
             y = z->__parent->__right;
-            if (!y->__color)
+            if (y &&!y->__color)
             {
                 y->__color = 1;
                 z->__parent->__color = 0;
@@ -406,7 +436,9 @@ void RBT_S<Key, Compare, Alloc>::Delete_FixUp(Node *z)
                     break;
                 }
             }
-            if (y->__left->__color && y->__right->__color)
+            if(!y)
+                break;
+            if ((!y->__left || y->__left->__color) && (!y->__right || y->__right->__color))
             {
                 y->__color = 0;
                 z = z->__parent;
@@ -436,6 +468,8 @@ void RBT_S<Key, Compare, Alloc>::Delete_FixUp(Node *z)
                 y->__color = 1;
                 z->__parent->__color = 0;
                 left_Rotate(z->__parent);
+                if(!z->__parent)
+                    break;
                 y = z->__parent->__left;
                 if(!y)
                 {
@@ -443,7 +477,7 @@ void RBT_S<Key, Compare, Alloc>::Delete_FixUp(Node *z)
                     break;
                 }
             }
-            if (y->__right->__color && y->__left->__color)
+            if ((!y->__left || y->__left->__color) && (!y->__right || y->__right->__color))
             {
                 y->__color = 0;
                 z = z->__parent;

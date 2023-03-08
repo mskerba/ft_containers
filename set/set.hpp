@@ -128,7 +128,7 @@ class ft::set
         iterator upper_bound (const key_type& k) const;
 
         // ? equal_range
-        pair<iterator,iterator>             equal_range (const key_type& k) const;
+        pair<iterator,iterator>   equal_range (const key_type& k) const;
 
     
         template <class _Key, class _Compare, class _Alloc>
@@ -410,6 +410,7 @@ void ft::set<Key, Compare, Alloc>::insert (InputIterator first, InputIterator la
 /***********************************************/
 /*                    erase                    */
 /***********************************************/
+
 template < class Key, class Compare, class Alloc>
 void ft::set<Key, Compare, Alloc>::erase (typename ft::set<Key, Compare, Alloc>::iterator position)
 {
@@ -418,18 +419,15 @@ void ft::set<Key, Compare, Alloc>::erase (typename ft::set<Key, Compare, Alloc>:
         this->clear();
         return ;
     }
-    // std::cerr  << "khfjkdsfhdsjk\n" << std::endl;
     value_type n = (*position);
-    // std::cerr  << " 1 " << n << std::endl;
     root.Delete(n);
-    // std::cerr  << " 2 " <<  n << std::endl;
     __size--;
 }
 
 template < class Key, class Compare, class Alloc>
 typename ft::set<Key, Compare, Alloc>::size_type ft::set<Key, Compare, Alloc>::erase (const typename ft::set<Key, Compare, Alloc>::key_type& k)
 {
-    RBT_S<key_type, key_compare, allocator_type> z;
+    RBT_S<Key, Compare, Alloc> z;
     z.__root = root.Search(root.__root, k);
     if (!z.__root)
         return (0);

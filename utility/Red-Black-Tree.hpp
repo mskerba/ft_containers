@@ -44,7 +44,7 @@ class RBT
             nil->__color = 1;
             this->__max = this->Maximum(this->__root);
         }
-        ~RBT(){destroy_n(nil);}
+        ~RBT(){ destroy_n(nil); }
         RBT&    operator= (const RBT& x)
         {
             clear_node(__root);

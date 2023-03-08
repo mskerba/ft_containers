@@ -240,8 +240,6 @@ template <class InputIterator>
     {
         (void)comp;
         (void)alloc;
-        // if (size() < 0)
-        //     throw  std::length_error("map");
 
         for (__size = 0; first != last; __size++)
             root.Insert(*(first++));
@@ -495,9 +493,8 @@ void ft::map<Key, T, Compare, Alloc>::erase (typename ft::map<Key, T, Compare, A
         this->clear();
         return ;
     }
-        value_type n = (*position);
-        root.Delete(n);
-    
+    value_type n = (*position);
+    root.Delete(n);
     __size--;
 }
 
