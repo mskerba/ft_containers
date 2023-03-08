@@ -1,14 +1,14 @@
-VECO =vector.out
+VECO=vector.out
 
-MAPO =map.out
+MAPO=map.out
 
-VECS=std::vector_test.cpp
+VECS=test/std::vector_test.cpp
 
-VECF=ft::vector_test.cpp
+VECF=test/ft::vector_test.cpp
 
-MAPF=ft::map_test.cpp
+MAPF=test/ft::map_test.cpp
 
-MAPS=std::map_test.cpp 
+MAPS=test/std::map_test.cpp 
 
 CXXFLAGS=-Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
 
@@ -21,32 +21,29 @@ GC= git commit -m "$(ARGS)"
 
 GP= git push
 
-vector : $(NAME)
-	@echo "\033[31m------------------std-------------------------\033[0m\n"
-	@CXX $(CXXFLAGS) $(VECS) -o $(VECO)
+all:
+	@echo "\033[31m------------------std_vector-------------------------\033[0m\n"
+	$(CXX) $(CXXFLAGS) $(VECS) -o $(VECO)
 	@./$(VECO) > std_vector.txt 
-	@echo "\033[31m-------------------ft-------------------------\033[0m\n"
-	@CXX $(CXXFLAGS) $(VECF) -o $(VECO)
+	@echo "\033[31m-------------------ft_vector-------------------------\033[0m\n"
+	$(CXX) $(CXXFLAGS) $(VECF) -o $(VECO)
 	@./$(VECO)  > ft_vector.txt  
-	@echo "\033[31m------------------diff------------------------\033[0m\n\n"
-	@diff ft_vector.txt std_vector.txt > diff.log && rm $(VECO) ft_vector.txt std_vector.txt 
-
-map : $(NAME)
-	@echo "\033[31m------------------std-------------------------\033[0m\n"
-	@CXX $(CXXFLAGS) $(MAPS) -o $(MAPO)
-	@./$(VECO) > std_map.txt 
-	@echo "\033[31m-------------------ft-------------------------\033[0m\n"
-	@CXX $(CXXFLAGS) $(MAPF) -o $(MAPO)
-	@./$(VECO)  > ft_map.txt  
-	@echo "\033[31m------------------diff------------------------\033[0m\n\n"
-	@diff ft_map.txt std_map.txt > diff.log && rm $(MAPO) ft_map.txt std_map.txt 
+	@echo "\033[31m------------------diff_vector------------------------\033[0m\n\n"
+	@diff ft_vector.txt std_vector.txt > vector_diff.log && rm $(VECO) ft_vector.txt std_vector.txt
+	@echo "\033[31m------------------std_map-------------------------\033[0m\n"
+	$(CXX) $(CXXFLAGS) $(MAPS) -o $(MAPO)
+	@./$(MAPO) > std_map.txt 
+	@echo "\033[31m-------------------ft_map-------------------------\033[0m\n"
+	$(CXX) $(CXXFLAGS) $(MAPF) -o $(MAPO)
+	@./$(MAPO)  > ft_map.txt  
+	@echo "\033[31m------------------diff_vector------------------------\033[0m\n\n"
+	@diff ft_map.txt std_map.txt > map_diff.log && rm $(MAPO) ft_map.txt std_map.txt 
 
 
 clean:
-	rm -rf $(OBJ)
 
 fclean : clean
-	rm -rf $(NAME)
+	rm -rf vector_diff.log map_diff.log
 
 push: fclean
 	@ $(GA) && $(GC) && $(GP) 

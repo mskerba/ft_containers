@@ -1,7 +1,7 @@
 #include <vector>
 #include <iostream>
 
-void main()
+int main()
 {
       // vector assign
   {
@@ -85,31 +85,6 @@ void main()
   }
 
 
-  // vector::emplace
-  {
-    std::vector<int> myvector = {10,20,30};
-    auto it = myvector.emplace ( myvector.begin()+1, 100 );
-    myvector.emplace ( it, 200 );
-    myvector.emplace ( myvector.end(), 300 );
-    std::cout << "myvector contains:";
-    for (auto& x: myvector)
-      std::cout << ' ' << x;
-    std::cout << '\n';
-  }
-
-
-  // vector::emplace_back
-  {
-    std::vector<int> myvector = {10,20,30};
-    myvector.emplace_back (100);
-    myvector.emplace_back (200);
-    std::cout << "myvector contains:";
-    for (auto& x: myvector)
-      std::cout << ' ' << x;
-    std::cout << '\n';
-  }
-
-
   // vector::empty
   {
     std::vector<int> myvector;
@@ -180,26 +155,6 @@ void main()
   }
 
 
-  // inserting into a vector
-  {
-    std::vector<int> myvector (3,100);
-    std::vector<int>::iterator it;
-    it = myvector.begin();
-    it = myvector.insert ( it , 200 );
-    myvector.insert (it,2,300);
-    // "it" no longer valid, get a new one:
-    it = myvector.begin();
-    std::vector<int> anothervector (2,400);
-    myvector.insert (it+2,anothervector.begin(),anothervector.end());
-    int myarray [] = { 501,502,503 };
-    myvector.insert (myvector.begin(), myarray, myarray+3);
-    std::cout << "myvector contains:";
-    for (it=myvector.begin(); it<myvector.end(); it++)
-      std::cout << ' ' << *it;
-    std::cout << '\n';
-  }
-
-
   // comparing size, capacity and max_size
   {
     std::vector<int> myvector;
@@ -258,18 +213,14 @@ void main()
     std::cout << "The elements of myvector add up to " << sum << '\n';
   }
 
-
-  // vector::push_back
-  {
-    std::vector<int> myvector;
-    int myint;
-    std::cout << "Please enter some integers (enter 0 to end):\n";
-    do {
-      std::cin >> myint;
-      myvector.push_back (myint);
-    } while (myint);
-    std::cout << "myvector stores " << int(myvector.size()) << " numbers.\n";
-  }
+// vector::push_back
+    {
+      std::vector<int> myvector;
+      int myint = 100;
+      while(--myint)
+          myvector.push_back (myint);
+      std::cout << "myvector stores " << int(myvector.size()) << " numbers.\n";
+    }
 
 
   // vector::rbegin/rend
@@ -336,7 +287,7 @@ void main()
     myvector.resize(8,100);
     myvector.resize(12);
     std::cout << "myvector contains:";
-    for (int i=0;i<myvector.size();i++)
+    for (size_t i=0;i < myvector.size();i++)
       std::cout << ' ' << myvector[i];
     std::cout << '\n';
   }
@@ -387,4 +338,5 @@ void main()
       std::cout << ' ' << bar[i];
     std::cout << '\n';
   }
+  return 0;
 }

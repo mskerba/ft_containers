@@ -424,17 +424,14 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
 
     while (z && z != __root && z->__color)
     {
-        std::cout <<9 << std::endl;
         if (z->__parent && z == z->__parent->__left)
         {
-        std::cout << 1 << std::endl;
             y = z->__parent->__right;
             if(!y)
             {
                 z = z->__parent;
                 break;
             }
-        std::cout << 2 << std::endl;
             if (y &&!y->__color)
             {
                 y->__color = 1;
@@ -447,18 +444,15 @@ void RBT<Key, T, Compare, Alloc>::Delete_FixUp(Node *z)
                     break;
                 }
             }
-        std::cout << 3 << std::endl;
             if ((!y->__left || y->__left->__color) && (!y->__right || y->__right->__color))
             {
                 y->__color = 0;
                 z = z->__parent;
                 if(!z)
                     break;
-        std::cout << 4 << std::endl;
             }
             else
             {
-        std::cout << 5 << std::endl;
                 if (y->__right && y->__right->__color)
                 {
                     y->__left->__color = 1;

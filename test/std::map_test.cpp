@@ -6,7 +6,7 @@ struct classcomp {
 bool operator() (const char& lhs, const char& rhs) const
 {return lhs<rhs;}
 };
-void main()
+int main()
 {
     // constructing maps
 
@@ -24,19 +24,6 @@ void main()
     }
 
 
-    // map::at
-    {
-    std::map<std::string,int> mymap = {
-                    { "alpha", 0 },
-                    { "beta", 0 },
-                    { "gamma", 0 } };
-    mymap.at("alpha") = 10;
-    mymap.at("beta") = 20;
-    mymap.at("gamma") = 30;
-    for (auto& x: mymap) {
-        std::cout << x.first << ": " << x.second << '\n';
-    }
-    }
 
 
     // map::begin/end
@@ -74,21 +61,6 @@ void main()
     // show content:
     for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
         std::cout << it->first << " => " << it->second << '\n';
-    }
-
-
-    // map::equal_range
-    {
-    std::map<char,int> mymap;
-    mymap['a']=10;
-    mymap['b']=20;
-    mymap['c']=30;
-    std::pair<std::map<char,int>::iterator,std::map<char,int>::iterator> ret;
-    ret = mymap.equal_range('b');
-    std::cout << "lower bound points to: ";
-    std::cout << ret.first->first << " => " << ret.first->second << '\n';
-    std::cout << "upper bound points to: ";
-    std::cout << ret.second->first << " => " << ret.second->second << '\n';
     }
 
 
@@ -132,48 +104,6 @@ void main()
     std::cout << "d => " << mymap.find('d')->second << '\n';
     }
 
-
-    // map::get_allocator
-    {
-    int psize;
-    std::map<char,int> mymap;
-    std::pair<const char,int>* p;
-    // allocate an array of 5 elements using mymap's allocator:
-    p=mymap.get_allocator().allocate(5);
-    // assign some values to array
-    psize = sizeof(std::map<char,int>::value_type)*5;
-    std::cout << "The allocated array has a size of " << psize << " bytes.\n";
-    mymap.get_allocator().deallocate(p,5);
-    }
-
-
-    // map::insert (C++98)
-    {
-    std::map<char,int> mymap;
-    // first insert function version (single parameter):
-    mymap.insert ( std::pair<char,int>('a',100) );
-    mymap.insert ( std::pair<char,int>('z',200) );
-    std::pair<std::map<char,int>::iterator,bool> ret;
-    ret = mymap.insert ( std::pair<char,int>('z',500) );
-    if (ret.second==false) {
-        std::cout << "element 'z' already existed";
-        std::cout << " with a value of " << ret.first->second << '\n';
-    }
-    // second insert function version (with hint position):
-    std::map<char,int>::iterator it = mymap.begin();
-    mymap.insert (it, std::pair<char,int>('b',300));  // max efficiency inserting
-    mymap.insert (it, std::pair<char,int>('c',400));  // no max efficiency inserting
-    // third insert function version (range insertion):
-    std::map<char,int> anothermap;
-    anothermap.insert(mymap.begin(),mymap.find('c'));
-    // showing contents:
-    std::cout << "mymap contains:\n";
-    for (it=mymap.begin(); it!=mymap.end(); ++it)
-        std::cout << it->first << " => " << it->second << '\n';
-    std::cout << "anothermap contains:\n";
-    for (it=anothermap.begin(); it!=anothermap.end(); ++it)
-        std::cout << it->first << " => " << it->second << '\n';
-    }
 
 
     // map::key_comp
@@ -324,37 +254,6 @@ void main()
     }
 
 
-    template <class Key, class T, class Compare, class Alloc>
-    class map<Key,T,Compare,Alloc>::value_compare
-    {   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
-    friend class map;
-    protected:
-    Compare comp;
-    value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
-    public:
-    typedef bool result_type;
-    typedef value_type first_argument_type;
-    typedef value_type second_argument_type;
-    bool operator() (const value_type& x, const value_type& y) const
-    {
-        return comp(x.first, y.first);
-    }
-    }
-    // map::value_comp
-    {
-    std::map<char,int> mymap;
-    mymap['x']=1001;
-    mymap['y']=2002;
-    mymap['z']=3003;
-    std::cout << "mymap contains:\n";
-    std::pair<char,int> highest = *mymap.rbegin();          // last element
-    std::map<char,int>::iterator it = mymap.begin();
-    do {
-        std::cout << it->first << " => " << it->second << '\n';
-    } while ( mymap.value_comp()(*it++, highest) );
-    }
-
-
 
 
     // swap maps
@@ -373,4 +272,5 @@ void main()
     for (std::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
         std::cout << it->first << " => " << it->second << '\n';
     }
+    return 0;
 }
