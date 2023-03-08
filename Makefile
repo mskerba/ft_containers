@@ -1,12 +1,19 @@
-NAME =ft_containers
+VECO =vector.out
 
-SRC=vector.cpp
+MAPO =map.out
+
+VECS=std::vector_test.cpp
+
+VECF=ft::vector_test.cpp
+
+MAPF=ft::map_test.cpp
+
+MAPS=std::map_test.cpp 
 
 CXXFLAGS=-Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
 
 CXX=c++
 
-OBJ= $(SRC:.cpp=.o)
 
 GA= git add .
 
@@ -14,11 +21,26 @@ GC= git commit -m "$(ARGS)"
 
 GP= git push
 
-all : $(NAME)
+vector : $(NAME)
+	@echo "\033[31m------------------std-------------------------\033[0m\n"
+	@CXX $(CXXFLAGS) $(VECS) -o $(VECO)
+	@./$(VECO) > std_vector.txt 
+	@echo "\033[31m-------------------ft-------------------------\033[0m\n"
+	@CXX $(CXXFLAGS) $(VECF) -o $(VECO)
+	@./$(VECO)  > ft_vector.txt  
+	@echo "\033[31m------------------diff------------------------\033[0m\n\n"
+	@diff ft_vector.txt std_vector.txt > diff.log && rm $(VECO) ft_vector.txt std_vector.txt 
 
+map : $(NAME)
+	@echo "\033[31m------------------std-------------------------\033[0m\n"
+	@CXX $(CXXFLAGS) $(MAPS) -o $(MAPO)
+	@./$(VECO) > std_map.txt 
+	@echo "\033[31m-------------------ft-------------------------\033[0m\n"
+	@CXX $(CXXFLAGS) $(MAPF) -o $(MAPO)
+	@./$(VECO)  > ft_map.txt  
+	@echo "\033[31m------------------diff------------------------\033[0m\n\n"
+	@diff ft_map.txt std_map.txt > diff.log && rm $(MAPO) ft_map.txt std_map.txt 
 
-$(NAME) : $(OBJ)
-	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
 clean:
 	rm -rf $(OBJ)
@@ -30,3 +52,4 @@ push: fclean
 	@ $(GA) && $(GC) && $(GP) 
 
 re : fclean all 
+
